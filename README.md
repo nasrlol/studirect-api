@@ -1,4 +1,4 @@
-# StuDirect
+# StuDirect - API
 
 StuDirect is een Tinder-achtige webapplicatie die studenten en bedrijven met elkaar matcht de carreerlaunch. 
 De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt een aangename gebruikerservaring, moderne technologieën en functies zoals swipen, chatten en profielen.
