@@ -17,5 +17,4 @@
 </body>
 </html>
 
-
 {{--je kan hier php in typen maar niet de bedoeling. Alles in controller. Als je echo doet mag je niet in gw php want is niet zuiver.--}}
