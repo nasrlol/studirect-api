@@ -24,14 +24,16 @@ De frontend van deze applicatie is beschikbaar op [nasrlol/programming-project-s
 
 ## Installatie
 
-```bash
 1. Repository klonen
+```bash
 
 git clone https://github.com/nasrlol/studirect
 cd studirect
+```
 
 2. installeren (Laravel)
 
+```bash
 cd source 
 composer install
 cp .env.example .env
