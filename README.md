@@ -41,3 +41,8 @@ php artisan key:generate
 php artisan migrate --seed
 php artisan serve
 ```
+
+3. gegevens ophalen
+
+GET api/studenten
+...
