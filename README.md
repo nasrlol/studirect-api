@@ -1,4 +1,4 @@
-# StuDirect
+# StuDirect - API
 
 StuDirect is een Tinder-achtige webapplicatie die studenten en bedrijven met elkaar matcht de carreerlaunch. 
 De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt een aangename gebruikerservaring, moderne technologieën en functies zoals swipen, chatten en profielen.
@@ -20,9 +20,10 @@ De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt ee
 
 ## Installatie
 
-### 1. Repository klonen
 
 ```bash
+1. Repository klonen
+
 git clone https://github.com/nasrlol/studirect
 cd studirect
 
