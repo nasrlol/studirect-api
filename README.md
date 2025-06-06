@@ -45,4 +45,3 @@ php artisan serve
 3. gegevens ophalen
 
 GET api/students
-...
