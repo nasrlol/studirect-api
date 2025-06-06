@@ -20,9 +20,9 @@ De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt ee
 
 ## Installatie
 
-### 1. Repository klonen
-
 ```bash
+1. Repository klonen
+
 git clone https://github.com/nasrlol/studirect
 cd studirect
 
