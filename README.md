@@ -20,7 +20,6 @@ De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt ee
 
 ## Installatie
 
-
 ```bash
 1. Repository klonen
 
