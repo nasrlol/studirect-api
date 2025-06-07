@@ -5,29 +5,50 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): JsonResponse
+    // momenteel hebben we 2 StudentController.php bestanden
+    // elk met een functie index, eentje geeft een json response terug en
+    // de andere geeft een view response terug
+    // inefficient
+
+    public function index(): View|JsonResponse
     {
         $students = Student::all();
-        return response()->json(['data' => $students]);
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+        if (request()->wantsJson()) {
+            // json voor json request
+            return response()->json([
+                'data' => $students
+            ]);
+        } else {
+            // return view voor het geval dat er een view wordt gevraagd
+            return view('student.index', [
+                'students' => $students
+            ]);
+        }
+    }
+    // het herkennen hiervan doet laravel automatisch, in geval van browser aanvraag -> view
+    // anders krijg je een json (als de controller het vraagt he)
+
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:students,email',
-            // Add more validation rules as needed
+            'password' => 'required|string|min:8',
+            'study_direction' => 'required|string|max:255',
+            'graduation_track' => 'required|string|max:255',
+            'interests' => 'required|string',
+            'job_preferences' => 'required|string',
+            'cv' => 'nullable|string',
+            'profile_complete' => 'boolean',
         ]);
 
         $student = Student::create($validated);
@@ -38,9 +59,6 @@ class StudentController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id): JsonResponse
     {
         try {
@@ -51,18 +69,15 @@ class StudentController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id): JsonResponse
     {
         try {
             $student = Student::findOrFail($id);
-
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'email' => 'required|email|unique:students,email',
+                'email' => 'required|email|unique:students,email' .$student->id,
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
                 'graduation_track' => 'required|string|max:255',
@@ -83,9 +98,6 @@ class StudentController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id): JsonResponse
     {
         try {
