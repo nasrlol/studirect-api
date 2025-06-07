@@ -15,12 +15,18 @@ use Illuminate\Support\Facades\Mail;
 
 // mail routes
 Route::get('/test-mail',function(){
-    Mail::raw('dit is een test mail', function($message){
+    Mail::raw('deze mail is verstuurd in laravel', function($message){
        $message->to('nsrddyn@gmail.com')
            ->subject('Test email');
     });
         return 'Email sent';
 });
+
+// Test route
+Route::get('/test', function() {
+    return response()->json(['message' => 'API works!']);
+});
+
 
 // studenten routes
 Route::get('/students', [StudentController::class, 'index']);
@@ -47,7 +53,3 @@ Route::delete('/appointements', [AppointmentController::class, 'destroy']);
 
 
 
-// Test route
-Route::get('/test', function() {
-    return response()->json(['message' => 'API works!']);
-});
