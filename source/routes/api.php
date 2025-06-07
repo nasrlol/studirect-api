@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\StudentController;  // Met Api namespace
 use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use App\Http\Controllers\Api\AppointementController;  // Met Api namespace
-
-// mail
-use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Mail; // mail import
 
 // mail routes
 Route::get('/test-mail',function(){
@@ -26,7 +23,6 @@ Route::get('/test-mail',function(){
 Route::get('/test', function() {
     return response()->json(['message' => 'API works!']);
 });
-
 
 // studenten routes
 Route::get('/students', [StudentController::class, 'index']);
@@ -50,6 +46,3 @@ Route::get('/appointements/{id}', [AppointmentController::class, 'show']);
 Route::put('/appointements', [AppointmentController::class, 'update']);
 Route::delete('/appointements', [AppointmentController::class, 'destroy']);
 */
-
-
-
