@@ -9,6 +9,25 @@ use App\Http\Controllers\Api\StudentController;  // Met Api namespace
 use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use App\Http\Controllers\Api\AppointementController;  // Met Api namespace
 
+// mail
+use Illuminate\Support\Facades\Mail;
+
+
+// mail routes
+Route::get('/test-mail',function(){
+    Mail::raw('deze mail is verstuurd in laravel', function($message){
+       $message->to('nsrddyn@gmail.com')
+           ->subject('Test email');
+    });
+        return 'Email sent';
+});
+
+// Test route
+Route::get('/test', function() {
+    return response()->json(['message' => 'API works!']);
+});
+
+
 // studenten routes
 Route::get('/students', [StudentController::class, 'index']);
 Route::post('/students', [StudentController::class, 'store']);
@@ -34,7 +53,3 @@ Route::delete('/appointements', [AppointmentController::class, 'destroy']);
 
 
 
-// Test route
-Route::get('/test', function() {
-    return response()->json(['message' => 'API works!']);
-});
