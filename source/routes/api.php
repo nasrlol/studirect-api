@@ -9,19 +9,6 @@ use App\Http\Controllers\Api\StudentController;  // Met Api namespace
 use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use App\Http\Controllers\Api\AppointementController;  // Met Api namespace
 
-// mail
-use Illuminate\Support\Facades\Mail;
-
-
-// mail routes
-Route::get('/test-mail',function(){
-    Mail::raw('dit is een test mail', function($message){
-       $message->to('nsrddyn@gmail.com')
-           ->subject('Test email');
-    });
-        return 'Email sent';
-});
-
 // studenten routes
 Route::get('/students', [StudentController::class, 'index']);
 Route::post('/students', [StudentController::class, 'store']);
