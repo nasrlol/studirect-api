@@ -69,7 +69,6 @@ class StudentController extends Controller
         }
     }
 
-
     public function update(Request $request, string $id): JsonResponse
     {
         try {
