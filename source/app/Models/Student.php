@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Hash;
 
 
 class Student extends Model
@@ -24,7 +25,17 @@ class Student extends Model
         'profile_complete',
     ];
 
-    // Een student kan meerdere afspraken hebben
+    // passwoord mag niet als plain tekst worden opgeslagen dus hashen
+
+    public function setPasswordAttribute($value)
+    {
+        // hashen enkel wanneer het nog niet gehashed is
+        if (!Hash::needsRehash($value)) {
+            $value = Hash::make($value);
+        }
+        $this->attributes['password'] = $value;
+    }
+
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
