@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('plan_type')->nullable();
             $table->text('description')->nullable();
             $table->text('job_types')->nullable();
-            $table->text('job_domains')->nullable();
+            $table->text('job_domain')->nullable();
             $table->string('booth_location')->nullable();
             $table->string('photo')->nullable();
             $table->integer('speeddate_duration')->nullable();
