@@ -17,21 +17,27 @@ class StudentController extends Controller
     // de andere geeft een view response terug
     // inefficient
 
-    public function index(): View|JsonResponse
+    public function index(): JsonResponse
     {
         $students = Student::all();
 
+        /*
         if (request()->wantsJson()) {
-            // json voor json request
+        */
+
+        // json voor json request
             return response()->json([
+
                 'data' => $students
             ]);
-        } else {
             // return view voor het geval dat er een view wordt gevraagd
+            /*
             return view('student.index', [
                 'students' => $students
             ]);
         }
+            */
+        // code uitgecomment want het blijft maar een html view terug geven terwijl dat we de json nodig hebben
     }
     // het herkennen hiervan doet laravel automatisch, in geval van browser aanvraag -> view
     // anders krijg je een json (als de controller het vraagt he)
