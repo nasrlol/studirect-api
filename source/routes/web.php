@@ -7,6 +7,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// dit leid de api naar index.blade.php, terwijl we de json eigenlijk zouden moeten opvragen
-//Route::get('/students', [StudentController::class, 'index']);
-//Route::post('/students', [StudentController::class, 'store']);
+// Dit leidt de api naar index.blade.php, terwijl we de json eigenlijk zouden moeten opvragen
+// Route::get('/students', [StudentController::class, 'index']);
+// Route::post('/students', [StudentController::class, 'store']);
