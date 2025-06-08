@@ -39,8 +39,8 @@ Route::delete('/students/{id}', [StudentController::class, 'destroy']);
 Route::get('/companys', [CompanyController::class, 'index']);
 Route::post('/companys', [CompanyController::class, 'store']);
 Route::get('/companys/{id}', [CompanyController::class, 'show']);
-Route::put('/companys', [CompanyController::class, 'update']);
-Route::delete('/companys', [CompanyController::class, 'destroy']);
+Route::put('/companys/{id}', [CompanyController::class, 'update']);
+Route::delete('/companys/{id}', [CompanyController::class, 'destroy']);
 
 // appointement routes
 /*
