@@ -20,7 +20,7 @@ class Company extends Model
         'plan_type',
         'description',
         'job_types',
-        'job_domains',
+        'job_domain',
         'booth_location',
         'photo',
         'speeddate_duration',
