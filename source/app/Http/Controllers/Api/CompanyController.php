@@ -12,6 +12,7 @@ class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * dus een lijst van alle companies die we hebben in de db
      */
     public function index(): JsonResponse
     {
@@ -85,7 +86,7 @@ class CompanyController extends Controller
 
             return response()->json([
                 'data' => $company,
-                'message' => 'Company updated succesfully'
+                'message' => 'Company updated successfully'
             ]);
         } catch (ModelNotFoundException $e)
         {
