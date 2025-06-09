@@ -1,25 +1,24 @@
 <?php
 
-/*use App\Http\Controllers\AppointementController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\CompanyController;*/
+/*
+use App\Http\Controllers\AppointmentController;
+*/
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\StudentController;  // Met Api namespace
 use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
-use App\Http\Controllers\Api\AppointementController;  // Met Api namespace
-
-// mail
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Mail;             // Mail
 
 
-// mail routes
-Route::get('/test-mail',function(){
-    Mail::raw('deze mail is verstuurd in laravel', function($message){
-       $message->to('nsrddyn@gmail.com')
-           ->subject('Test email');
+// Mail routes
+// momenteel is dit nog maar een test mail om aan te tonen dat de server werkt
+// verdere implementatie moet nog gebeuren
+Route::get('/mail',function(){
+    Mail::raw('', function($message){
+       $message->to('appie@nsrddyn.com')
+           ->subject('Laravel Mail');
     });
-        return 'Email sent';
+        return response()->json(['message' => 'Mail works!'])
 });
 
 // Test route
@@ -28,7 +27,7 @@ Route::get('/test', function() {
 });
 
 
-// studenten routes
+// student routes
 Route::get('/students', [StudentController::class, 'index']);
 Route::post('/students', [StudentController::class, 'store']);
 Route::get('/students/{id}', [StudentController::class, 'show']);
@@ -36,19 +35,19 @@ Route::put('/students/{id}', [StudentController::class, 'update']);
 Route::delete('/students/{id}', [StudentController::class, 'destroy']);
 
 // company routes
-Route::get('/companys', [CompanyController::class, 'index']);
-Route::post('/companys', [CompanyController::class, 'store']);
-Route::get('/companys/{id}', [CompanyController::class, 'show']);
-Route::put('/companys/{id}', [CompanyController::class, 'update']);
-Route::delete('/companys/{id}', [CompanyController::class, 'destroy']);
+Route::get('/companies', [CompanyController::class, 'index']);
+Route::post('/companies', [CompanyController::class, 'store']);
+Route::get('/companies/{id}', [CompanyController::class, 'show']);
+Route::put('/companies/{id}', [CompanyController::class, 'update']);
+Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
 
-// appointement routes
 /*
-Route::get('/appointements', [App::class, 'index']);
-Route::post('/appointements', [AppointmentController::class, 'store']);
-Route::get('/appointements/{id}', [AppointmentController::class, 'show']);
-Route::put('/appointements', [AppointmentController::class, 'update']);
-Route::delete('/appointements', [AppointmentController::class, 'destroy']);
+appointment routes
+Route::get('/appointments', [AppointmentController::class, 'index']);
+Route::post('/appointments, [AppointmentController::class, 'store']);
+Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
+Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
+Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 */
 
 
