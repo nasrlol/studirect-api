@@ -3,12 +3,11 @@
 /*
 use App\Http\Controllers\AppointmentController;
 */
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\StudentController;  // Met Api namespace
 use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use Illuminate\Support\Facades\Mail;             // Mail
-
 
 // Mail routes
 // momenteel is dit nog maar een test mail om aan te tonen dat de server werkt
@@ -18,7 +17,7 @@ Route::get('/mail',function(){
        $message->to('appie@nsrddyn.com')
            ->subject('Laravel Mail');
     });
-        return response()->json(['message' => 'Mail works!'])
+        return response()->json(['message' => 'Mail works!']);
 });
 
 // Test route
@@ -41,14 +40,14 @@ Route::get('/companies/{id}', [CompanyController::class, 'show']);
 Route::put('/companies/{id}', [CompanyController::class, 'update']);
 Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
 
-/*
-appointment routes
+// appointment routes
 Route::get('/appointments', [AppointmentController::class, 'index']);
-Route::post('/appointments, [AppointmentController::class, 'store']);
+Route::post('/appointments', [AppointmentController::class, 'store']);
 Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
 Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
-*/
 
 
+// zo kan het ook, misschien doen we het zo later
+// Route::apiResource('appointments', AppointmentController::class);
 
