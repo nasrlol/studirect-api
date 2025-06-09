@@ -27,6 +27,9 @@ class Company extends Model
     ];
 
 
+    // zelfde als bij student het wachtwoord mag niet als plain tekst worden
+    // opgeslagen dus we hashen het
+
     public function setPasswordAttribute($value)
     {
         // hashen enkel wanneer het nog niet gehashed is
@@ -43,8 +46,8 @@ class Company extends Model
     }
 
     // Relatie: een bedrijf kan meerdere matches hebben
-    public function connecties(): HasMany
+    public function connections(): HasMany
     {
-        return $this->hasMany(Connectie::class);
+        return $this->hasMany(Connection::class);
     }
 }

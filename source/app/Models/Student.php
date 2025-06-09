@@ -25,7 +25,7 @@ class Student extends Model
         'profile_complete',
     ];
 
-    // passwoord mag niet als plain tekst worden opgeslagen dus hashen
+    // wachtwoord mag niet als plain tekst worden opgeslagen dus hashen
 
     public function setPasswordAttribute($value)
     {
@@ -44,6 +44,6 @@ class Student extends Model
     // Een student kan meerdere matches/connecties hebben
     public function connecties(): HasMany
     {
-        return $this->hasMany(Connectie::class);  // Fix class name capitalization
+        return $this->hasMany(Connection::class);  // Fix class name capitalization
     }
 }
