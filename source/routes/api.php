@@ -4,8 +4,9 @@
 use App\Http\Controllers\AppointmentController;
 */
 
+use App\Http\Controllers\Api\AdminLogController;
 use App\Http\Controllers\Api\AppointmentController;
-use App\Http\Controllers\Api\ConnectieController;
+use App\Http\Controllers\Api\ConnectionController;
 use App\Http\Controllers\Api\StudentController;  // Met Api namespace
 use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use Illuminate\Support\Facades\Mail;             // Mail
@@ -50,13 +51,12 @@ Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
 Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 
-//connectie routes
-// connectie routes
-Route::get('/connecties', [ConnectieController::class, 'index']);
-Route::post('/connecties', [ConnectieController::class, 'store']);
-Route::get('/connecties/{id}', [ConnectieController::class, 'show']);
-Route::put('/connecties/{id}', [ConnectieController::class, 'update']);
-Route::delete('/connecties/{id}', [ConnectieController::class, 'destroy']);
+// connection routes
+Route::get('/connections', [ConnectionController::class, 'index']);
+Route::post('/connections', [ConnectionController::class, 'store']);
+Route::get('/connections/{id}', [ConnectionController::class, 'show']);
+Route::put('/connections/{id}', [ConnectionController::class, 'update']);
+Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 
 
 // zo kan het ook, misschien doen we het zo later
@@ -75,4 +75,4 @@ Route::put('/admin/companies/{id}', [AdminController::class, 'updateCompany']);
 Route::delete('/admin/companies/{id}', [AdminController::class, 'deleteCompany']);
 
 // Admin routes voor logs
-Route::get('/admin/logs', [AdminController::class, 'getLogs']);
+Route::get('/admin/logs', [AdminLogController::class, 'getLogs']);
