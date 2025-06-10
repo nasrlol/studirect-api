@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AdminLog extends Model
 {
-   use HasFactory;
+    use HasFactory;
+    public  $timestamps = false;
+    
     protected $fillable = [
         'admin_id',
         'action',
