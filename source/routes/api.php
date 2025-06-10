@@ -5,6 +5,7 @@ use App\Http\Controllers\AppointmentController;
 */
 
 use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\Api\ConnectieController;
 use App\Http\Controllers\Api\StudentController;  // Met Api namespace
 use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use Illuminate\Support\Facades\Mail;             // Mail

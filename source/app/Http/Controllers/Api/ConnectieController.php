@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Connectie;
+use App\Models\Connection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class ConnectieController extends Controller
 {
-    // GET /api/connecties
+    // GET /api/connections
     public function index(): JsonResponse
     {
-        $connecties = Connectie::all();
-        return response()->json(['data' => $connecties]);
+        $connections = Connection::all();
+        return response()->json(['data' => $connections]);
     }
 
-    // POST /api/connecties
+    // POST /api/connections
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -26,30 +26,30 @@ class ConnectieController extends Controller
             'type' => 'required|string|max:255', // bijvoorbeeld 'match' of 'bericht'
         ]);
 
-        $connectie = Connectie::create($validated);
+        $connection = Connection::create($validated);
 
         return response()->json([
-            'data' => $connectie,
-            'message' => 'Connectie succesvol aangemaakt'
+            'data' => $connection,
+            'message' => 'connection succesvol aangemaakt'
         ], 201);
     }
 
-    // GET /api/connecties/{id}
+    // GET /api/connections/{id}
     public function show(string $id): JsonResponse
     {
         try {
-            $connectie = Connectie::findOrFail($id);
-            return response()->json(['data' => $connectie]);
+            $connection = Connection::findOrFail($id);
+            return response()->json(['data' => $connection]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Connectie niet gevonden'], 404);
+            return response()->json(['message' => 'connection niet gevonden'], 404);
         }
     }
 
-    // PUT /api/connecties/{id}
+    // PUT /api/connections/{id}
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $connectie = Connectie::findOrFail($id);
+            $connection = Connection::findOrFail($id);
 
             $validated = $request->validate([
                 'student_id' => 'required|integer|exists:students,id',
@@ -57,29 +57,29 @@ class ConnectieController extends Controller
                 'type' => 'required|string|max:255',
             ]);
 
-            $connectie->update($validated);
+            $connection->update($validated);
 
             return response()->json([
-                'data' => $connectie,
-                'message' => 'Connectie succesvol bijgewerkt'
+                'data' => $connection,
+                'message' => 'connection succesvol bijgewerkt'
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Connectie niet gevonden'], 404);
+            return response()->json(['message' => 'connection niet gevonden'], 404);
         }
     }
 
-    // DELETE /api/connecties/{id}
+    // DELETE /api/connections/{id}
     public function destroy(string $id): JsonResponse
     {
         try {
-            $connectie = Connectie::findOrFail($id);
-            $connectie->delete();
+            $connection = Connection::findOrFail($id);
+            $connection->delete();
 
             return response()->json([
-                'message' => 'Connectie verwijderd'
+                'message' => 'connection verwijderd'
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Connectie niet gevonden'], 404);
+            return response()->json(['message' => 'connection niet gevonden'], 404);
         }
     }
 }
