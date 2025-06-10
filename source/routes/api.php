@@ -47,6 +47,14 @@ Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
 Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
 Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 
+//connectie routes
+// connectie routes
+Route::get('/connecties', [ConnectieController::class, 'index']);
+Route::post('/connecties', [ConnectieController::class, 'store']);
+Route::get('/connecties/{id}', [ConnectieController::class, 'show']);
+Route::put('/connecties/{id}', [ConnectieController::class, 'update']);
+Route::delete('/connecties/{id}', [ConnectieController::class, 'destroy']);
+
 
 // zo kan het ook, misschien doen we het zo later
 // Route::apiResource('appointments', AppointmentController::class);
