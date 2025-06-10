@@ -15,12 +15,11 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        Student::factory()->count(30)->create();
-        Company::factory()->count(30)->create();
-        Appointment::factory()->count(30)->create();
-        Connection::factory()->count(10)->create();
+        Student::factory()->count(5)->create();
+        Company::factory()->count(5)->create();
+        Appointment::factory()->count(5)->create();
+        Connection::factory()->count(5)->create();
         Admin::factory()->count(5)->create();
         AdminLog::factory()->count(5)->create();
-        // $this->call(AdminSeeder::class);
     }
 }
