@@ -2,16 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
 use Illuminate\Database\Seeder;
+use App\Models\Company;
 use App\Models\Student;
+use App\Models\Appointment;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        Student::factory()->count(10)->create();
-        Company::factory()->count(5)->create();
-
+        Student::factory()->count(200)->create();
+        Company::factory()->count(50)->create();
+        Appointment::factory()->count(100)->create();
     }
 }
