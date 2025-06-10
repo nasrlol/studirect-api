@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         Student::factory()->count(200)->create();
         Company::factory()->count(50)->create();
         Appointment::factory()->count(100)->create();
+        ConnectieSeeder::factory()->count(10)->create();
         AdminLog::factory()->count(5)->create();
         // $this->call(AdminSeeder::class);
     }
