@@ -59,7 +59,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
-            $table->timestamp('timestamp')->useCurrent();
+            $table->boolean('status')->default(false);
+            $table->timestamps();
         });
 
         Schema::create('messages', function (Blueprint $table) {
@@ -85,7 +86,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('appointments');
         Schema::dropIfExists('messages');
-        Schema::dropIfExists('matches');
+        Schema::dropIfExists('connections');
         Schema::dropIfExists('admin_logs');
         Schema::dropIfExists('students');
         Schema::dropIfExists('companies');

@@ -36,6 +36,8 @@ class Student extends Model
         $this->attributes['password'] = $value;
     }
 
+
+
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);

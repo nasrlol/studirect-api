@@ -55,7 +55,8 @@ Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 Route::get('/connections', [ConnectionController::class, 'index']);
 Route::post('/connections', [ConnectionController::class, 'store']);
 Route::get('/connections/{id}', [ConnectionController::class, 'show']);
-Route::put('/connections/{id}', [ConnectionController::class, 'update']);
+Route::patch('/connections/{id}', [ConnectionController::class, 'update']);
+// hier een patch ipv een put omdat enkel het tijdstip wordt aangepast
 Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 
 

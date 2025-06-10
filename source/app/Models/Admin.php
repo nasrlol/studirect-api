@@ -5,16 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Hash;
 
 class Admin extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'admin_id',
         'email',
         'password'
     ];
 
+    public function setPasswordAttribute($value)
+    {
+        // hashen enkel wanneer het nog niet gehashed is
+        if (!Hash::needsRehash($value)) {
+            $value = Hash::make($value);
+        }
+        $this->attributes['password'] = $value;
+    }
     public function adminlogs(): HasMany
     {
         return $this->HasMany(AdminLog::class);

@@ -49,7 +49,7 @@ class AppointmentController extends Controller
             $appointment = Appointment::findOrFail($id);
             return response()->json(['data' => $appointment]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Appointment not found']);
+            return response()->json(['message' => 'Appointment not found'], 404);
         }
     }
 
@@ -62,13 +62,14 @@ class AppointmentController extends Controller
         $validated = $request->validate([
             'time_slot' => 'required|string|max:255',
             // afspraak verzetten = enkel tijdstip verzetten
+            // moet dan een patch zijn??
         ]);
 
         $appointment->update($validated);
         return response()->json([
             'data' => $appointment,
             'message' => 'Appointment updated successfully'
-        ], 204);
+        ], 200);
     }
 
     /**

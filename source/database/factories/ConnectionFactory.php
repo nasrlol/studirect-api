@@ -16,7 +16,7 @@ class ConnectionFactory extends Factory
         return [
             'student_id' => Student::factory(),
             'company_id' => Company::factory(),
-            'type' => $this->faker->randomElement(['match', 'bericht']),
+            'status' => $this->faker->boolean(),
         ];
     }
 }
