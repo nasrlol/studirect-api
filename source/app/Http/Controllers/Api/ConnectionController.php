@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class ConnectieController extends Controller
+class ConnectionController extends Controller
 {
     // GET /api/connections
     public function index(): JsonResponse
