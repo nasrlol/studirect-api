@@ -59,7 +59,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
-            $table->timestamps();
         });
 
         Schema::create('messages', function (Blueprint $table) {
