@@ -16,7 +16,7 @@ class ConnectionFactory extends Factory
         return [
             'student_id' => Student::factory(),
             'company_id' => Company::factory(),
-            'timestamp' => $this->faker->dateTime
+            'status' => $this->faker->boolean
         ];
     }
 }

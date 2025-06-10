@@ -12,7 +12,7 @@ class Connection extends Model
     protected $fillable = [
         'student_id',
         'company_id',
-        'timestamp',
+        'status',
     ];
 
     // Relaties (optioneel)
