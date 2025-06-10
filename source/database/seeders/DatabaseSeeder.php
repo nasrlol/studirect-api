@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Company;
 use App\Models\Student;
 use App\Models\Appointment;
-use Database\Seeders\AdminSeeder;
+// use Database\Seeders\AdminSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         Student::factory()->count(200)->create();
         Company::factory()->count(50)->create();
         Appointment::factory()->count(100)->create();
-        $this->call(AdminSeeder::class);
+        AdminLog::factory()->count(5)->create();
+        // $this->call(AdminSeeder::class);
     }
 }
