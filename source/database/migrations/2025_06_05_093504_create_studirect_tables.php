@@ -84,7 +84,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('appointments');
         Schema::dropIfExists('messages');
-        Schema::dropIfExists('matches');
+        Schema::dropIfExists('connections');
         Schema::dropIfExists('admin_logs');
         Schema::dropIfExists('students');
         Schema::dropIfExists('companies');
