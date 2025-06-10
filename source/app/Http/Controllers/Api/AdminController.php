@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
-use App\Models\AdminLog;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,7 +14,7 @@ class AdminController extends Controller
 {
     public function index(): JsonResponse
     {
-        $admins = AdminLog::all();
+        $admins = Admin::all();
         return response()->json(['data' => $admins]);
     }
 
@@ -28,7 +27,7 @@ class AdminController extends Controller
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
-        $admin = AdminLog::create($validated);
+        $admin = Admin::create($validated);
 
         return response()->json(['data' => $admin], 201);
     }
@@ -36,7 +35,7 @@ class AdminController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
-            $admin = AdminLog::findOrFail($id);
+            $admin = Admin::findOrFail($id);
             return response()->json(['data' => $admin]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Admin niet gevonden'], 404);
@@ -46,7 +45,7 @@ class AdminController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         try {
-            $admin = AdminLog::findOrFail($id);
+            $admin = Admin::findOrFail($id);
             $validated = $request->validate([
                 'name' => 'string|max:255',
                 'email' => 'email|unique:admins,email,' . $admin->id,
@@ -68,7 +67,7 @@ class AdminController extends Controller
     public function destroy(string $id): JsonResponse
     {
         try {
-            $admin = AdminLog::findOrFail($id);
+            $admin = Admin::findOrFail($id);
             $admin->delete();
             return response()->json(['message' => 'Admin verwijderd']);
         } catch (ModelNotFoundException $e) {
@@ -153,6 +152,23 @@ class AdminController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Bedrijf niet gevonden'], 404);
         }
+    }
+
+
+    private function logAdminAction(string $action, string $targetType, string $targetId, string $severity = 'info'): void
+    {
+        // In een echte toepassing zou je hier de huidige ingelogde admin ID gebruiken
+        // Voor nu gebruiken we ID 1 als voorbeeld
+        $adminId = 1; // Hier zou je Auth::id() of iets dergelijks gebruiken
+
+        Admin::create([
+            'admin_id' => $adminId,
+            'action' => $action,
+            'target_type' => $targetType,
+            'target_id' => $targetId,
+            'severity' => $severity,
+            // timestamp wordt automatisch ingevuld door de database
+        ]);
     }
 
     public function updateCompany(Request $request, string $id): JsonResponse
