@@ -14,7 +14,6 @@ class AdminLog extends Model
         'action',
         'target_type',
         'target_id',
-        'timestamp',
         'severity',
     ];
 
