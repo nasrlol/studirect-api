@@ -23,7 +23,7 @@ class ConnectionController extends Controller
         $validated = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
             'company_id' => 'required|integer|exists:companies,id',
-            'type' => 'required|string|max:255', // bijvoorbeeld 'match' of 'bericht'
+            'timestamp' => 'required|Date', // bijvoorbeeld 'match' of 'bericht'
         ]);
 
         $connection = Connection::create($validated);
