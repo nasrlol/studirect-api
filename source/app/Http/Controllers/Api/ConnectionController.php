@@ -54,7 +54,7 @@ class ConnectionController extends Controller
             $validated = $request->validate([
                 'student_id' => 'required|integer|exists:students,id',
                 'company_id' => 'required|integer|exists:companies,id',
-                'status' => 'required|string|max:255',
+                'timestamp' => 'required|Date',
             ]);
 
             $connection->update($validated);
