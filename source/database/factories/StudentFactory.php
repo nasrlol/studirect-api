@@ -16,7 +16,7 @@ class StudentFactory extends Factory
             'first_name' => $this->faker->name(),
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->unique()->safeEmail,
-            'password' => bcrypt('password'), // You can hash a default password
+            'password' => 'password',
             'study_direction' => $this->faker->randomElement(['Informatica', 'Economie', 'Talen', 'Wetenschappen']),
             'graduation_track' => $this->faker->randomElement(['Professioneel', 'Academisch']),
             'interests' => implode(', ', $this->faker->randomElements(['AI', 'Webdev', 'Networking', 'Cybersecurity', 'IoT'], 2)),

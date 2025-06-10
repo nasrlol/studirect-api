@@ -62,6 +62,7 @@ class AppointmentController extends Controller
         $validated = $request->validate([
             'time_slot' => 'required|string|max:255',
             // afspraak verzetten = enkel tijdstip verzetten
+            // moet dan een patch zijn??
         ]);
 
         $appointment->update($validated);

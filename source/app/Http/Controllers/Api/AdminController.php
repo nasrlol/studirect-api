@@ -21,7 +21,6 @@ class AdminController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:admins,email',
             'password' => 'required|string|min:8',
         ]);
@@ -47,7 +46,6 @@ class AdminController extends Controller
         try {
             $admin = Admin::findOrFail($id);
             $validated = $request->validate([
-                'name' => 'string|max:255',
                 'email' => 'email|unique:admins,email,' . $admin->id,
                 'password' => 'nullable|string|min:8',
             ]);
