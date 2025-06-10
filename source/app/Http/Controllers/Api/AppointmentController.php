@@ -49,7 +49,7 @@ class AppointmentController extends Controller
             $appointment = Appointment::findOrFail($id);
             return response()->json(['data' => $appointment]);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Appointment not found']);
+            return response()->json(['message' => 'Appointment not found'], 404);
         }
     }
 
@@ -68,7 +68,7 @@ class AppointmentController extends Controller
         return response()->json([
             'data' => $appointment,
             'message' => 'Appointment updated successfully'
-        ], 204);
+        ], 200);
     }
 
     /**
