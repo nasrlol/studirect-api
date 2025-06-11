@@ -12,17 +12,12 @@ use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use Illuminate\Support\Facades\Mail;             // Mail
 use Illuminate\Support\Facades\Route;            // Route
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\MailController;
 
 // Mail routes
 // momenteel is dit nog maar een test mail om aan te tonen dat de server werkt
 // verdere implementatie moet nog gebeuren
-Route::get('/mail',function(){
-    Mail::raw('', function($message){
-       $message->to('appie@nsrddyn.com')
-           ->subject('Laravel Mail');
-    });
-        return response()->json(['message' => 'Mail works!']);
-});
+Route::get('/mail', [MailController::class, 'sendStudentVerification']);
 
 // Test route
 Route::get('/test', function() {
