@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use Illuminate\Support\Facades\Mail;             // Mail
 use Illuminate\Support\Facades\Route;            // Route
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\MessageController;
 
 // Mail routes
 // momenteel is dit nog maar een test mail om aan te tonen dat de server werkt
@@ -69,19 +70,9 @@ Route::middleware('throttle:50,1')->group(function () {
 // zo kan het ook, misschien doen we het zo later
 // Route::apiResource('appointments', AppointmentController::class);
 
- // Admin routes voor student beheer
- Route::middleware('throttle:50,1')->group(function () {
-    Route::get('/admin/students', [AdminController::class, 'getAllStudents']);
-    Route::get('/admin/students/{id}', [AdminController::class, 'getStudent']);
-    Route::put('/admin/students/{id}', [AdminController::class, 'updateStudent']);
-    Route::delete('/admin/students/{id}', [AdminController::class, 'deleteStudent']);
-});
-// Admin routes voor bedrijf beheer
-Route::middleware('throttle:50,1')->group(function () {
-    Route::get('/admin/companies', [AdminController::class, 'getAllCompanies']);
-    Route::get('/admin/companies/{id}', [AdminController::class, 'getCompany']);
-    Route::put('/admin/companies/{id}', [AdminController::class, 'updateCompany']);
-    Route::delete('/admin/companies/{id}', [AdminController::class, 'deleteCompany']);
-});
 // Admin routes voor logs
 Route::get('/admin/logs', [AdminLogController::class, 'getLogs']);
+
+//routes voor berichten
+Route::post('/messages/send', [MessageController::class, 'sendMessage']);
+Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
