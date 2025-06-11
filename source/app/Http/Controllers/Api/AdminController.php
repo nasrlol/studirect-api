@@ -213,5 +213,34 @@ class AdminController extends Controller
             return response()->json(['message' => 'Bedrijf niet gevonden'], 404);
         }
     }
+
+
+    public function createCompany(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:companies,email',
+            'password' => 'required|string|min:8',
+            'plan_type' => 'required|string|max:255',
+            'description' => 'required|string',
+            'job_types' => 'required|string',
+            'job_domain' => 'required|string',
+            'booth_location' => 'required|string|max:255',
+            'photo' => 'nullable|string|max:255',
+            'speeddate_duration' => 'nullable|integer',
+        ]);
+
+        $company = Company::create($validated);
+        
+        // Log de admin actie
+        $this->logAdminAction('create', 'Company', $company->id, 'info');
+        
+        return response()->json([
+            'data' => $company,
+            'message' => 'Bedrijf is aangemaakt'
+        ], 201);
+    }
+
+
 }
 

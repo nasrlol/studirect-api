@@ -71,6 +71,7 @@ Route::delete('/admin/students/{id}', [AdminController::class, 'deleteStudent'])
 
 // Admin routes voor bedrijf beheer
 Route::get('/admin/companies', [AdminController::class, 'getAllCompanies']);
+Route::post('/admin/companies', [AdminController::class, 'createCompany']); 
 Route::get('/admin/companies/{id}', [AdminController::class, 'getCompany']);
 Route::put('/admin/companies/{id}', [AdminController::class, 'updateCompany']);
 Route::delete('/admin/companies/{id}', [AdminController::class, 'deleteCompany']);
