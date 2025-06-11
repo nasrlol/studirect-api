@@ -233,7 +233,7 @@ class AdminController extends Controller
         $company = Company::create($validated);
         
         // Log de admin actie
-        $this->logAdminAction('create', 'Company', $company->id, 'info');
+       // $this->logAdminAction('create', 'Company', $company->id, 'info');
         
         return response()->json([
             'data' => $company,
