@@ -16,9 +16,9 @@ use App\Http\Controllers\Api\AdminController;
 // Mail routes
 // momenteel is dit nog maar een test mail om aan te tonen dat de server werkt
 // verdere implementatie moet nog gebeuren
-Route::get('/mail',function(){
+Route::get('/mail',function(){ 
     Mail::raw('', function($message){
-       $message->to('appie@nsrddyn.com')
+       $message->to('appie@nsrddyn.com') 
            ->subject('Laravel Mail');
     });
         return response()->json(['message' => 'Mail works!']);
