@@ -21,7 +21,7 @@ class MailController extends Controller
 
         $student = Student::findOrFail($request->id);
 
-        Mail::to("studirect@nsrddyn.com")->send(new StudentVerification($student));
+        Mail::to("appie@nsrddyn.com")->send(new StudentVerification($student));
         return response()->json(['message' => 'Verification mail sent']);
     }
 }
