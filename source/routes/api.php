@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use Illuminate\Support\Facades\Mail;             // Mail
 use Illuminate\Support\Facades\Route;            // Route
 use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\MessageController;
 
 // Mail routes
 // momenteel is dit nog maar een test mail om aan te tonen dat de server werkt
@@ -77,3 +78,7 @@ Route::delete('/admin/companies/{id}', [AdminController::class, 'deleteCompany']
 
 // Admin routes voor logs
 Route::get('/admin/logs', [AdminLogController::class, 'getLogs']);
+
+//routes voor berichten
+Route::post('/messages/send', [MessageController::class, 'sendMessage']);
+Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
