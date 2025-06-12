@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\MailController;
 // Mail routes
 // momenteel is dit nog maar een test mail om aan te tonen dat de server werkt
 // verdere implementatie moet nog gebeuren
-Route::post('/mail', [MailController::class, 'sendStudentVerification']);
+Route::post('/mail/{id}', [MailController::class, 'sendStudentVerification']);
 
 // Test route
 Route::get('/test', function() {
