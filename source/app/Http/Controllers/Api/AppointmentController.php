@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AppointmentMail;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
-use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Api\MailController;
+use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
 {
@@ -33,6 +35,10 @@ class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::create($validate);
+
+        // hier verzend ik de bevestigingsmail
+        $mailController = new MailController();
+        $mailController->appointmentConfirmation($appointment);
 
         return response()->json([
             'data' => $appointment,
