@@ -97,7 +97,7 @@ class CompanyController extends Controller
             'photo' => 'nullable|string|max:255',
             'speeddate_duration' => 'required|integer|max:60'
             ]);
-    
+
             $company->update($validated);
 
             return response()->json([

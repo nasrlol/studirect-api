@@ -23,8 +23,8 @@ class Admin extends Model
         }
         $this->attributes['password'] = $value;
     }
-    public function adminlogs(): HasMany
+    public function logging(): HasMany
     {
-        return $this->HasMany(AdminLog::class);
+        return $this->HasMany(Log::class);
     }
 }
