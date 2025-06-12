@@ -14,11 +14,6 @@ use Illuminate\Support\Facades\Route;            // Route
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\MailController;
 
-// Mail routes
-// Appointment krijgt geen route omdat dat niet logisch dat het moet aangeroepen worden via een route
-// Ik zal het aanroepen bij het aanmaken van een appointment
-Route::post('/mail/{id}', [MailController::class, 'sendStudentVerification']);
-
 
 // Test route
 Route::get('/test', function() {
