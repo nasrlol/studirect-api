@@ -10,43 +10,15 @@ use Illuminate\Http\JsonResponse;
 
 class StudentController extends Controller
 {
-    // momenteel hebben we 2 StudentController.php bestanden
-    // elk met een functie index, eentje geeft een json response terug en
-    // de andere geeft een view response terug
-    // inefficient
-
-   // kleine update over de vorige comment, het terug geven van een view is een
-    // frontend iets en het zorgde alleen maar voor errors dus heb ik die er uit gehaald
-    // in een vorige pull request
-
     public function index(): JsonResponse
     {
         $students = Student::all();
 
-        /*
-        if (request()->wantsJson()) {
-        */
-
-        // json voor json request
-            return response()->json([
-                'data' => $students
-            ]);
-
-            // return view voor het geval dat er een view wordt gevraagd
-            /*
-            return view('student.index', [
-                'students' => $students
-            ]);
-        }
-            */
-        // code uitgecomment want het blijft maar een html view terug geven terwijl dat we de json nodig hebben
+        return response()->json([
+            'data' => $students
+        ]);
     }
-    // het herkennen hiervan doet laravel automatisch, in geval van browser aanvraag -> view
-    // anders krijg je een json (als de controller het vraagt he)
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -70,10 +42,6 @@ class StudentController extends Controller
         ], 201);
     }
 
-    /*
-     * Display the specified resource.
-     */
-
     public function show(string $id): JsonResponse
     {
         try {
@@ -84,9 +52,6 @@ class StudentController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id): JsonResponse
     {
         try {
@@ -94,7 +59,7 @@ class StudentController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'email' => 'required|email|unique:students,email' .$student->id,
+                'email' => 'required|email|unique:students,email,' . $student->id,
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
                 'graduation_track' => 'required|string|max:255',
