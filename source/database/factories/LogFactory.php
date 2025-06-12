@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Admin;
-use App\Models\Logs;
+use App\Models\Log;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LogFactory extends Factory
 {
-    protected $model = Logs::class;
+    protected $model = Log::class;
 
     public function definition(): array
     {

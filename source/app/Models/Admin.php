@@ -25,6 +25,6 @@ class Admin extends Model
     }
     public function logging(): HasMany
     {
-        return $this->HasMany(Logs::class);
+        return $this->HasMany(Log::class);
     }
 }

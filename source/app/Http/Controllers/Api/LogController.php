@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Logs;
+use App\Models\Log;
 use Illuminate\Http\JsonResponse;
 
 class LogController extends Controller
 {
 
-// Logs bekijken
+// Log bekijken
     public function getLogs(): JsonResponse
     {
-        // $logs = Logs::with('admin')->orderBy('timestamp', 'desc')->get();
+        // $logs = Log::with('admin')->orderBy('timestamp', 'desc')->get();
         // return response()->json(['data' => $logs]);
 
         // de fk is weg dus ffkes de vorige code uizetten
-        $logs = Logs::orderBy('created_at', 'desc')->get();
+        $logs = Log::orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'data' => $logs
@@ -28,7 +28,7 @@ class LogController extends Controller
         // In een echte toepassing zou je hier de huidige ingelogde admin ID gebruiken
         // Voor nu gebruiken we ID 1 als voorbeeld
 
-        Logs::create([
+        Log::create([
             'action' => $action,
             'target_type' => $targetType,
             'target_id' => $targetId,
