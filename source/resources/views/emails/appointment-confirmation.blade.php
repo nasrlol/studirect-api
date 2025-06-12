@@ -9,7 +9,7 @@
 <body>
 <main>
     <h3>Hey {{ $student->first_name }}</h3>
-    <p>You booked a speeddate at {{ $appointment->time_slot }}</p>
+    <p>U heeft een speeddate geboekt {{ $appointment->time_slot }}</p>
 </main>
 </body>
 </html>
