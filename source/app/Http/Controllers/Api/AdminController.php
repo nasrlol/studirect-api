@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Student;
 use App\Models\Company;
-
+ 
 class AdminController extends Controller
 {
     public function index(): JsonResponse
@@ -74,84 +74,6 @@ class AdminController extends Controller
     }
 
 
-    // Studenten beheren
-    public function getAllStudents(): JsonResponse
-    {
-        $students = Student::all();
-        return response()->json(['data' => $students]);
-    }
-
-    public function getStudent(string $id): JsonResponse
-    {
-        try {
-            $student = Student::findOrFail($id);
-            return response()->json(['data' => $student]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Student niet gevonden'], 404);
-        }
-    }
-
-    public function updateStudent(Request $request, string $id): JsonResponse
-    {
-        try {
-            $student = Student::findOrFail($id);
-            $validated = $request->validate([
-                'first_name' => 'string|max:255',
-                'last_name' => 'string|max:255',
-                'email' => 'email|unique:students,email,' . $student->id,
-                'study_direction' => 'string|max:255',
-                'graduation_track' => 'string|max:255',
-                'interests' => 'string',
-                'job_preferences' => 'string',
-                'profile_complete' => 'boolean',
-            ]);
-
-            $student->update($validated);
-
-            // Log de admin actie
-            $this->logAdminAction('update', 'Student', $id, 'info');
-
-            return response()->json([
-                'data' => $student,
-                'message' => 'Student is bijgewerkt'
-            ]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Student niet gevonden'], 404);
-        }
-    }
-
-    public function deleteStudent(string $id): JsonResponse
-    {
-        try {
-            $student = Student::findOrFail($id);
-            $student->delete();
-
-            // Log de admin actie
-            $this->logAdminAction('delete', 'Student', $id, 'warning');
-
-            return response()->json(['message' => 'Student verwijderd']);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Student niet gevonden'], 404);
-        }
-    }
-
-// Bedrijven beheren
-    public function getAllCompanies(): JsonResponse
-    {
-        $companies = Company::all();
-        return response()->json(['data' => $companies]);
-    }
-
-    public function getCompany(string $id): JsonResponse
-    {
-        try {
-            $company = Company::findOrFail($id);
-            return response()->json(['data' => $company]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Bedrijf niet gevonden'], 404);
-        }
-    }
-
 
     private function logAdminAction(string $action, string $targetType, string $targetId, string $severity = 'info'): void
     {
@@ -169,49 +91,4 @@ class AdminController extends Controller
         ]);
     }
 
-    public function updateCompany(Request $request, string $id): JsonResponse
-    {
-        try {
-            $company = Company::findOrFail($id);
-            $validated = $request->validate([
-                'name' => 'string|max:255',
-                'email' => 'email|unique:companies,email,' . $company->id,
-                'plan_type' => 'string|max:255',
-                'description' => 'string',
-                'job_types' => 'string',
-                'job_domain' => 'string',
-                'booth_location' => 'string|max:255',
-                'photo' => 'string|max:255',
-                'speeddate_duration' => 'integer'
-            ]);
-
-            $company->update($validated);
-
-            // Log de admin actie
-            $this->logAdminAction('update', 'Company', $id, 'info');
-
-            return response()->json([
-                'data' => $company,
-                'message' => 'Bedrijf is bijgewerkt'
-            ]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Bedrijf niet gevonden'], 404);
-        }
-    }
-
-    public function deleteCompany(string $id): JsonResponse
-    {
-        try {
-            $company = Company::findOrFail($id);
-            $company->delete();
-
-            // Log de admin actie
-            $this->logAdminAction('delete', 'Company', $id, 'warning');
-
-            return response()->json(['message' => 'Bedrijf verwijderd']);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Bedrijf niet gevonden'], 404);
-        }
-    }
 }
-

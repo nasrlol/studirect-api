@@ -67,8 +67,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
+            $table->string('sender_type'); // 'student' of 'company'
+            $table->string('receiver_type'); // 'student' of 'company'
             $table->text('content');
-            $table->timestamp('timestamp')->useCurrent();
+            $table->timestamps();
+            
+      
         });
 
         Schema::create('appointments', function (Blueprint $table) {
