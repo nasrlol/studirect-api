@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
@@ -25,7 +26,7 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, MailService $mailService): JsonResponse
     {
         $validate = $request->validate([
             'name' => 'required|string|max:255',
@@ -57,6 +58,7 @@ class CompanyController extends Controller
         }
 
         $company = Company::create($validate);
+        $mailService->sendCompanyPassword($company);
 
         return response()->json([
             'data' => $company,
