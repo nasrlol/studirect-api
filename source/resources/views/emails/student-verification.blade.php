@@ -8,6 +8,7 @@
 <body>
 <main>
     <h1>Hallo {{ $student->first_name }},</h1>
+    <p>In de toekomst zal u hier ergens op een url moeten drukken om uw account te verifieren</p>
 </main>
 </body>
 </html>

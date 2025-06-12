@@ -2,23 +2,27 @@
 
 namespace App\Mail;
 
+use App\Models\Company;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class TestPostfixMail extends Mailable
+class CompanyPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+
+    public Company $company;
+
+    public function __construct(Company $company)
     {
-        //
+        $this->company = $company;
     }
 
     /**
@@ -27,7 +31,7 @@ class TestPostfixMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Test Postfix Mail',
+            subject: 'Company Password',
         );
     }
 
@@ -37,14 +41,14 @@ class TestPostfixMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.company-password',
         );
     }
 
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {

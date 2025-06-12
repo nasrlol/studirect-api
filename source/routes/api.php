@@ -1,36 +1,15 @@
 <?php
 
-/*
-use App\Http\Controllers\AppointmentController;
-*/
-
-use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ConnectionController;
+use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\MessageController;
-<<<<<<< tijdstip_mail_confirmatie
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 
 // Met Api namespace
-// Met Api namespace
-// Mail
 // Route
-=======
-use App\Http\Controllers\Api\StudentController;  // Met Api namespace
-use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
-use Illuminate\Support\Facades\Mail;             // Mail
-use Illuminate\Support\Facades\Route;            // Route
-use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\MailController;
->>>>>>> main
-
-
-// Test route
-Route::get('/test', function() {
-    return response()->json(['message' => 'API works!']);
-});
 
 // student routes
 Route::middleware('throttle:50,1')->group(function () {
@@ -64,7 +43,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::post('/connections', [ConnectionController::class, 'store']);
     Route::get('/connections/{id}', [ConnectionController::class, 'show']);
     Route::patch('/connections/{id}', [ConnectionController::class, 'update']);
-    // hier een patch ipv een put omdat enkel het tijdstip wordt aangepast
+    // hier een patch in plaats van een put omdat enkel het tijdstip wordt aangepast
     Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 });
 
