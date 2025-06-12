@@ -7,20 +7,15 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Api\AdminLogController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\ConnectionController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\StudentController;  // Met Api namespace
 use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
-use Illuminate\Support\Facades\Mail;             // Mail
 use Illuminate\Support\Facades\Route;            // Route
-use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\MailController;
 
 // Mail routes
-Route::post('/mail/{id}', [MailController::class, 'sendStudentVerification']);
-
-// Test route
-Route::get('/test', function() {
-    return response()->json(['message' => 'API works!']);
-});
+Route::post('/mail/students/{id}', [MailController::class, 'studentVerification']);
+Route::post('/mail/companies/{id}', [MailController::class, 'companyPassword']);
 
 // student routes
 Route::middleware('throttle:50,1')->group(function () {
@@ -54,7 +49,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::post('/connections', [ConnectionController::class, 'store']);
     Route::get('/connections/{id}', [ConnectionController::class, 'show']);
     Route::patch('/connections/{id}', [ConnectionController::class, 'update']);
-    // hier een patch ipv een put omdat enkel het tijdstip wordt aangepast
+    // hier een patch in plaats van een put omdat enkel het tijdstip wordt aangepast
     Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 });
 
