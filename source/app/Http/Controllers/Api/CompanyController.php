@@ -32,13 +32,29 @@ class CompanyController extends Controller
             'email' => 'required|email|unique:companies,email',
             'password' => 'required|string|min:8',
             'plan_type' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'job_types' => 'required|string|max:255',
-            'job_domain' => 'required|string|max:255',
             'booth_location' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'job_types' => 'nullable|string|max:255',
+            'job_domain' => 'nullable|string|max:255',
             'photo' => 'nullable|string|max:255',
-            'speeddate_duration' => 'required|integer|max:60'
+            'speeddate_duration' => 'nullable|integer|max:60'
         ]);
+
+        // Standaardwaarden voor ontbrekende velden
+        $defaults = [
+            'description' => 'Bedrijfsbeschrijving nog niet ingevuld',
+            'job_types' => 'Fulltime',
+            'job_domain' => 'Nog niet gespecificeerd',
+            'photo' => null,
+            'speeddate_duration' => 30
+        ];
+
+        // Vul ontbrekende velden aan met standaardwaarden
+        foreach ($defaults as $field => $value) {
+            if (!isset($validate[$field])) {
+                $validate[$field] = $value;
+            }
+        }
 
         $company = Company::create($validate);
 
