@@ -6,13 +6,16 @@ use App\Http\Controllers\AppointmentController;
 
 use App\Http\Controllers\Api\AdminLogController;
 use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ConnectionController;
-use App\Http\Controllers\Api\StudentController;  // Met Api namespace
-use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
-use Illuminate\Support\Facades\Mail;             // Mail
-use Illuminate\Support\Facades\Route;            // Route
-use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\MailController;
+use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\StudentController;
+use Illuminate\Support\Facades\Route;
+
+// Met Api namespace
+// Met Api namespace
+// Mail
+// Route
 
 
 // Test route
