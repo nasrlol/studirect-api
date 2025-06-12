@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\MailController;
 
 // Mail routes
 Route::post('/mail/{id}', [MailController::class, 'sendStudentVerification']);
+Route::post('/mail/appointment/{id}', [MailController::class, 'AppointmentConfirmation']);
 
 // Test route
 Route::get('/test', function() {
