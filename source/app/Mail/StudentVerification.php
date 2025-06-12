@@ -21,7 +21,6 @@ class StudentVerification extends Mailable
      */
 
     public Student $student;
-    public string $verificationUrl;
 
     public function __construct(Student $student)
     {
