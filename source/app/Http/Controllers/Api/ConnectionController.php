@@ -7,6 +7,7 @@ use App\Models\Connection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Api\ActivityLogController;
 
 class ConnectionController extends Controller
 {
@@ -27,6 +28,15 @@ class ConnectionController extends Controller
         ]);
 
         $connection = Connection::create($validated);
+
+        // Log actie
+        ActivityLogController::logAction(
+            actorType: \App\Models\Student::class, // of Company, afhankelijk van wie het aanroept
+            actorId: 1, // later: Auth::guard('student')->id() of Auth::guard('company')->id()
+            action: 'created_connection',
+            targetType: \App\Models\Connection::class,
+            targetId: $connection->id
+        );
 
         return response()->json([
             'data' => $connection,
@@ -59,6 +69,15 @@ class ConnectionController extends Controller
 
             $connection->update($validated);
 
+            // Log actie
+            ActivityLogController::logAction(
+                actorType: \App\Models\Student::class, // of Company
+                actorId: 1, // later: Auth::guard('student')->id() of Auth::guard('company')->id()
+                action: 'updated_connection',
+                targetType: \App\Models\Connection::class,
+                targetId: $connection->id
+            );
+
             return response()->json([
                 'data' => $connection,
                 'message' => 'connection succesvol bijgewerkt'
@@ -73,6 +92,16 @@ class ConnectionController extends Controller
     {
         try {
             $connection = Connection::findOrFail($id);
+
+            // Log actie VÓÓR delete
+            ActivityLogController::logAction(
+                actorType: \App\Models\Student::class, // of Company
+                actorId: 1, // later: Auth::guard('student')->id() of Auth::guard('company')->id()
+                action: 'deleted_connection',
+                targetType: \App\Models\Connection::class,
+                targetId: $connection->id
+            );
+
             $connection->delete();
 
             return response()->json([
