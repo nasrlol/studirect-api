@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class StudentController extends Controller
     // de andere geeft een view response terug
     // inefficient
 
-   // kleine update over de vorige comment, het terug geven van een view is een
+    // kleine update over de vorige comment, het terug geven van een view is een
     // frontend iets en het zorgde alleen maar voor errors dus heb ik die er uit gehaald
     // in een vorige pull request
 
@@ -28,17 +29,17 @@ class StudentController extends Controller
         */
 
         // json voor json request
-            return response()->json([
-                'data' => $students
-            ]);
+        return response()->json([
+            'data' => $students
+        ]);
 
-            // return view voor het geval dat er een view wordt gevraagd
-            /*
-            return view('student.index', [
-                'students' => $students
-            ]);
-        }
-            */
+        // return view voor het geval dat er een view wordt gevraagd
+        /*
+        return view('student.index', [
+            'students' => $students
+        ]);
+    }
+        */
         // code uitgecomment want het blijft maar een html view terug geven terwijl dat we de json nodig hebben
     }
     // het herkennen hiervan doet laravel automatisch, in geval van browser aanvraag -> view
@@ -77,6 +78,9 @@ class StudentController extends Controller
 
         $student = Student::create($validated);
 
+        $logger = new LogController();
+        $logger->setLog('create', 'Student', $student->id, 'info');
+
         return response()->json([
             'data' => $student,
             'message' => 'Student created successfully'
@@ -107,7 +111,7 @@ class StudentController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'email' => 'required|email|unique:students,email,' .$student->id,
+                'email' => 'required|email|unique:students,email,' . $student->id,
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
                 'graduation_track' => 'required|string|max:255',

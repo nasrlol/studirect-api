@@ -4,11 +4,12 @@
 use App\Http\Controllers\AppointmentController;
 */
 
-use App\Http\Controllers\Api\AdminLogController;
+use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ConnectionController;
 use App\Http\Controllers\Api\MessageController;
+<<<<<<< tijdstip_mail_confirmatie
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 // Met Api namespace
 // Mail
 // Route
+=======
+use App\Http\Controllers\Api\StudentController;  // Met Api namespace
+use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
+use Illuminate\Support\Facades\Mail;             // Mail
+use Illuminate\Support\Facades\Route;            // Route
+use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\MailController;
+>>>>>>> main
 
 
 // Test route
@@ -62,7 +71,7 @@ Route::middleware('throttle:50,1')->group(function () {
 // Route::apiResource('appointments', AppointmentController::class);
 
 // Admin routes voor logs
-Route::get('/admin/logs', [AdminLogController::class, 'getLogs']);
+Route::get('/admin/logs', [LogController::class, 'getLogs']);
 
 //routes voor berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);

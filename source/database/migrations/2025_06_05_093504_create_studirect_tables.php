@@ -45,14 +45,14 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('admin_logs', function (Blueprint $table) {
+        Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_id')->constrained('admins')->onDelete('cascade');
             $table->text('action');
             $table->string('target_type')->nullable();
             $table->unsignedBigInteger('target_id')->nullable();
             $table->timestamp('timestamp')->useCurrent();
             $table->string('severity')->nullable();
+            $table->timestamps();
         });
 
         Schema::create('connections', function (Blueprint $table) {
@@ -71,8 +71,8 @@ return new class extends Migration
             $table->string('receiver_type'); // 'student' of 'company'
             $table->text('content');
             $table->timestamps();
-            
-      
+
+
         });
 
         Schema::create('appointments', function (Blueprint $table) {
@@ -91,7 +91,7 @@ return new class extends Migration
         Schema::dropIfExists('appointments');
         Schema::dropIfExists('messages');
         Schema::dropIfExists('connections');
-        Schema::dropIfExists('admin_logs');
+        Schema::dropIfExists('logs');
         Schema::dropIfExists('students');
         Schema::dropIfExists('companies');
         Schema::dropIfExists('admins');
