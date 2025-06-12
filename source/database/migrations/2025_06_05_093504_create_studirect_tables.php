@@ -45,15 +45,17 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('admin_logs', function (Blueprint $table) {
+        Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_id')->constrained('admins')->onDelete('cascade');
-            $table->text('action');
+            $table->string('actor_type')->nullable();
+            $table->unsignedBigInteger('actor_id')->nullable();
+            $table->string('action');
             $table->string('target_type')->nullable();
             $table->unsignedBigInteger('target_id')->nullable();
-            $table->timestamp('timestamp')->useCurrent();
-            $table->string('severity')->nullable();
+            $table->string('severity')->default('info');
+            $table->timestamps();
         });
+
 
         Schema::create('connections', function (Blueprint $table) {
             $table->id();
