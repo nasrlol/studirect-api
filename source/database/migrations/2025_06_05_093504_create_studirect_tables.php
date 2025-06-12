@@ -47,7 +47,6 @@ return new class extends Migration
 
         Schema::create('admin_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('admin_id')->constrained('admins')->onDelete('cascade');
             $table->text('action');
             $table->string('target_type')->nullable();
             $table->unsignedBigInteger('target_id')->nullable();
@@ -71,8 +70,8 @@ return new class extends Migration
             $table->string('receiver_type'); // 'student' of 'company'
             $table->text('content');
             $table->timestamps();
-            
-      
+
+
         });
 
         Schema::create('appointments', function (Blueprint $table) {
