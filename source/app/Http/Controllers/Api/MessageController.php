@@ -8,12 +8,12 @@ use App\Models\Student;
 use App\Models\Company;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-
+use App\Http\Controllers\Api\ActivityLogController;
 
 class MessageController extends Controller
 {
     // Bericht versturen
-    public function sendMessage(Request $request) : JsonResponse
+    public function sendMessage(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'sender_id' => 'required|integer',
@@ -24,6 +24,15 @@ class MessageController extends Controller
         ]);
 
         $message = Message::create($validated);
+
+        // Log actie
+        ActivityLogController::logAction(
+            actorType: $validated['sender_type'],
+            actorId: $validated['sender_id'],
+            action: 'sent_message',
+            targetType: \App\Models\Message::class,
+            targetId: $message->id
+        );
 
         return response()->json(['message' => 'Bericht verzonden.', 'data' => $message]);
     }
