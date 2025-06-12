@@ -12,24 +12,15 @@ use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
 use Illuminate\Support\Facades\Mail;             // Mail
 use Illuminate\Support\Facades\Route;            // Route
 use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\MailController;
 
 // Mail routes
-// momenteel is dit nog maar een test mail om aan te tonen dat de server werkt
-// verdere implementatie moet nog gebeuren
-Route::get('/mail',function(){ 
-    Mail::raw('', function($message){
-       $message->to('appie@nsrddyn.com') 
-           ->subject('Laravel Mail');
-    });
-        return response()->json(['message' => 'Mail works!']);
-});
+Route::post('/mail/{id}', [MailController::class, 'sendStudentVerification']);
 
 // Test route
 Route::get('/test', function() {
     return response()->json(['message' => 'API works!']);
 });
-
 
 // student routes
 Route::middleware('throttle:50,1')->group(function () {
@@ -67,7 +58,6 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 });
 
-// zo kan het ook, misschien doen we het zo later
 // Route::apiResource('appointments', AppointmentController::class);
 
 // Admin routes voor logs
