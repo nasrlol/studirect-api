@@ -94,7 +94,7 @@ class StudentController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'email' => 'required|email|unique:students,email' .$student->id,
+                'email' => 'required|email|unique:students,email,' .$student->id,
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
                 'graduation_track' => 'required|string|max:255',
