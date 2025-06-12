@@ -45,7 +45,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('admin_logs', function (Blueprint $table) {
+        Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->text('action');
             $table->string('target_type')->nullable();
@@ -90,7 +90,7 @@ return new class extends Migration
         Schema::dropIfExists('appointments');
         Schema::dropIfExists('messages');
         Schema::dropIfExists('connections');
-        Schema::dropIfExists('admin_logs');
+        Schema::dropIfExists('logs');
         Schema::dropIfExists('students');
         Schema::dropIfExists('companies');
         Schema::dropIfExists('admins');
