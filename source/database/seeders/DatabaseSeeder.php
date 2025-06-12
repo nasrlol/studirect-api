@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
-use App\Models\AdminLog;
+use App\Models\Logs;
 use App\Models\Connection;
 use Illuminate\Database\Seeder;
 use App\Models\Company;
@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
         Appointment::factory()->count(5)->create();
         Connection::factory()->count(5)->create();
         Admin::factory()->count(5)->create();
-        AdminLog::factory()->count(5)->create();
+        Logs::factory()->count(5)->create();
     }
 }
