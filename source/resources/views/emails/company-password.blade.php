@@ -8,7 +8,8 @@
 <body>
 <main>
     <h1>Hallo {{ $company->name }},</h1>
-    <p>In de toekomst zal u uw random gegenereerd wachtwoord hier ergens ontvangen</p>
+    <p>Dit is uw wachtwoord {{ $company->password }}}</p>
+    <p>Verander dit wachtwoord zo snel mogelijk, alvast bedankt</p>
 </main>
 </body>
 </html>
