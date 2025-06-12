@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Student;
 use App\Models\Company;
-
+ 
 class AdminController extends Controller
 {
     public function index(): JsonResponse
