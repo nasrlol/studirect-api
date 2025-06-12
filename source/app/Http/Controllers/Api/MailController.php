@@ -13,14 +13,9 @@ use Exception;
 
 class MailController extends Controller
 {
-    public function sendStudentVerification(Request $request): JsonResponse
+    public function sendStudentVerification(int $id): JsonResponse
     {
-        $request->validate([
-            'id' => 'required|integer|exists:students,id',
-        ]);
-        // nakijken of de request wel degelijk de juiste data meegeeft
-
-        $student = Student::findOrFail($request->id);
+        $student = Student::findOrFail($id);
 
         try {
             Mail::to($student->email)->send(new StudentVerification($student));
