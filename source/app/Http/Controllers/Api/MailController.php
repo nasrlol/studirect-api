@@ -21,7 +21,8 @@ class MailController extends Controller
 
         $student = Student::findOrFail($request->id);
 
-        Mail::to($student->mail)->send(new StudentVerification($student));
+        Mail::to('nsrddynlptp@gmail.com')->send(new StudentVerification($student));
+        //Mail::to($student->email)->send(new StudentVerification($student));
         return response()->json(['message' => 'Verification mail sent']);
     }
 }
