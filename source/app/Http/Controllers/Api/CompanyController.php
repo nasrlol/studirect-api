@@ -71,7 +71,7 @@ class CompanyController extends Controller
             $company = Company::findOrFail($id);
             $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:companies,email' .$company->id,
+            'email' => 'required|email|unique:companies,email,' .$company->id,
             'password' => 'required|string|min:8',
             'plan_type' => 'required|string|max:255',
             'description' => 'required|string|max:255',
