@@ -7,9 +7,8 @@ use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Models\Student;
-use App\Models\Company;
- 
+use App\Http\Controllers\Api\ActivityLogController;
+
 class AdminController extends Controller
 {
     public function index(): JsonResponse
@@ -27,6 +26,15 @@ class AdminController extends Controller
 
         $validated['password'] = bcrypt($validated['password']);
         $admin = Admin::create($validated);
+
+        // Log actie
+        ActivityLogController::logAction(
+            actorType: \App\Models\Admin::class,
+            actorId: 1, // later: Auth::guard('admin')->id()
+            action: 'created_admin',
+            targetType: \App\Models\Admin::class,
+            targetId: $admin->id
+        );
 
         return response()->json(['data' => $admin], 201);
     }
@@ -56,6 +64,15 @@ class AdminController extends Controller
 
             $admin->update($validated);
 
+            // Log actie
+            ActivityLogController::logAction(
+                actorType: \App\Models\Admin::class,
+                actorId: 1, // later: Auth::guard('admin')->id()
+                action: 'updated_admin',
+                targetType: \App\Models\Admin::class,
+                targetId: $admin->id
+            );
+
             return response()->json(['data' => $admin]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Admin niet gevonden'], 404);
@@ -66,29 +83,21 @@ class AdminController extends Controller
     {
         try {
             $admin = Admin::findOrFail($id);
+
+            // Log actie VÓÓR delete
+            ActivityLogController::logAction(
+                actorType: \App\Models\Admin::class,
+                actorId: 1, // later: Auth::guard('admin')->id()
+                action: 'deleted_admin',
+                targetType: \App\Models\Admin::class,
+                targetId: $admin->id
+            );
+
             $admin->delete();
+
             return response()->json(['message' => 'Admin verwijderd']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Admin niet gevonden'], 404);
         }
     }
-
-
-
-    private function logAdminAction(string $action, string $targetType, string $targetId, string $severity = 'info'): void
-    {
-        // In een echte toepassing zou je hier de huidige ingelogde admin ID gebruiken
-        // Voor nu gebruiken we ID 1 als voorbeeld
-        $adminId = 1; // Hier zou je Auth::id() of iets dergelijks gebruiken
-
-        Admin::create([
-            'admin_id' => $adminId,
-            'action' => $action,
-            'target_type' => $targetType,
-            'target_id' => $targetId,
-            'severity' => $severity,
-            // timestamp wordt automatisch ingevuld door de database
-        ]);
-    }
-
 }
