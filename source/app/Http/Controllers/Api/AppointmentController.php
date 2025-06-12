@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
-use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Api\ActivityLogController;
 
 class AppointmentController extends Controller
 {
@@ -33,6 +33,15 @@ class AppointmentController extends Controller
         ]);
 
         $appointment = Appointment::create($validate);
+
+        // Log actie
+        ActivityLogController::logAction(
+            actorType: \App\Models\Student::class, // of Company, afhankelijk van wie het aanroept
+            actorId: 1, // later: Auth::guard('student')->id() of Auth::guard('company')->id()
+            action: 'created_appointment',
+            targetType: \App\Models\Appointment::class,
+            targetId: $appointment->id
+        );
 
         return response()->json([
             'data' => $appointment,
@@ -62,10 +71,19 @@ class AppointmentController extends Controller
         $validated = $request->validate([
             'time_slot' => 'required|string|max:255',
             // afspraak verzetten = enkel tijdstip verzetten
-            // moet dan een patch zijn??
         ]);
 
         $appointment->update($validated);
+
+        // Log actie
+        ActivityLogController::logAction(
+            actorType: \App\Models\Student::class, // of Company
+            actorId: 1, // later: Auth::guard('student')->id() of Auth::guard('company')->id()
+            action: 'updated_appointment',
+            targetType: \App\Models\Appointment::class,
+            targetId: $appointment->id
+        );
+
         return response()->json([
             'data' => $appointment,
             'message' => 'Appointment updated successfully'
@@ -79,6 +97,16 @@ class AppointmentController extends Controller
     {
         try {
             $appointment = Appointment::findOrFail($id);
+
+            // Log actie VÓÓR delete
+            ActivityLogController::logAction(
+                actorType: \App\Models\Student::class, // of Company
+                actorId: 1, // later: Auth::guard('student')->id() of Auth::guard('company')->id()
+                action: 'deleted_appointment',
+                targetType: \App\Models\Appointment::class,
+                targetId: $appointment->id
+            );
+
             $appointment->delete();
 
             return response()->json([
@@ -86,8 +114,8 @@ class AppointmentController extends Controller
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                    'message' => 'Appointment not found']
-                , 404);
+                'message' => 'Appointment not found'
+            ], 404);
         }
     }
 }
