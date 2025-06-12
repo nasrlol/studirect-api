@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Logs extends Model
 {
     use HasFactory;
-    public  $timestamps = false;
 
     protected $fillable = [
         'action',
