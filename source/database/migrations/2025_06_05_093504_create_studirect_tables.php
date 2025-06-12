@@ -52,6 +52,7 @@ return new class extends Migration
             $table->unsignedBigInteger('target_id')->nullable();
             $table->timestamp('timestamp')->useCurrent();
             $table->string('severity')->nullable();
+            $table->timestamps();
         });
 
         Schema::create('connections', function (Blueprint $table) {
