@@ -90,6 +90,7 @@ return new class extends Migration
         Schema::dropIfExists('appointments');
         Schema::dropIfExists('messages');
         Schema::dropIfExists('connections');
+        Schema::dropIfExists('logs');
         Schema::dropIfExists('log');
         Schema::dropIfExists('students');
         Schema::dropIfExists('companies');

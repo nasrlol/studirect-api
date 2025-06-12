@@ -16,10 +16,10 @@ class LogController extends Controller
         // return response()->json(['data' => $logs]);
 
         // de fk is weg dus ffkes de vorige code uizetten
-        $logs = Log::orderBy('created_at', 'desc')->get();
+        $log = Log::orderBy('created_at', 'desc')->get();
 
         return response()->json([
-            'data' => $logs
+            'data' => $log
         ]);
 
     }
