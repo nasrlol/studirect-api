@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AppointmentMail;
 use App\Mail\StudentVerification;
 use App\Models\Appointment;
 use App\Models\Student;
@@ -31,12 +32,12 @@ class MailController extends Controller
 
     }
 
-    public function AppointmentConfirmation(int $id): JsonResponse
+    public function appointmentConfirmation(Appointment $appointment): JsonResponse
     {
-        $appointment = Appointment::findOrFail($id);
+        $student = Student::findOrFail($appointment->student_id);
 
         try {
-            Mail::to($appointment->email)->send(new StudentVerification($appointment));
+            Mail::to($student->email)->send(new AppointmentMail($appointment));
             return response()->json(['message' => 'Appointment confirmation mail sent']);
         } catch (Exception $e) {
             return response()->json([
@@ -45,3 +46,4 @@ class MailController extends Controller
             ], 500);
         }
     }
+}
