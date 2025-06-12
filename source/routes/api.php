@@ -8,10 +8,7 @@ use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 
-// Met Api namespace
-// Route
-
-// student routes
+// Student routes
 Route::middleware('throttle:50,1')->group(function () {
     Route::get('/students', [StudentController::class, 'index']);
     Route::post('/students', [StudentController::class, 'store']);
@@ -20,7 +17,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
 });
 
-// company routes
+// Company routes
 Route::middleware('throttle:50,1')->group(function () {
     Route::get('/companies', [CompanyController::class, 'index']);
     Route::post('/companies', [CompanyController::class, 'store']);
@@ -29,7 +26,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
 });
 
-// appointment routes
+// Appointment routes
 Route::middleware('throttle:200,1')->group(function () {
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
@@ -37,7 +34,8 @@ Route::middleware('throttle:200,1')->group(function () {
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
     Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 });
-// connection routes
+
+// Connection routes
 Route::middleware('throttle:50,1')->group(function () {
     Route::get('/connections', [ConnectionController::class, 'index']);
     Route::post('/connections', [ConnectionController::class, 'store']);
@@ -52,6 +50,6 @@ Route::middleware('throttle:50,1')->group(function () {
 // Admin routes voor logs
 Route::get('/admin/logs', [LogController::class, 'getLogs']);
 
-//routes voor berichten
+// Routes voor berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
