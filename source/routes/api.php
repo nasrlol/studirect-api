@@ -15,8 +15,10 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\MailController;
 
 // Mail routes
+// Appointment krijgt geen route omdat dat niet logisch dat het moet aangeroepen worden via een route
+// Ik zal het aanroepen bij het aanmaken van een appointment
 Route::post('/mail/{id}', [MailController::class, 'sendStudentVerification']);
-Route::post('/mail/appointment/{id}', [MailController::class, 'AppointmentConfirmation']);
+
 
 // Test route
 Route::get('/test', function() {
