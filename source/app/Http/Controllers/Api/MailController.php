@@ -8,6 +8,7 @@ use App\Models\Student;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Mockery\Exception;
 
 
 class MailController extends Controller
@@ -21,8 +22,18 @@ class MailController extends Controller
 
         $student = Student::findOrFail($request->id);
 
-        Mail::to('nsrddynlptp@gmail.com')->send(new StudentVerification($student));
-        //Mail::to($student->email)->send(new StudentVerification($student));
-        return response()->json(['message' => 'Verification mail sent']);
+        try {
+            Mail::to('nsrddynlptp@gmail.com')->send(new StudentVerification($student));
+            //Mail::to($student->email)->send(new StudentVerification($student));
+
+            return response()->json(['message' => 'Verification mail sent']);
+        } catch (Exception $e)
+        {
+            return response()->json([
+                'message' => 'Failed to send verification email.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
     }
 }
