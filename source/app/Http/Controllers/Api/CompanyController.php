@@ -7,6 +7,7 @@ use App\Models\Company;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Api\ActivityLogController;
 
 class CompanyController extends Controller
 {
@@ -18,7 +19,7 @@ class CompanyController extends Controller
     {
         $companies = Company::all();
         return response()->json([
-            'data'=>$companies
+            'data' => $companies
         ]);
     }
 
@@ -42,6 +43,15 @@ class CompanyController extends Controller
 
         $company = Company::create($validate);
 
+        // Log actie
+        ActivityLogController::logAction(
+            actorType: \App\Models\Admin::class,
+            actorId: 1, // later: Auth::guard('admin')->id()
+            action: 'created_company',
+            targetType: \App\Models\Company::class,
+            targetId: $company->id
+        );
+
         return response()->json([
             'data' => $company,
             'message' => 'Company created successfully'
@@ -55,9 +65,8 @@ class CompanyController extends Controller
     {
         try {
             $company = Company::findOrFail($id);
-            return response()->json(['data'=>$company]);
-        } catch(ModelNotFoundException $e)
-        {
+            return response()->json(['data' => $company]);
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Company not found']);
         }
     }
@@ -65,31 +74,39 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id) : JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
         try {
             $company = Company::findOrFail($id);
             $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:companies,email' .$company->id,
-            'password' => 'required|string|min:8',
-            'plan_type' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'job_types' => 'required|string|max:255',
-            'job_domain' => 'required|string|max:255',
-            'booth_location' => 'required|string|max:255',
-            'photo' => 'nullable|string|max:255',
-            'speeddate_duration' => 'required|integer|max:60'
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:companies,email,' . $company->id,
+                'password' => 'required|string|min:8',
+                'plan_type' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+                'job_types' => 'required|string|max:255',
+                'job_domain' => 'required|string|max:255',
+                'booth_location' => 'required|string|max:255',
+                'photo' => 'nullable|string|max:255',
+                'speeddate_duration' => 'required|integer|max:60'
             ]);
 
             $company->update($validated);
+
+            // Log actie
+            ActivityLogController::logAction(
+                actorType: \App\Models\Admin::class,
+                actorId: 1, // later: Auth::guard('admin')->id()
+                action: 'updated_company',
+                targetType: \App\Models\Company::class,
+                targetId: $company->id
+            );
 
             return response()->json([
                 'data' => $company,
                 'message' => 'Company updated successfully'
             ]);
-        } catch (ModelNotFoundException $e)
-        {
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Company not found']);
         }
     }
@@ -101,6 +118,16 @@ class CompanyController extends Controller
     {
         try {
             $company = Company::findOrFail($id);
+
+            // Log actie VÓÓR delete
+            ActivityLogController::logAction(
+                actorType: \App\Models\Admin::class,
+                actorId: 1, // later: Auth::guard('admin')->id()
+                action: 'deleted_company',
+                targetType: \App\Models\Company::class,
+                targetId: $company->id
+            );
+
             $company->delete();
 
             return response()->json([
