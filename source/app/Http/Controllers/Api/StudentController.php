@@ -54,13 +54,26 @@ class StudentController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:students,email',
             'password' => 'required|string|min:8',
-            'study_direction' => 'required|string|max:255',
-            'graduation_track' => 'required|string|max:255',
-            'interests' => 'required|string',
-            'job_preferences' => 'required|string',
+            'study_direction' => 'required|string|max:255', // Nu verplicht
+            'graduation_track' => 'required|string|max:255', // Nu verplicht
+            'interests' => 'nullable|string',
+            'job_preferences' => 'nullable|string',
             'cv' => 'nullable|string',
-            'profile_complete' => 'boolean',
+            'profile_complete' => 'nullable|boolean',
         ]);
+
+        // Standaardwaarden alleen voor optionele velden
+        $defaults = [
+            'interests' => 'Nog niet ingevuld',
+            'job_preferences' => 'Nog niet ingevuld',
+            'profile_complete' => false
+        ];
+
+        foreach ($defaults as $field => $value) {
+            if (!isset($validated[$field])) {
+                $validated[$field] = $value;
+            }
+        }
 
         $student = Student::create($validated);
 
@@ -94,7 +107,7 @@ class StudentController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'required|string|max:255',
-                'email' => 'required|email|unique:students,email' .$student->id,
+                'email' => 'required|email|unique:students,email,' .$student->id,
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
                 'graduation_track' => 'required|string|max:255',
