@@ -4,8 +4,10 @@ namespace App\Services;
 
 
 use App\Mail\AppointmentMail;
+use App\Mail\CompanyPassword;
 use App\Mail\StudentVerification;
 use App\Models\Appointment;
+use App\Models\Company;
 use App\Models\Student;
 use Illuminate\Support\Facades\Mail;
 
@@ -22,4 +24,10 @@ class MailService
     {
         Mail::to($appointment->student->email)->send(new AppointmentMail($appointment));
     }
+
+    public function sendCompanyPassword(Company $company): void
+    {
+        Mail::to($company->email)->send(new CompanyPassword($company));
+    }
+
 }
