@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class AdminLog extends Model
+class Logs extends Model
 {
     use HasFactory;
     public  $timestamps = false;
-    
+
     protected $fillable = [
-        'admin_id',
         'action',
         'target_type',
         'target_id',
