@@ -24,6 +24,9 @@ class Company extends Model
         'booth_location',
         'photo',
         'speeddate_duration',
+        'company_description',
+        'job_requirements',
+        'job_description',
     ];
 
 

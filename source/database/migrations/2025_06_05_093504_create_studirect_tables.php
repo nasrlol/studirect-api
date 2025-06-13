@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('booth_location')->nullable();
             $table->string('photo')->nullable();
             $table->integer('speeddate_duration')->nullable();
+            $table->string('company_description')->nullable();
+            $table->string('job_requirements')->nullable();
+            $table->string('job_description')->nullable();
             $table->timestamps();
         });
 
