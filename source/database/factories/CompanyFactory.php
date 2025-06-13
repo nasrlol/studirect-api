@@ -22,7 +22,10 @@ class CompanyFactory extends Factory
             'booth_location' => $this->faker->randomElement([
                 'A12', 'B5', 'C7', 'D3', 'E10']),
             'photo' => $this->faker->url(),
-            'speeddate_duration' => $this->faker->numberBetween(1,30)
+            'speeddate_duration' => $this->faker->numberBetween(1,30),
+            'company_description' => $this->faker->paragraph(2),
+            'job_requirements' => $this->faker->paragraph(2),
+            'job_description' => $this->faker->paragraph(2)
         ];
     }
 }
