@@ -79,7 +79,7 @@ class StudentController extends Controller
         $student = Student::create($validated);
 
         $logger = new LogController();
-        $logger->setLog('create', 'Student', $student->id, 'info');
+        $logger->setLog("Student", "Student created", "Student", "Normal");
 
         return response()->json([
             'data' => $student,
@@ -123,6 +123,9 @@ class StudentController extends Controller
 
             $student->update($validated);
 
+            $logger = new LogController();
+            $logger->setLog("Student", "Student updated", "Student", "Normal");
+
             return response()->json([
                 'data' => $student,
                 'message' => 'Student updated successfully'
@@ -137,6 +140,9 @@ class StudentController extends Controller
         try {
             $student = Student::findOrFail($id);
             $student->delete();
+
+            $logger = new LogController();
+            $logger->setLog("Student", "Student deleted", "Student", "Normal");
 
             return response()->json([
                 'message' => 'Student deleted successfully'
