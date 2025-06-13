@@ -48,7 +48,7 @@ class MessageController extends Controller
                   ->where('sender_type', $validated['user2_type'])
                   ->where('receiver_id', $validated['user1_id'])
                   ->where('receiver_type', $validated['user1_type']);
-        })->orderBy('timestamp', 'asc')->get();
+        })->orderBy('created_at', 'asc')->get();
 
         return response()->json(['conversation' => $messages]);
     }
