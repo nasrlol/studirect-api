@@ -13,9 +13,9 @@ class Log extends Model
 
 
     protected $fillable = [
+        'actor',
         'action',
         'target_type',
-        'target_id',
         'severity',
     ];
 

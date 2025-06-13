@@ -28,6 +28,9 @@ class ConnectionController extends Controller
 
         $connection = Connection::create($validated);
 
+        $logger = new LogController();
+        $logger->setLog("Student", "Connection created", "Connection", "Normal");
+
         return response()->json([
             'data' => $connection,
             'message' => 'connection succesvol aangemaakt'
@@ -58,7 +61,8 @@ class ConnectionController extends Controller
             ]);
 
             $connection->update($validated);
-
+            $logger = new LogController();
+            $logger->setLog("Student", "Connection updated ", "Connection", "Normal");
             return response()->json([
                 'data' => $connection,
                 'message' => 'connection succesvol bijgewerkt'
@@ -75,8 +79,10 @@ class ConnectionController extends Controller
             $connection = Connection::findOrFail($id);
             $connection->delete();
 
+            $logger = new LogController();
+            $logger->setLog("Student", "Connection deleted ", "Connection", "High");
             return response()->json([
-                'message' => 'connection verwijderd'
+                'message' => 'Connection deleted'
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'connection niet gevonden'], 404);

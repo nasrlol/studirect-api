@@ -28,6 +28,10 @@ class AdminController extends Controller
         $validated['password'] = bcrypt($validated['password']);
         $admin = Admin::create($validated);
 
+
+        $logger = new LogController();
+        $logger->setLog("Admin", "Admin created ", "Admin", "High");
+
         return response()->json(['data' => $admin], 201);
     }
 
@@ -56,6 +60,11 @@ class AdminController extends Controller
 
             $admin->update($validated);
 
+
+            $logger = new LogController();
+            $logger->setLog("Admin", "Admin updated ", "Admin", "High");
+
+
             return response()->json(['data' => $admin]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Admin niet gevonden'], 404);
@@ -64,9 +73,14 @@ class AdminController extends Controller
 
     public function destroy(string $id): JsonResponse
     {
+
+
         try {
             $admin = Admin::findOrFail($id);
             $admin->delete();
+
+            $logger = new LogController();
+            $logger->setLog("Admin", "Admin deleted ", "Admin", "High");
             return response()->json(['message' => 'Admin verwijderd']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Admin niet gevonden'], 404);

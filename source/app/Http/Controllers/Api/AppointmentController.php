@@ -36,6 +36,8 @@ class AppointmentController extends Controller
 
         // hier verzend ik de bevestigingsmail
         $mailService->sendAppointmentConfirmation($appointment);
+        $logger = new LogController();
+        $logger->setLog("student", "appointment creation", " appointment", "normal");
 
         return response()->json([
             'data' => $appointment,
@@ -83,6 +85,9 @@ class AppointmentController extends Controller
         try {
             $appointment = Appointment::findOrFail($id);
             $appointment->delete();
+
+            $logger = new LogController();
+            $logger->setLog("Student | Company", "Appointment deleted", "Appointment", "normal");
 
             return response()->json([
                 'message' => 'Appointment deleted successfully'
