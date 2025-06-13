@@ -60,6 +60,10 @@ class CompanyController extends Controller
         $company = Company::create($validate);
         $mailService->sendCompanyPassword($company);
 
+
+        $logger = new LogController();
+        $logger->setLog("Company", "Company created", "Company", "High");
+
         return response()->json([
             'data' => $company,
             'message' => 'Company created successfully'
@@ -102,6 +106,10 @@ class CompanyController extends Controller
 
             $company->update($validated);
 
+
+            $logger = new LogController();
+            $logger->setLog("Company", "Company updated", "Company", "normal");
+
             return response()->json([
                 'data' => $company,
                 'message' => 'Company updated successfully'
@@ -120,6 +128,9 @@ class CompanyController extends Controller
         try {
             $company = Company::findOrFail($id);
             $company->delete();
+
+            $logger = new LogController();
+            $logger->setLog("Company", "Company deleted", "Company", "normal");
 
             return response()->json([
                 'message' => 'Company deleted successfully'
