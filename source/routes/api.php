@@ -1,29 +1,14 @@
 <?php
 
-/*
-use App\Http\Controllers\AppointmentController;
-*/
-
-use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ConnectionController;
+use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\MessageController;
-use App\Http\Controllers\Api\StudentController;  // Met Api namespace
-use App\Http\Controllers\Api\CompanyController;  // Met Api namespace
-use Illuminate\Support\Facades\Mail;             // Mail
-use Illuminate\Support\Facades\Route;            // Route
-use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\MailController;
+use App\Http\Controllers\Api\StudentController;
+use Illuminate\Support\Facades\Route;
 
-// Mail routes
-Route::post('/mail/{id}', [MailController::class, 'sendStudentVerification']);
-
-// Test route
-Route::get('/test', function() {
-    return response()->json(['message' => 'API works!']);
-});
-
-// student routes
+// Student routes
 Route::middleware('throttle:50,1')->group(function () {
     Route::get('/students', [StudentController::class, 'index']);
     Route::post('/students', [StudentController::class, 'store']);
@@ -32,7 +17,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
 });
 
-// company routes
+// Company routes
 Route::middleware('throttle:50,1')->group(function () {
     Route::get('/companies', [CompanyController::class, 'index']);
     Route::post('/companies', [CompanyController::class, 'store']);
@@ -41,7 +26,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
 });
 
-// appointment routes
+// Appointment routes
 Route::middleware('throttle:200,1')->group(function () {
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
@@ -49,13 +34,14 @@ Route::middleware('throttle:200,1')->group(function () {
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
     Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 });
-// connection routes
+
+// Connection routes
 Route::middleware('throttle:50,1')->group(function () {
     Route::get('/connections', [ConnectionController::class, 'index']);
     Route::post('/connections', [ConnectionController::class, 'store']);
     Route::get('/connections/{id}', [ConnectionController::class, 'show']);
     Route::patch('/connections/{id}', [ConnectionController::class, 'update']);
-    // hier een patch ipv een put omdat enkel het tijdstip wordt aangepast
+    // hier een patch in plaats van een put omdat enkel het tijdstip wordt aangepast
     Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 });
 
@@ -64,6 +50,6 @@ Route::middleware('throttle:50,1')->group(function () {
 // Admin routes voor logs
 Route::get('/admin/logs', [LogController::class, 'getLogs']);
 
-//routes voor berichten
+// Routes voor berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 Route::get('/messages/conversation', [MessageController::class, 'getConversation']);

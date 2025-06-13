@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Models\Appointment;
+use App\Models\Student;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,16 +11,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class TestPostfixMail extends Mailable
+class AppointmentMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+
+    public Appointment $appointment;
+    public function __construct(Appointment $appointment)
     {
-        //
+        $this->appointment = $appointment;
     }
 
     /**
@@ -26,8 +30,8 @@ class TestPostfixMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Test Postfix Mail',
+       return new Envelope(
+            subject: 'Booking confirmation',
         );
     }
 
@@ -36,8 +40,12 @@ class TestPostfixMail extends Mailable
      */
     public function content(): Content
     {
+        $student = Student::findOrFail($this->appointment->student_id);
         return new Content(
-            view: 'view.name',
+            view: 'emails.appointment-confirmation',
+            with: [
+                'student' => $student,
+            ]
         );
     }
 

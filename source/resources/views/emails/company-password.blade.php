@@ -7,7 +7,9 @@
 </head>
 <body>
 <main>
-    <h1>Hallo {{ $student->first_name }},</h1>
+    <h1>Hallo {{ $company->name }},</h1>
+    <p>Dit is uw wachtwoord {{ $company->password }}}</p>
+    <p>Verander dit wachtwoord zo snel mogelijk, alvast bedankt</p>
 </main>
 </body>
 </html>

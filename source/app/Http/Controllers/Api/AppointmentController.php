@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
-use Illuminate\Support\Facades\App;
 
 class AppointmentController extends Controller
 {
@@ -23,16 +23,19 @@ class AppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, MailService $mailService): JsonResponse
     {
         $validate = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
             'company_id' => 'required|integer|exists:companies,id',
-            // de exists:students,id kijkt na of dat de FK zich wel in de db bevindt
+            // de "exists:student,id" id kijkt na of dat de FK zich wel in de db bevindt
             'time_slot' => 'required|string|max:255',
         ]);
 
         $appointment = Appointment::create($validate);
+
+        // hier verzend ik de bevestigingsmail
+        $mailService->sendAppointmentConfirmation($appointment);
 
         return response()->json([
             'data' => $appointment,
