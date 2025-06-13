@@ -38,7 +38,10 @@ class CompanyController extends Controller
             'job_types' => 'nullable|string|max:255',
             'job_domain' => 'nullable|string|max:255',
             'photo' => 'nullable|string|max:255',
-            'speeddate_duration' => 'nullable|integer|max:60'
+            'speeddate_duration' => 'nullable|integer|max:60',
+            'job_requirements' => 'nullable|string', 
+            'job_description' => 'nullable|string', 
+            'company_description' => 'nullable|string'
         ]);
 
         // Standaardwaarden voor ontbrekende velden
@@ -47,7 +50,10 @@ class CompanyController extends Controller
             'job_types' => 'Fulltime',
             'job_domain' => 'Nog niet gespecificeerd',
             'photo' => null,
-            'speeddate_duration' => 30
+            'speeddate_duration' => 30,
+            'job_requirements' => 'Functie-eisen nog niet ingevuld', 
+            'job_description' => 'Functieomschrijving nog niet ingevuld', 
+            'company_description' => 'Bedrijfsbeschrijving nog niet ingevuld'
         ];
 
         // Vul ontbrekende velden aan met standaardwaarden
