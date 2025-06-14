@@ -9,8 +9,9 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
 
-class CompanyPassword extends Mailable
+class CompanyAccountCreation extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -40,8 +41,13 @@ class CompanyPassword extends Mailable
      */
     public function content(): Content
     {
+        $registratieUrl = 'http://localhost:8000/placeholder';
         return new Content(
             view: 'emails.company-password',
+                with: [
+                'company' => $this->company,
+                'verificationUrl' => $registratieUrl,
+            ]
         );
     }
 
