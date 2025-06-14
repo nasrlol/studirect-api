@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
 
 // omdat dynamic properties niet werken vanaf php 8.2
 class StudentVerification extends Mailable
@@ -41,8 +42,15 @@ class StudentVerification extends Mailable
      */
     public function content(): Content
     {
+
+        $verificationUrl = URL::signedRoute('students.verify', ['id' => $this->student->id]);
+
         return new Content(
             view: 'emails.student-verification',
+            with: [
+                'student' => $this->student,
+                'verificationUrl' => $verificationUrl,
+            ]
         );
     }
 
