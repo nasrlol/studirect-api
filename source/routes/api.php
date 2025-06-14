@@ -25,6 +25,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::get('/companies/{id}', [CompanyController::class, 'show']);
     Route::put('/companies/{id}', [CompanyController::class, 'update']);
     Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
+    Route::patch('companies/{id}', [CompanyController::class, 'partialUpdate']);
 });
 
 // Appointment routes
