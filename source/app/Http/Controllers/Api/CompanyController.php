@@ -39,8 +39,8 @@ class CompanyController extends Controller
             'job_domain' => 'nullable|string|max:255',
             'photo' => 'nullable|string|max:255',
             'speeddate_duration' => 'nullable|integer|max:60',
-            'job_requirements' => 'nullable|string', 
-            'job_description' => 'nullable|string', 
+            'job_requirements' => 'nullable|string',
+            'job_description' => 'nullable|string',
             'company_description' => 'nullable|string'
         ]);
 
@@ -51,8 +51,8 @@ class CompanyController extends Controller
             'job_domain' => 'Nog niet gespecificeerd',
             'photo' => null,
             'speeddate_duration' => 30,
-            'job_requirements' => 'Functie-eisen nog niet ingevuld', 
-            'job_description' => 'Functieomschrijving nog niet ingevuld', 
+            'job_requirements' => 'Functie-eisen nog niet ingevuld',
+            'job_description' => 'Functieomschrijving nog niet ingevuld',
             'company_description' => 'Bedrijfsbeschrijving nog niet ingevuld'
         ];
 
@@ -64,7 +64,7 @@ class CompanyController extends Controller
         }
 
         $company = Company::create($validate);
-        $mailService->sendCompanyPassword($company);
+        $mailService->sendCompanyAccountVerification($company);
 
 
         $logger = new LogController();
