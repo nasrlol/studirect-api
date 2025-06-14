@@ -58,7 +58,4 @@ Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
 
 Route::get('/diplomas', [DiplomaController::class, 'index']);
-Route::post('/diplomas', [DiplomaController::class, 'store']);
 Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
-Route::put('/diplomas/{id}', [DiplomaController::class, 'update']);
-Route::delete('/diplomas/{id}', [DiplomaController::class, 'destroy']);
