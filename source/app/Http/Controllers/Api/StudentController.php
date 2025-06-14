@@ -178,9 +178,6 @@ class StudentController extends Controller
                 $data['password'] = Hash::make($data['password']);
             }
 
-            $logger = new LogController();
-            $logger->setLog("Student", "Student updated", "Student", "Normal");
-
             $student->update($data);
             return response()->json([
                 'data' => $student,
@@ -190,7 +187,5 @@ class StudentController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Student not found'], 404);
         }
-
-
     }
 }
