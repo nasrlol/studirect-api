@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
@@ -149,6 +148,21 @@ class StudentController extends Controller
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Student not found'], 404);
+        }
+    }
+
+    public function verify(string $id)
+    {
+        try {
+            $student = Student::findOrFail($id);
+            if ($student->profile_complete) {
+                return response()->json(['message' => 'Student was already verified']);
+            } else {
+                $student->profile_complete = true;
+                return response()->json(['message' => 'Student now verified']);
+            }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Failed to find student']);
         }
     }
 }
