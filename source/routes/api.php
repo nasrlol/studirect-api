@@ -15,6 +15,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::get('/students/{id}', [StudentController::class, 'show']);
     Route::put('/students/{id}', [StudentController::class, 'update']);
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+    Route::patch('/students/{id})', [StudentController::class, 'partialUpdate']);
 });
 
 // Company routes

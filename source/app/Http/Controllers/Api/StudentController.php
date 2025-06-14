@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -150,5 +150,47 @@ class StudentController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Student not found'], 404);
         }
+    }
+
+    public function partialUpdate(Request $request, string $id): JsonResponse
+    {
+        try {
+            $student = Student::findOrFail($id);
+            $fields = [
+                'first_name',
+                'last_name',
+                'email',
+                'password',
+                'study_direction',
+                'graduation_track',
+                'interests',
+                'job_preferences',
+                'cv',
+                'profile_complete',
+
+            ];
+
+            // filtreren op enkel de informatie dat meegegeven wordt
+            $data = $request->only($fields);
+
+            // het wachtwoord opnieuw hashen
+            if (isset($data['password'])) {
+                $data['password'] = Hash::make($data['password']);
+            }
+
+            $logger = new LogController();
+            $logger->setLog("Student", "Student updated", "Student", "Normal");
+
+            $student->update($data);
+            return response()->json([
+                'data' => $student,
+                'message' => 'Student partially updated successfully',
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+
     }
 }
