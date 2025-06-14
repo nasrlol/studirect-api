@@ -18,6 +18,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::get('/students/{id}/verify', [StudentController::class, 'verify'])
         ->name('students.verify') // maak een naam  voor de route, kan ik die straks makkelijker aanroepen in de mail view
         ->middleware('signed');
+    Route::patch('/students/{id}', [StudentController::class, 'partialUpdate']);
 });
 
 // Company routes
@@ -27,6 +28,7 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::get('/companies/{id}', [CompanyController::class, 'show']);
     Route::put('/companies/{id}', [CompanyController::class, 'update']);
     Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
+    Route::patch('companies/{id}', [CompanyController::class, 'partialUpdate']);
 });
 
 // Appointment routes

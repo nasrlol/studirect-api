@@ -8,6 +8,7 @@ use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
 {
@@ -141,6 +142,47 @@ class CompanyController extends Controller
             return response()->json([
                 'message' => 'Company deleted successfully'
             ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Company not found'], 404);
+        }
+    }
+
+    public function partialUpdate(Request $request, string $id): JsonResponse
+    {
+        try {
+            $company = Company::findOrFail($id);
+
+            $fields = [
+                'name',
+                'email',
+                'password',
+                'plan_type',
+                'description',
+                'job_types',
+                'job_domain',
+                'booth_location',
+                'photo',
+                'speeddate_duration',
+                'company_description',
+                'job_requirements',
+                'job_description'
+                ];
+
+
+            // filtreren op enkel de informatie dat meegegeven wordt
+            $data = $request->only($fields);
+
+            // het wachtwoord opnieuw hashen
+            if (isset($data['password'])) {
+                $data['password'] = Hash::make($data['password']);
+            }
+
+            $company->update($data);
+            return response()->json([
+                'data' => $company,
+                'message' => 'Company partially updated successfully',
+            ]);
+
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Company not found'], 404);
         }
