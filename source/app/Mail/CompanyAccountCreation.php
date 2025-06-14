@@ -2,16 +2,16 @@
 
 namespace App\Mail;
 
-use App\Models\Student;
+use App\Models\Company;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
 
-// omdat dynamic properties niet werken vanaf php 8.2
-class StudentVerification extends Mailable
+class CompanyAccountCreation extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,11 +19,11 @@ class StudentVerification extends Mailable
      * Create a new message instance.
      */
 
-    public Student $student;
+    public Company $company;
 
-    public function __construct(Student $student)
+    public function __construct(Company $company)
     {
-        $this->student = $student;
+        $this->company = $company;
     }
 
     /**
@@ -32,7 +32,7 @@ class StudentVerification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Studirect verification',
+            subject: 'Company Password',
         );
     }
 
@@ -41,8 +41,13 @@ class StudentVerification extends Mailable
      */
     public function content(): Content
     {
+        $registratieUrl = 'http://localhost:8000/placeholder';
         return new Content(
-            view: 'emails.student-verification',
+            view: 'emails.company-password',
+                with: [
+                'company' => $this->company,
+                'verificationUrl' => $registratieUrl,
+            ]
         );
     }
 
