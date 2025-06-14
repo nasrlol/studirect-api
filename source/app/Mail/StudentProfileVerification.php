@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\URL;
 
 // omdat dynamic properties niet werken vanaf php 8.2
-class StudentVerification extends Mailable
+class StudentProfileVerification extends Mailable
 {
     use Queueable, SerializesModels;
 

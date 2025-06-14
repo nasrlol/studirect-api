@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -47,7 +48,7 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, Mailservice $mailService): JsonResponse
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -79,6 +80,8 @@ class StudentController extends Controller
 
         $logger = new LogController();
         $logger->setLog("Student", "Student created", "Student", "Normal");
+
+        $mailService->sendStudentVerification($student);
 
         return response()->json([
             'data' => $student,
