@@ -74,8 +74,6 @@ return new class extends Migration
             $table->string('receiver_type'); // 'student' of 'company'
             $table->text('content');
             $table->timestamps();
-
-
         });
 
         Schema::create('appointments', function (Blueprint $table) {
@@ -86,7 +84,11 @@ return new class extends Migration
             $table->timestamps();
         });
 
-
+        Schema::create('diplomas', function (Blueprint $table) {
+            $table->id();
+            $table->string('type');
+            $table->timestamps();
+        });
     }
 
     public function down(): void
