@@ -86,9 +86,7 @@ return new class extends Migration
 
         Schema::create('diplomas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->string('type');
-            $table->string('name');
             $table->timestamps();
         });
     }
