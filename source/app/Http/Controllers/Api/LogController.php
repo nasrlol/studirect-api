@@ -23,17 +23,5 @@ class LogController extends Controller
         ]);
 
     }
-    public function setLog(string $actor, string $action, string $targetType, string $severity = 'info'): void
-    {
-        // In een echte toepassing zou je hier de huidige ingelogde admin ID gebruiken
-        // Voor nu gebruiken we ID 1 als voorbeeld
 
-        Log::create([
-            'actor' => $actor,
-            'action' => $action,
-            'target_type' => $targetType,
-            'severity' => $severity,
-            // timestamp wordt automatisch ingevuld door de database
-        ]);
-    }
 }

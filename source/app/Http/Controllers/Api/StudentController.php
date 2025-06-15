@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Services\LogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -48,7 +49,7 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, LogService $logService): JsonResponse
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -77,9 +78,7 @@ class StudentController extends Controller
         }
 
         $student = Student::create($validated);
-
-        $logger = new LogController();
-        $logger->setLog("Student", "Student created", "Student", "Normal");
+        $logService->setLog("Student", "Student created", "Student");
 
         return response()->json([
             'data' => $student,
@@ -104,7 +103,7 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $id, LogService $logService): JsonResponse
     {
         try {
             $student = Student::findOrFail($id);
@@ -123,8 +122,7 @@ class StudentController extends Controller
 
             $student->update($validated);
 
-            $logger = new LogController();
-            $logger->setLog("Student", "Student updated", "Student", "Normal");
+            $logService->setLog("Student", "Student updated", "Student");
 
             return response()->json([
                 'data' => $student,
@@ -135,14 +133,13 @@ class StudentController extends Controller
         }
     }
 
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id, LogService $logService): JsonResponse
     {
         try {
             $student = Student::findOrFail($id);
             $student->delete();
 
-            $logger = new LogController();
-            $logger->setLog("Student", "Student deleted", "Student", "Normal");
+            $logService->setLog("Student", "Student deleted", "Student");
 
             return response()->json([
                 'message' => 'Student deleted successfully'

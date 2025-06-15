@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\LogService;
 use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +24,7 @@ class AppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, MailService $mailService): JsonResponse
+    public function store(Request $request, MailService $mailService, LogService $logger): JsonResponse
     {
         $validate = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
@@ -36,8 +37,7 @@ class AppointmentController extends Controller
 
         // hier verzend ik de bevestigingsmail
         $mailService->sendAppointmentConfirmation($appointment);
-        $logger = new LogController();
-        $logger->setLog("student", "appointment creation", " appointment", "normal");
+        $logger->setLog("student", "appointment creation", " appointment");
 
         return response()->json([
             'data' => $appointment,
@@ -80,14 +80,13 @@ class AppointmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id, LogService $logger): JsonResponse
     {
         try {
             $appointment = Appointment::findOrFail($id);
             $appointment->delete();
 
-            $logger = new LogController();
-            $logger->setLog("Student | Company", "Appointment deleted", "Appointment", "normal");
+            $logger->setLog("Student | Company", "Appointment deleted", "Appointment");
 
             return response()->json([
                 'message' => 'Appointment deleted successfully'

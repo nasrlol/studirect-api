@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Services\LogService;
 use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +29,7 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, MailService $mailService): JsonResponse
+    public function store(Request $request, MailService $mailService, LogService $logService): JsonResponse
     {
         $validate = $request->validate([
             'name' => 'required|string|max:255',
@@ -65,11 +67,9 @@ class CompanyController extends Controller
         }
 
         $company = Company::create($validate);
+
         $mailService->sendCompanyPassword($company);
-
-
-        $logger = new LogController();
-        $logger->setLog("Company", "Company created", "Company", "High");
+        $logService->setLog("Company", "Company created", "Company", LogLevel::CRITICAL);
 
         return response()->json([
             'data' => $company,
@@ -94,7 +94,7 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id) : JsonResponse
+    public function update(Request $request, string $id, LogService $logService) : JsonResponse
     {
         try {
             $company = Company::findOrFail($id);
@@ -112,10 +112,7 @@ class CompanyController extends Controller
             ]);
 
             $company->update($validated);
-
-
-            $logger = new LogController();
-            $logger->setLog("Company", "Company updated", "Company", "normal");
+            $logService->setLog("Company", "Company updated", "Company");
 
             return response()->json([
                 'data' => $company,
@@ -130,14 +127,13 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id, LogService $logService): JsonResponse
     {
         try {
             $company = Company::findOrFail($id);
             $company->delete();
 
-            $logger = new LogController();
-            $logger->setLog("Company", "Company deleted", "Company", "normal");
+            $logService->setLog("Company", "Company deleted", "Company");
 
             return response()->json([
                 'message' => 'Company deleted successfully'
