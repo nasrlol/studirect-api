@@ -1,0 +1,439 @@
+openapi: 3.0.3
+info:
+  title: 'Laravel API Documentation'
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost'
+tags:
+  -
+    name: Endpoints
+    description: ''
+paths:
+  /api/students:
+    post:
+      summary: 'Store a newly created resource in storage.'
+      operationId: storeANewlyCreatedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                  nullable: false
+                last_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: 'n'
+                  nullable: false
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: ashly64@example.com
+                  nullable: false
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: pBNvYg
+                  nullable: false
+                study_direction:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: h
+                  nullable: false
+                graduation_track:
+                  type: string
+                  description: 'Nu verplicht. Must not be greater than 255 characters.'
+                  example: w
+                  nullable: false
+                interests:
+                  type: string
+                  description: 'Nu verplicht.'
+                  example: architecto
+                  nullable: true
+                job_preferences:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: true
+                cv:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: true
+                profile_complete:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: true
+              required:
+                - first_name
+                - last_name
+                - email
+                - password
+                - study_direction
+                - graduation_track
+      security: []
+  '/api/students/{id}':
+    put:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiStudentsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    patch:
+      summary: ''
+      operationId: patchApiStudentsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the student.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/companies:
+    post:
+      summary: 'Store a newly created resource in storage.'
+      operationId: storeANewlyCreatedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                  nullable: false
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: zbailey@example.net
+                  nullable: false
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: '-0pBNvYgxw'
+                  nullable: false
+                plan_type:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: a
+                  nullable: false
+                booth_location:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: 'y'
+                  nullable: false
+                description:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: 'Quo omnis nostrum aut adipisci.'
+                  nullable: true
+                job_types:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: p
+                  nullable: true
+                job_domain:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: w
+                  nullable: true
+                photo:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: l
+                  nullable: true
+                speeddate_duration:
+                  type: integer
+                  description: 'Must not be greater than 60.'
+                  example: 20
+                  nullable: true
+                job_requirements:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: true
+                job_description:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: true
+                company_description:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: true
+              required:
+                - name
+                - email
+                - password
+                - plan_type
+                - booth_location
+      security: []
+  '/api/companies/{id}':
+    put:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: 'Remove the specified resource from storage.'
+      operationId: removeTheSpecifiedResourceFromStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    patch:
+      summary: ''
+      operationId: patchApiCompaniesId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the company.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/appointments:
+    post:
+      summary: 'Store a newly created resource in storage.'
+      operationId: storeANewlyCreatedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                student_id:
+                  type: integer
+                  description: 'The <code>id</code> of an existing record in the students table.'
+                  example: 16
+                  nullable: false
+                company_id:
+                  type: integer
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: 16
+                  nullable: false
+                time_slot:
+                  type: string
+                  description: 'de "exists:student,id" id kijkt na of dat de FK zich wel in de db bevindt. Must not be greater than 255 characters.'
+                  example: 'n'
+                  nullable: false
+              required:
+                - student_id
+                - company_id
+                - time_slot
+      security: []
+  '/api/appointments/{id}':
+    put:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time_slot:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: b
+                  nullable: false
+              required:
+                - time_slot
+      security: []
+    delete:
+      summary: 'Remove the specified resource from storage.'
+      operationId: removeTheSpecifiedResourceFromStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the appointment.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/connections:
+    post:
+      summary: ''
+      operationId: postApiConnections
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                student_id:
+                  type: integer
+                  description: 'The <code>id</code> of an existing record in the students table.'
+                  example: 16
+                  nullable: false
+                company_id:
+                  type: integer
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: 16
+                  nullable: false
+                status:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+              required:
+                - student_id
+                - company_id
+                - status
+      security: []
+  '/api/connections/{id}':
+    patch:
+      summary: ''
+      operationId: patchApiConnectionsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: ''
+      operationId: deleteApiConnectionsId
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the connection.'
+        example: architecto
+        required: true
+        schema:
+          type: string
+  /api/messages/send:
+    post:
+      summary: ''
+      operationId: postApiMessagesSend
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender_id:
+                  type: integer
+                  description: ''
+                  example: 16
+                  nullable: false
+                sender_type:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: false
+                receiver_id:
+                  type: integer
+                  description: '''App\Models\Student'' of ''App\Models\Company''.'
+                  example: 16
+                  nullable: false
+                receiver_type:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: false
+                content:
+                  type: string
+                  description: ''
+                  example: architecto
+                  nullable: false
+              required:
+                - sender_id
+                - sender_type
+                - receiver_id
+                - receiver_type
+                - content
+      security: []
