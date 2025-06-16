@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Services\LogService;
 use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Models\Appointment;
 
 class AppointmentController extends Controller
 {
@@ -37,7 +37,7 @@ class AppointmentController extends Controller
 
         // hier verzend ik de bevestigingsmail
         $mailService->sendAppointmentConfirmation($appointment);
-        $logger->setLog("student", "appointment creation", " appointment");
+        $logger->setLog("student", $appointment->student_id, "appointment creation", " appointment");
 
         return response()->json([
             'data' => $appointment,
