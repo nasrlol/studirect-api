@@ -86,7 +86,7 @@ class AppointmentController extends Controller
             $appointment = Appointment::findOrFail($id);
             $appointment->delete();
 
-            $logger->setLog("Student | Company", "Appointment deleted", "Appointment");
+            $logger->setLog("Student", $appointment->student_id, "Appointment deleted", "Appointment");
 
             return response()->json([
                 'message' => 'Appointment deleted successfully'
