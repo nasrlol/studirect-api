@@ -24,7 +24,7 @@ class StudentController extends Controller
 
     public function index(): JsonResponse
     {
-        $students = Student::all();
+        $students = Student::cursorPaginate(15);
 
         /*
         if (request()->wantsJson()) {
