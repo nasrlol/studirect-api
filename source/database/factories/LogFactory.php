@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Admin;
 use App\Models\Log;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LogFactory extends Factory
@@ -15,6 +16,7 @@ class LogFactory extends Factory
         return [
             'actor' => $this->faker->randomElement(['Student', 'Bedrijf']),
             'action' => $this->faker->randomElement(['create', 'delete', 'update','read']),
+            'actor_id' => Student::factory(),
             'target_type' => $this->faker->randomElement(['Student', 'Admin', 'Company' ]),
             // dit eve een random id laten aanmeken maar in de toekmost een studeten id of company id
             'severity' => $this->faker->randomElement(['low', 'medium', 'high', 'Critical'])
