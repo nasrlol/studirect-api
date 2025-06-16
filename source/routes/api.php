@@ -8,6 +8,9 @@ use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Auth\AdminAuthController;
+use App\Http\Controllers\Api\Auth\CompanyAuthController;
+use App\Http\Controllers\Api\Auth\StudentAuthController;
 
 // Student routes
 Route::middleware('throttle:300,1')->group(function () {
@@ -66,3 +69,21 @@ Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 //Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
 
 Route::post('/messages/conversation', [MessageController::class, 'getConversation']);
+
+
+// Authentication Routes
+Route::post('/students/login', [StudentAuthController::class, 'login']);
+Route::post('/companies/login', [CompanyAuthController::class, 'login']);
+Route::post('/admins/login', [AdminAuthController::class, 'login']);
+
+// Protected Routes
+Route::middleware('auth:sanctum')->group(function () {
+    // Logout routes
+    Route::post('/students/logout', [StudentAuthController::class, 'logout']);
+    Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
+    Route::post('/admins/logout', [AdminAuthController::class, 'logout']);
+    
+    // You can protect other routes here as needed
+    // For example:
+    // Route::get('/protected-resource', [YourController::class, 'method']);
+});
