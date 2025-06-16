@@ -10,8 +10,6 @@ class Log extends Model
 {
     use HasFactory;
 
-
-
     protected $fillable = [
         'actor',
         'actor_id',
