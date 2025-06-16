@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // roept de diplomas aan
+        $this->call(DiplomaSeeder::class);
         Student::factory()->count(5)->create();
         Company::factory()->count(5)->create();
         Appointment::factory()->count(5)->create();
