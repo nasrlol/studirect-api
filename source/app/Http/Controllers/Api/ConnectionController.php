@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
 use App\Models\Connection;
+use App\Services\LogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +20,7 @@ class ConnectionController extends Controller
     }
 
     // POST /api/connections
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, LogService $logService): JsonResponse
     {
         $validated = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
@@ -28,8 +30,7 @@ class ConnectionController extends Controller
 
         $connection = Connection::create($validated);
 
-        $logger = new LogController();
-        $logger->setLog("Student", "Connection created", "Connection", "Normal");
+        $logService->setLog("Student", "Connection created", "Connection");
 
         return response()->json([
             'data' => $connection,
@@ -49,7 +50,7 @@ class ConnectionController extends Controller
     }
 
     // PUT /api/connections/{id}
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $id, LogService $logService): JsonResponse
     {
         try {
             $connection = Connection::findOrFail($id);
@@ -61,8 +62,8 @@ class ConnectionController extends Controller
             ]);
 
             $connection->update($validated);
-            $logger = new LogController();
-            $logger->setLog("Student", "Connection updated ", "Connection", "Normal");
+            $logService->setLog("Student", "Connection updated ", "Connection");
+
             return response()->json([
                 'data' => $connection,
                 'message' => 'connection succesvol bijgewerkt'
@@ -73,14 +74,13 @@ class ConnectionController extends Controller
     }
 
     // DELETE /api/connections/{id}
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id, LogService $logService): JsonResponse
     {
         try {
             $connection = Connection::findOrFail($id);
             $connection->delete();
 
-            $logger = new LogController();
-            $logger->setLog("Student", "Connection deleted ", "Connection", "High");
+            $logService->setLog("Student", "Connection deleted ", "Connection", LogLevel::CRITICAL);
             return response()->json([
                 'message' => 'Connection deleted'
             ]);

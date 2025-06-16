@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Services\LogService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Models\Student;
-use App\Models\Company;
 
 class AdminController extends Controller
 {
@@ -18,7 +18,7 @@ class AdminController extends Controller
         return response()->json(['data' => $admins]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, LogService $logService): JsonResponse
     {
         $validated = $request->validate([
             'email' => 'required|email|unique:admins,email',
@@ -28,9 +28,7 @@ class AdminController extends Controller
         $validated['password'] = bcrypt($validated['password']);
         $admin = Admin::create($validated);
 
-
-        $logger = new LogController();
-        $logger->setLog("Admin", "Admin created ", "Admin", "High");
+        $logService->setLog("Admin", "Admin created ", "Admin", LogLevel::CRITICAL);
 
         return response()->json(['data' => $admin], 201);
     }
@@ -45,7 +43,7 @@ class AdminController extends Controller
         }
     }
 
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $id, LogService $logService): JsonResponse
     {
         try {
             $admin = Admin::findOrFail($id);
@@ -59,10 +57,8 @@ class AdminController extends Controller
             }
 
             $admin->update($validated);
-
-
-            $logger = new LogController();
-            $logger->setLog("Admin", "Admin updated ", "Admin", "High");
+            $logService->setLog("Admin", "Admin updated ", "Admin");
+            // severity level wordt hier niet gezet omdat ik dat als default waarde heb gezet, dus normal = niks doen
 
 
             return response()->json(['data' => $admin]);
@@ -71,16 +67,14 @@ class AdminController extends Controller
         }
     }
 
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id, LogService $logService): JsonResponse
     {
-
-
         try {
             $admin = Admin::findOrFail($id);
-            $admin->delete();
 
-            $logger = new LogController();
-            $logger->setLog("Admin", "Admin deleted ", "Admin", "High");
+            $admin->delete();
+            $logService->setLog("Admin", "Admin deleted ", "Admin", LogLevel::CRITICAL);
+
             return response()->json(['message' => 'Admin verwijderd']);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Admin niet gevonden'], 404);
