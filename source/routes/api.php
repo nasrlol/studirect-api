@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 
 // Student routes
-Route::middleware('throttle:50,1')->group(function () {
+Route::middleware('throttle:300,1')->group(function () {
     Route::get('/students', [StudentController::class, 'index']);
     Route::post('/students', [StudentController::class, 'store']);
     Route::get('/students/{id}', [StudentController::class, 'show']);
@@ -23,7 +23,7 @@ Route::middleware('throttle:50,1')->group(function () {
 });
 
 // Company routes
-Route::middleware('throttle:50,1')->group(function () {
+Route::middleware('throttle:300,1')->group(function () {
     Route::get('/companies', [CompanyController::class, 'index']);
     Route::post('/companies', [CompanyController::class, 'store']);
     Route::get('/companies/{id}', [CompanyController::class, 'show']);
@@ -33,7 +33,7 @@ Route::middleware('throttle:50,1')->group(function () {
 });
 
 // Appointment routes
-Route::middleware('throttle:200,1')->group(function () {
+Route::middleware('throttle:500,1')->group(function () {
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
@@ -42,7 +42,7 @@ Route::middleware('throttle:200,1')->group(function () {
 });
 
 // Connection routes
-Route::middleware('throttle:50,1')->group(function () {
+Route::middleware('throttle:500,1')->group(function () {
     Route::get('/connections', [ConnectionController::class, 'index']);
     Route::post('/connections', [ConnectionController::class, 'store']);
     Route::get('/connections/{id}', [ConnectionController::class, 'show']);
