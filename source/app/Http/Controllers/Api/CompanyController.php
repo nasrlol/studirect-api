@@ -20,7 +20,7 @@ class CompanyController extends Controller
      */
     public function index(): JsonResponse
     {
-        $companies = Company::all();
+        $companies = Company::cursorPaginate();
         return response()->json([
             'data'=>$companies
         ]);
