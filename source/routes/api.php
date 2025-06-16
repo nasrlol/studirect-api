@@ -66,3 +66,21 @@ Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 //Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
 
 Route::post('/messages/conversation', [MessageController::class, 'getConversation']);
+
+
+// Authentication Routes
+Route::post('/students/login', [App\Http\Controllers\Api\Auth\StudentAuthController::class, 'login']);
+Route::post('/companies/login', [App\Http\Controllers\Api\Auth\CompanyAuthController::class, 'login']);
+Route::post('/admins/login', [App\Http\Controllers\Api\Auth\AdminAuthController::class, 'login']);
+
+// Protected Routes
+Route::middleware('auth:sanctum')->group(function () {
+    // Logout routes
+    Route::post('/students/logout', [App\Http\Controllers\Api\Auth\StudentAuthController::class, 'logout']);
+    Route::post('/companies/logout', [App\Http\Controllers\Api\Auth\CompanyAuthController::class, 'logout']);
+    Route::post('/admins/logout', [App\Http\Controllers\Api\Auth\AdminAuthController::class, 'logout']);
+    
+    // You can protect other routes here as needed
+    // For example:
+    // Route::get('/protected-resource', [YourController::class, 'method']);
+});
