@@ -36,6 +36,7 @@ class Student extends Model
         $this->attributes['password'] = $value;*/
 
         // Altijd hashen om zeker te zijn
+        // wordt dan het gehashed ook niet gehashed?
         $this->attributes['password'] = Hash::make($value);
     }
 
@@ -49,6 +50,11 @@ class Student extends Model
     // Een student kan meerdere matches/connecties hebben
     public function connecties(): HasMany
     {
-        return $this->hasMany(Connection::class);  // Fix class name capitalization
+        return $this->hasMany(Connection::class);
+    }
+
+    public function diploma(): HasMany
+    {
+        return $this->hasMany(Diploma::class, 'graduation_track');
     }
 }

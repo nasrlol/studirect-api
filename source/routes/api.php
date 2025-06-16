@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ConnectionController;
+use App\Http\Controllers\Api\DiplomaController;
 use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\StudentController;
@@ -54,6 +55,11 @@ Route::middleware('throttle:50,1')->group(function () {
 
 // Admin routes voor logs
 Route::get('/admin/logs', [LogController::class, 'getLogs']);
+
+
+
+Route::get('/diplomas', [DiplomaController::class, 'index']);
+Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
 
 // Routes voor berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);

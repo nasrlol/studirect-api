@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('admins', function (Blueprint $table) {
@@ -15,7 +14,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-    Schema::create('companies', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
@@ -33,14 +32,21 @@ return new class extends Migration
             $table->timestamps();
         });
 
- Schema::create('students', function (Blueprint $table) {
+        Schema::create('diplomas', function (Blueprint $table) {
+            $table->id();
+            $table->string('type');
+            $table->timestamps();
+        });
+
+        Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password');
             $table->string('study_direction')->nullable();
-            $table->string('graduation_track')->nullable();
+            $table->unsignedBigInteger('graduation_track')->nullable();
+            $table->foreign('graduation_track')->references('id')->on('diplomas')->onDelete('cascade');
             $table->text('interests')->nullable();
             $table->text('job_preferences')->nullable();
             $table->string('cv')->nullable();
@@ -74,8 +80,6 @@ return new class extends Migration
             $table->string('receiver_type'); // 'student' of 'company'
             $table->text('content');
             $table->timestamps();
-
-
         });
 
         Schema::create('appointments', function (Blueprint $table) {
