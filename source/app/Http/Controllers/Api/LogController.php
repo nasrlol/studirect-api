@@ -12,16 +12,11 @@ class LogController extends Controller
 // Log bekijken
     public function getLogs(): JsonResponse
     {
-        // $logs = Log::with('admin')->orderBy('timestamp', 'desc')->get();
-        // return response()->json(['data' => $logs]);
-
-        // de fk is weg dus ffkes de vorige code uizetten
-        $log = Log::orderBy('created_at', 'desc')->get();
+        $log = Log::orderBy('created_at', 'desc')->cursorPaginate(20);
+        // paginate(15) hoeveelheid logs er per pagina dat er worden gegenereerd
 
         return response()->json([
             'data' => $log
         ]);
-
     }
-
 }
