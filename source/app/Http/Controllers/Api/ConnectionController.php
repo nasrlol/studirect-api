@@ -30,7 +30,7 @@ class ConnectionController extends Controller
 
         $connection = Connection::create($validated);
 
-        $logService->setLog("Student", "Connection created", "Connection");
+        $logService->setLog("Student", $connection->student_id ,"Connection created", "Connection");
 
         return response()->json([
             'data' => $connection,
@@ -62,7 +62,7 @@ class ConnectionController extends Controller
             ]);
 
             $connection->update($validated);
-            $logService->setLog("Student", "Connection updated ", "Connection");
+            $logService->setLog("Student", $connection->student_id, "Connection updated ", "Connection");
 
             return response()->json([
                 'data' => $connection,
@@ -80,7 +80,7 @@ class ConnectionController extends Controller
             $connection = Connection::findOrFail($id);
             $connection->delete();
 
-            $logService->setLog("Student", "Connection deleted ", "Connection", LogLevel::CRITICAL);
+            $logService->setLog("Student", $connection->student_id, "Connection deleted ", "Connection", LogLevel::CRITICAL);
             return response()->json([
                 'message' => 'Connection deleted'
             ]);

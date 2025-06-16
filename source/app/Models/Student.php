@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -42,14 +42,13 @@ class Student extends Model
     }
 
 
-
-    public function appointments(): HasMany
+    public function appointment(): HasMany
     {
         return $this->hasMany(Appointment::class);
     }
 
     // Een student kan meerdere matches/connecties hebben
-    public function connecties(): HasMany
+    public function connection(): HasMany
     {
         return $this->hasMany(Connection::class);
     }

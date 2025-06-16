@@ -69,7 +69,7 @@ class CompanyController extends Controller
         $company = Company::create($validate);
 
         $mailService->sendCompanyAccountVerification($company);
-        $logService->setLog("Company", "Company created", "Company", LogLevel::CRITICAL);
+        $logService->setLog("Company", $company->id, "Company created", "Company", LogLevel::CRITICAL);
 
         return response()->json([
             'data' => $company,
@@ -112,7 +112,7 @@ class CompanyController extends Controller
             ]);
 
             $company->update($validated);
-            $logService->setLog("Company", "Company updated", "Company");
+            $logService->setLog("Company", $company->id, "Company updated", "Company");
 
             return response()->json([
                 'data' => $company,
@@ -133,7 +133,7 @@ class CompanyController extends Controller
             $company = Company::findOrFail($id);
             $company->delete();
 
-            $logService->setLog("Company", "Company deleted", "Company");
+            $logService->setLog("Company", $company->id, "Company deleted", "Company");
 
             return response()->json([
                 'message' => 'Company deleted successfully'

@@ -80,7 +80,7 @@ class StudentController extends Controller
         }
 
         $student = Student::create($validated);
-        $logService->setLog("Student", "Student created", "Student");
+        $logService->setLog("Student", $student->id,"Student created", "Student");
 
         $mailService->sendStudentVerification($student);
 
@@ -126,7 +126,7 @@ class StudentController extends Controller
 
             $student->update($validated);
 
-            $logService->setLog("Student", "Student updated", "Student");
+            $logService->setLog("Student", $student->id, "Student updated", "Student");
 
             return response()->json([
                 'data' => $student,
@@ -143,7 +143,7 @@ class StudentController extends Controller
             $student = Student::findOrFail($id);
             $student->delete();
 
-            $logService->setLog("Student", "Student deleted", "Student");
+            $logService->setLog("Student", $student->id, "Student deleted", "Student");
 
             return response()->json([
                 'message' => 'Student deleted successfully'
@@ -163,7 +163,7 @@ class StudentController extends Controller
             } else {
                 $student->profile_complete = true;
                 $student->save();
-                // nu pas opgevallen dat de verandering nog moest opgeglsagen worden
+                // nu pas opgevallen dat de verandering nog moest opgeslagen worden
                 return response()->json(['message' => 'Student now verified']);
             }
         } catch (ModelNotFoundException $e) {
@@ -171,7 +171,7 @@ class StudentController extends Controller
         }
      }
 
-    public function partialUpdate(Request $request, string $id): JsonResponse
+    public function partialUpdate(Request $request, string $id, LogService $logService): JsonResponse
     {
         try {
             $student = Student::findOrFail($id);
@@ -198,6 +198,8 @@ class StudentController extends Controller
             }
 
             $student->update($data);
+            $logService->setLog("Student", $student->id,"Student updated", "Student");
+
             return response()->json([
                 'data' => $student,
                 'message' => 'Student partially updated successfully',
