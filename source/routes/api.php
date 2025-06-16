@@ -54,4 +54,6 @@ Route::get('/admin/logs', [LogController::class, 'getLogs']);
 
 // Routes voor berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
-Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
+//Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
+
+Route::post('/messages/conversation', [MessageController::class, 'getConversation']);
