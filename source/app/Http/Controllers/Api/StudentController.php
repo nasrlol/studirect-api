@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Services\LogService;
+use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -49,7 +50,8 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, LogService $logService): JsonResponse
+
+    public function store(Request $request, LogService $logService, MailService $mailService): JsonResponse
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -79,6 +81,8 @@ class StudentController extends Controller
 
         $student = Student::create($validated);
         $logService->setLog("Student", "Student created", "Student");
+
+        $mailService->sendStudentVerification($student);
 
         return response()->json([
             'data' => $student,
@@ -148,6 +152,24 @@ class StudentController extends Controller
             return response()->json(['message' => 'Student not found'], 404);
         }
     }
+
+
+    public function verify(string $id)
+    {
+        try {
+            $student = Student::findOrFail($id);
+            if ($student->profile_complete) {
+                return response()->json(['message' => 'Student was already verified']);
+            } else {
+                $student->profile_complete = true;
+                $student->save();
+                // nu pas opgevallen dat de verandering nog moest opgeglsagen worden
+                return response()->json(['message' => 'Student now verified']);
+            }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Failed to find student'], 404);
+        }
+     }
 
     public function partialUpdate(Request $request, string $id): JsonResponse
     {

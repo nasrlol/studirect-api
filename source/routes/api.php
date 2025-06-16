@@ -15,6 +15,9 @@ Route::middleware('throttle:50,1')->group(function () {
     Route::get('/students/{id}', [StudentController::class, 'show']);
     Route::put('/students/{id}', [StudentController::class, 'update']);
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+    Route::get('/students/{id}/verify', [StudentController::class, 'verify'])
+        ->name('students.verify') // maak een naam  voor de route, kan ik die straks makkelijker aanroepen in de mail view
+        ->middleware('signed');
     Route::patch('/students/{id}', [StudentController::class, 'partialUpdate']);
 });
 
@@ -54,4 +57,6 @@ Route::get('/admin/logs', [LogController::class, 'getLogs']);
 
 // Routes voor berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
-Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
+//Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
+
+Route::post('/messages/conversation', [MessageController::class, 'getConversation']);

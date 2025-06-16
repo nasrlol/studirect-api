@@ -31,25 +31,32 @@ class MessageController extends Controller
     // Gesprek ophalen tussen twee users
     public function getConversation(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'user1_id' => 'required|integer',
-            'user1_type' => 'required|string',
-            'user2_id' => 'required|integer',
-            'user2_type' => 'required|string',
-        ]);
+        try {
+            $validated = $request->validate([
+                'user1_id' => 'required|integer',
+                'user1_type' => 'required|string',
+                'user2_id' => 'required|integer',
+                'user2_type' => 'required|string',
+            ]);
+            
+            $messages = Message::where(function ($query) use ($validated) {
+                $query->where('sender_id', $validated['user1_id'])
+                    ->where('sender_type', $validated['user1_type'])
+                    ->where('receiver_id', $validated['user2_id'])
+                    ->where('receiver_type', $validated['user2_type']);
+            })->orWhere(function ($query) use ($validated) {
+                $query->where('sender_id', $validated['user2_id'])
+                    ->where('sender_type', $validated['user2_type'])
+                    ->where('receiver_id', $validated['user1_id'])
+                    ->where('receiver_type', $validated['user1_type']);
+            })->orderBy('created_at', 'asc')->get();
 
-        $messages = Message::where(function ($query) use ($validated) {
-            $query->where('sender_id', $validated['user1_id'])
-                  ->where('sender_type', $validated['user1_type'])
-                  ->where('receiver_id', $validated['user2_id'])
-                  ->where('receiver_type', $validated['user2_type']);
-        })->orWhere(function ($query) use ($validated) {
-            $query->where('sender_id', $validated['user2_id'])
-                  ->where('sender_type', $validated['user2_type'])
-                  ->where('receiver_id', $validated['user1_id'])
-                  ->where('receiver_type', $validated['user1_type']);
-        })->orderBy('created_at', 'asc')->get();
-
-        return response()->json(['conversation' => $messages]);
+            return response()->json(['conversation' => $messages]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'error' => 'Validatiefout',
+                'details' => $e->errors()
+            ], 422);
+        }
     }
 }
