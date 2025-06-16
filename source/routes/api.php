@@ -8,6 +8,9 @@ use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Auth\AdminAuthController;
+use App\Http\Controllers\Api\Auth\CompanyAuthController;
+use App\Http\Controllers\Api\Auth\StudentAuthController;
 
 // Student routes
 Route::middleware('throttle:50,1')->group(function () {
@@ -69,16 +72,16 @@ Route::post('/messages/conversation', [MessageController::class, 'getConversatio
 
 
 // Authentication Routes
-Route::post('/students/login', [App\Http\Controllers\Api\Auth\StudentAuthController::class, 'login']);
-Route::post('/companies/login', [App\Http\Controllers\Api\Auth\CompanyAuthController::class, 'login']);
-Route::post('/admins/login', [App\Http\Controllers\Api\Auth\AdminAuthController::class, 'login']);
+Route::post('/students/login', [StudentAuthController::class, 'login']);
+Route::post('/companies/login', [CompanyAuthController::class, 'login']);
+Route::post('/admins/login', [AdminAuthController::class, 'login']);
 
 // Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
     // Logout routes
-    Route::post('/students/logout', [App\Http\Controllers\Api\Auth\StudentAuthController::class, 'logout']);
-    Route::post('/companies/logout', [App\Http\Controllers\Api\Auth\CompanyAuthController::class, 'logout']);
-    Route::post('/admins/logout', [App\Http\Controllers\Api\Auth\AdminAuthController::class, 'logout']);
+    Route::post('/students/logout', [StudentAuthController::class, 'logout']);
+    Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
+    Route::post('/admins/logout', [AdminAuthController::class, 'logout']);
     
     // You can protect other routes here as needed
     // For example:
