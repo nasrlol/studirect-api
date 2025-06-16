@@ -57,6 +57,7 @@ return new class extends Migration {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->string('actor')->nullable();
+            $table->unsignedBigInteger("id");
             $table->text('action');
             $table->string('target_type')->nullable();
             $table->timestamp('timestamp')->useCurrent();
