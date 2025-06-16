@@ -163,7 +163,7 @@ class StudentController extends Controller
             } else {
                 $student->profile_complete = true;
                 $student->save();
-                // nu pas opgevallen dat de verandering nog moest opgeglsagen worden
+                // nu pas opgevallen dat de verandering nog moest opgeslagen worden
                 return response()->json(['message' => 'Student now verified']);
             }
         } catch (ModelNotFoundException $e) {
