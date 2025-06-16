@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 
 class Diploma extends Model
 {
@@ -10,7 +12,8 @@ class Diploma extends Model
         'type',
     ];
 
-    public function student(){
-       return $this->hasMany(Student::class, 'graduation_track');
+    public function student(): HasMany
+    {
+       return $this->HasMany(Student::class, 'graduation_track');
     }
 }
