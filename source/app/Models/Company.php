@@ -46,7 +46,7 @@ class Company extends Model
     }
 
     // Relatie: een bedrijf kan meerdere afspraken hebben
-    public function appointments(): HasMany
+    public function appointment(): HasMany
     {
         return $this->hasMany(Appointment::class);
     }
