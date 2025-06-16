@@ -53,8 +53,8 @@ class Student extends Model
         return $this->hasMany(Connection::class);
     }
 
-    public function diplomas(): HasMany
+    public function diploma(): HasMany
     {
-        return $this->hasMany(Diploma::class);
+        return $this->hasMany(Diploma::class, 'graduation_track');
     }
 }

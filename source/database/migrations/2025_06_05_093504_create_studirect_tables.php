@@ -41,6 +41,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('study_direction')->nullable();
             $table->string('graduation_track')->nullable();
+            $table->unsignedBigInteger('graduation_track')->nullable();
+            $table->foreign('graduation_track')->references('id')->on('diplomas')->onDelete('cascade');
             $table->text('interests')->nullable();
             $table->text('job_preferences')->nullable();
             $table->string('cv')->nullable();

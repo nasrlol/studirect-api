@@ -10,4 +10,7 @@ class Diploma extends Model
         'type',
     ];
 
+    public function student(){
+       return $this->hasMany(Student::class, 'graduation_track');
+    }
 }
