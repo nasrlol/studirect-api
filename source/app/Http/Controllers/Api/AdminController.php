@@ -28,7 +28,7 @@ class AdminController extends Controller
         $validated['password'] = bcrypt($validated['password']);
         $admin = Admin::create($validated);
 
-        $logService->setLog("Admin", "Admin created ", "Admin", LogLevel::CRITICAL);
+        $logService->setLog("Admin", $admin->id, "Admin created ", "Admin", LogLevel::CRITICAL);
 
         return response()->json(['data' => $admin], 201);
     }
@@ -57,7 +57,7 @@ class AdminController extends Controller
             }
 
             $admin->update($validated);
-            $logService->setLog("Admin", "Admin updated ", "Admin");
+            $logService->setLog("Admin", $admin->id, "Admin updated ", "Admin");
             // severity level wordt hier niet gezet omdat ik dat als default waarde heb gezet, dus normal = niks doen
 
 
@@ -73,7 +73,7 @@ class AdminController extends Controller
             $admin = Admin::findOrFail($id);
 
             $admin->delete();
-            $logService->setLog("Admin", "Admin deleted ", "Admin", LogLevel::CRITICAL);
+            $logService->setLog("Admin",$admin->id, "Admin deleted ", "Admin", LogLevel::CRITICAL);
 
             return response()->json(['message' => 'Admin verwijderd']);
         } catch (ModelNotFoundException $e) {
