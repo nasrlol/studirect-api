@@ -22,7 +22,7 @@ class StudentFactory extends Factory
             'interests' => implode(', ', $this->faker->randomElements(['AI', 'Webdev', 'Networking', 'Cybersecurity', 'IoT'], 2)),
             'job_preferences' => $this->faker->sentence(3),
             'cv' => 'cv_' . Str::random(10) . '.pdf', // Placeholder for file name
-            'profile_complete' => $this->faker->boolean,
+            'profile_complete' => false
         ];
     }
 }

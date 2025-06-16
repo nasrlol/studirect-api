@@ -65,7 +65,7 @@ class CompanyController extends Controller
         }
 
         $company = Company::create($validate);
-        $mailService->sendCompanyPassword($company);
+        $mailService->sendCompanyAccountVerification($company);
 
 
         $logger = new LogController();

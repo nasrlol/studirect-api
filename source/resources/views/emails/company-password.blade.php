@@ -3,13 +3,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Student verification</title>
+    <title>Bedrijfsaccount geactiveerd</title>
 </head>
 <body>
 <main>
-    <h1>Hallo {{ $company->name }},</h1>
-    <p>Dit is uw wachtwoord {{ $company->password }}}</p>
-    <p>Verander dit wachtwoord zo snel mogelijk, alvast bedankt</p>
+    <h1>Proficiat {{ $company->name }},</h1>
+    <p>Je bedrijfsaccount is succesvol aangemaakt.</p>
+    <p>Via onderstaande link kan je jouw bedrijfsprofiel verder aanvullen:</p>
+    <p>
+        <a href="{{ $registratieUrl }}">
+            Klik hier om je bedrijfsprofiel aan te passen
+        </a>
+    </p>
+    <p>Bedankt voor je registratie!</p>
 </main>
 </body>
 </html>
