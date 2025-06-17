@@ -19,7 +19,6 @@ class Company extends Model
         'email',
         'password',
         'plan_type',
-        'description',
         'job_types',
         'job_domain',
         'booth_location',
@@ -28,6 +27,7 @@ class Company extends Model
         'company_description',
         'job_requirements',
         'job_description',
+        'company_location',
     ];
 
 
