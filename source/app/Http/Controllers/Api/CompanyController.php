@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Services\LogService;
 use App\Services\MailService;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class CompanyController extends Controller
      */
     public function index(): JsonResponse
     {
-        $companies = Company::cursorPaginate(15);
+        $companies = Company::all();
         return response()->json([
             'data'=>$companies
         ]);
