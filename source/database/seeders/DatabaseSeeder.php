@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
     {
         // roept de diplomas aan
         $this->call(DiplomaSeeder::class);
-        Student::factory()->count(5)->create();
-        Company::factory()->count(5)->create();
-        Appointment::factory()->count(5)->create();
-        Connection::factory()->count(5)->create();
-        Admin::factory()->count(5)->create();
-        Log::factory()->count(50)->create();
+        Student::factory()->count(20)->create();
+        Company::factory()->count(20)->create();
+        Appointment::factory()->count(20)->create();
+        Connection::factory()->count(20)->create();
+        Admin::factory()->count(20)->create();
+        Log::factory()->count(20)->create();
     }
 }
