@@ -58,9 +58,9 @@ Route::middleware('throttle:500,1')->group(function () {
 
 // Admin routes voor logs
 Route::get('/admin/logs', [LogController::class, 'getLogs']);
-Route::get('admin/logs/student/{id}', [LogController::class, 'getLogsStudent']);
-Route::get('admin/logs/company/{id}', [LogController::class, 'getLogsCompany']);
-Route::get('admin/logs/admin/{id}', [LogController::class, 'getLogsAdmin']);
+Route::get('admin/logs/students/{id}', [LogController::class, 'getLogsStudent']);
+Route::get('admin/logs/companies/{id}', [LogController::class, 'getLogsCompany']);
+Route::get('admin/logs/admins/{id}', [LogController::class, 'getLogsAdmin']);
 
 Route::get('/diplomas', [DiplomaController::class, 'index']);
 Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
