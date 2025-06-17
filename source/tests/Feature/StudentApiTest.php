@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\Student;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class StudentApiTest extends TestCase
 {
@@ -20,7 +20,6 @@ class StudentApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                    'data' => [
                         '*' => [
                             'id',
                             'first_name',
@@ -32,10 +31,7 @@ class StudentApiTest extends TestCase
                             'job_preferences',
                             'cv',
                             'profile_complete',
-                            'created_at',
-                            'updated_at'
                         ]
-                    ]
                 ]
             ]);
     }
@@ -48,7 +44,7 @@ class StudentApiTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password123',
             'study_direction' => 'Informatica',
-            'graduation_track' => 'AI',
+            'graduation_track' => 5,
         ];
 
         $response = $this->postJson('/api/students', $data);
@@ -66,8 +62,6 @@ class StudentApiTest extends TestCase
                     'job_preferences',
                     'cv',
                     'profile_complete',
-                    'created_at',
-                    'updated_at'
                 ],
                 'message'
             ]);
@@ -102,7 +96,7 @@ class StudentApiTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'newpassword123',
             'study_direction' => 'Netwerken',
-            'graduation_track' => 'Cybersecurity',
+            'graduation_track' => 3,
             'interests' => 'Security',
             'job_preferences' => 'Backend Developer',
             'cv' => 'cv_link.pdf',
