@@ -43,7 +43,8 @@ class CompanyController extends Controller
             'speeddate_duration' => 'nullable|integer|max:60',
             'job_requirements' => 'nullable|string',
             'job_description' => 'nullable|string',
-            'company_description' => 'nullable|string'
+            'company_description' => 'nullable|string',
+            'company_location' => 'nullable|string|max:255'
         ]);
 
         // Standaardwaarden voor ontbrekende velden
@@ -157,7 +158,8 @@ class CompanyController extends Controller
                 'speeddate_duration',
                 'company_description',
                 'job_requirements',
-                'job_description'
+                'job_description',
+                'company_location'
                 ];
 
 
