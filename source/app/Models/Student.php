@@ -24,6 +24,7 @@ class Student extends Model
         'job_preferences',
         'cv',
         'profile_complete',
+        'profile_photo',  
     ];
 
     // wachtwoord mag niet als plain tekst worden opgeslagen dus hashen
