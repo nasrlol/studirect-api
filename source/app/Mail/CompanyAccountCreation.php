@@ -45,7 +45,7 @@ class CompanyAccountCreation extends Mailable
             view: 'emails.company-password',
                 with: [
                 'company' => $this->company,
-                'verificationUrl' => $registratieUrl,
+                'registratieUrl' => $registratieUrl,
             ]
         );
     }
