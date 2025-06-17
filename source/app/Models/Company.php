@@ -19,7 +19,6 @@ class Company extends Model
         'email',
         'password',
         'plan_type',
-        'description',
         'job_types',
         'job_domain',
         'booth_location',
