@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('profile_photo')->nullable();
             $table->timestamps();
         });
 
@@ -51,6 +52,7 @@ return new class extends Migration {
             $table->text('job_preferences')->nullable();
             $table->string('cv')->nullable();
             $table->boolean('profile_complete')->default(false);
+            $table->string('profile_photo')->nullable();
             $table->timestamps();
         });
 
