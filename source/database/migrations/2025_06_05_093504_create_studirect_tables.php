@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->string('plan_type')->nullable();
-            $table->text('description')->nullable();
             $table->text('job_types')->nullable();
             $table->text('job_domain')->nullable();
             $table->string('booth_location')->nullable();
