@@ -20,13 +20,31 @@ class LogController extends Controller
         ]);
     }
 
-    public function getLogsByStudenten($id): JsonResponse
+    public function getLogsStudent($id): JsonResponse
     {
 
+        $logs = Log::where('actor_id', $id)->whereRaw('LOWER(actor) = ?', ['student'])->cursorPaginate(15);
+
+        return response()->json([
+            'data' => $logs
+        ]);
     }
 
-    public function getLogsByBedrijven($id): JsonResponse
+    public function getLogsCompany($id): JsonResponse
     {
+        $logs = Log::where('actor_id', $id)->whereRaw('LOWER(actor) = ?', ['company'])->cursorPaginate(15);
 
+        return response()->json([
+            'data' => $logs
+        ]);
+    }
+
+    public function getLogsAdmin($id): JsonResponse
+    {
+        $logs = Log::where('actor_id', $id)->whereRaw('LOWER(actor) = ?', ['admin'])->cursorPaginate(15);
+
+        return response()->json([
+            'data' => $logs
+        ]);
     }
 }
