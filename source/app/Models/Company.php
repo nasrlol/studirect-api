@@ -27,6 +27,7 @@ class Company extends Model
         'company_description',
         'job_requirements',
         'job_description',
+        'company_location',
     ];
 
 
