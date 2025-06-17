@@ -82,7 +82,7 @@ class StudentController extends Controller
         $student = Student::create($validated);
         $logService->setLog("Student", $student->id,"Student created", "Student");
 
-        $mailService->sendStudentVerification($student);
+        $mailService->sendStudentVerification($student, $logService);
 
         return response()->json([
             'data' => $student,
