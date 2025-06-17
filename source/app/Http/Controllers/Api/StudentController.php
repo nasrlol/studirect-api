@@ -169,7 +169,7 @@ class StudentController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Failed to find student'], 404);
         }
-     }
+    }
 
     public function partialUpdate(Request $request, string $id, LogService $logService): JsonResponse
     {
