@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Enums\LogLevel;
 
 class AdminAuthController extends Controller
 {
@@ -27,11 +28,11 @@ class AdminAuthController extends Controller
             ]);
         }
 
-        $logService->setLog("Admin", "Admin logged in", "Auth");
+        $logService->setLog("Admin", $admin->id, "Admin logged in", "Auth", LogLevel::NORMAL);
         
         return response()->json([
             'user' => $admin,
-            'token' => $admin->createToken('admin-token')->plainTextToken,
+            'token' => $admin->createToken('admin-token', ['admin'])->plainTextToken,
             'user_type' => 'admin'
         ]);
     }
@@ -40,8 +41,8 @@ class AdminAuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         
-        $logService->setLog("Admin", "Admin logged out", "Auth");
+        $logService->setLog("Admin", $request->user()->id, "Admin logged out", "Auth", LogLevel::NORMAL);
         
         return response()->json(['message' => 'Logged out successfully']);
     }
-}
+} 
