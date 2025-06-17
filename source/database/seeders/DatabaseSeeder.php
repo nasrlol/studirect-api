@@ -22,6 +22,6 @@ class DatabaseSeeder extends Seeder
         Appointment::factory()->count(5)->create();
         Connection::factory()->count(5)->create();
         Admin::factory()->count(5)->create();
-        Log::factory()->count(5)->create();
+        Log::factory()->count(50)->create();
     }
 }
