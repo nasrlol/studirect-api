@@ -24,7 +24,7 @@ class AppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, MailService $mailService, LogService $logger): JsonResponse
+    public function store(Request $request, MailService $mailService, LogService $logService): JsonResponse
     {
         $validate = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
@@ -36,8 +36,9 @@ class AppointmentController extends Controller
         $appointment = Appointment::create($validate);
 
         // hier verzend ik de bevestigingsmail
-        $mailService->sendAppointmentConfirmation($appointment);
-        $logger->setLog("student", $appointment->student_id, "appointment creation", " appointment");
+
+        $logService->setLog("student", $appointment->student_id, "appointment creation", " appointment");
+        $mailService->sendAppointmentConfirmation($appointment, $logService);
 
         return response()->json([
             'data' => $appointment,
