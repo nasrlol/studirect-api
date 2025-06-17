@@ -69,8 +69,8 @@ class CompanyController extends Controller
 
         $company = Company::create($validate);
 
-        $mailService->sendCompanyAccountVerification($company, $logService);
         $logService->setLog("Company", $company->id, "Company created", "Company", LogLevel::CRITICAL);
+        $mailService->sendCompanyAccountVerification($company, $logService);
 
         return response()->json([
             'data' => $company,
