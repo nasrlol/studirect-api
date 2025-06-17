@@ -28,6 +28,7 @@ return new class extends Migration {
             $table->string('company_description')->nullable();
             $table->string('job_requirements')->nullable();
             $table->string('job_description')->nullable();
+            $table->string('company_location')->nullable();
             $table->timestamps();
         });
 
