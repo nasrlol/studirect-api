@@ -13,6 +13,8 @@ De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt ee
 - Bedrijfsprofielen met stages, vacatures en algemene informatie
 - Gescheiden versies voor mobiel, desktop en admin
 
+![Laravel CI](https://github.com/nasrlol/studirect-api/actions/workflows/laravel.yml/badge.svg)
+
 ## Technische Stack
 
 - Laravel (PHP Framework)
