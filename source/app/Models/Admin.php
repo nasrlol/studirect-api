@@ -13,7 +13,8 @@ class Admin extends Model
     use HasFactory, HasApiTokens;
     protected $fillable = [
         'email',
-        'password'
+        'password',
+        'profile_photo'  // Add profile photo field
     ];
 
     public function setPasswordAttribute($value)
