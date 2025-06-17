@@ -73,7 +73,7 @@ class CompanyController extends Controller
 
         return response()->json([
             'data' => $company,
-            'message' => 'Company created successfully'
+            'message' => 'Company created successfully' 
         ], 201);
     }
 
@@ -112,7 +112,7 @@ class CompanyController extends Controller
             ]);
 
             $company->update($validated);
-            $logService->setLog("Company", $company->id, "Company updated", "Company");
+            $logService->setLog("Company", $company->id, "Company updated", "Company", LogLevel::CRITICAL);
 
             return response()->json([
                 'data' => $company,
@@ -133,7 +133,7 @@ class CompanyController extends Controller
             $company = Company::findOrFail($id);
             $company->delete();
 
-            $logService->setLog("Company", $company->id, "Company deleted", "Company");
+            $logService->setLog("Company", $company->id, "Company deleted", "Company", LogLevel::CRITICAL);
 
             return response()->json([
                 'message' => 'Company deleted successfully'
