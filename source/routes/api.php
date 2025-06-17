@@ -58,6 +58,9 @@ Route::middleware('throttle:500,1')->group(function () {
 
 // Admin routes voor logs
 Route::get('/admin/logs', [LogController::class, 'getLogs']);
+Route::get('admin/logs/students/{id}', [LogController::class, 'getLogsStudent']);
+Route::get('admin/logs/companies/{id}', [LogController::class, 'getLogsCompany']);
+Route::get('admin/logs/admins/{id}', [LogController::class, 'getLogsAdmin']);
 
 Route::get('/diplomas', [DiplomaController::class, 'index']);
 Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
@@ -80,7 +83,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/students/logout', [StudentAuthController::class, 'logout']);
     Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
     Route::post('/admins/logout', [AdminAuthController::class, 'logout']);
-    
+
     // You can protect other routes here as needed
     // For example:
     // Route::get('/protected-resource', [YourController::class, 'method']);
