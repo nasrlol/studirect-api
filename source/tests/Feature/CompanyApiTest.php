@@ -25,7 +25,6 @@ class CompanyApiTest extends TestCase
         $data = [
             'name' => 'Test Company',
             'email' => 'test@company.com',
-            'address' => '123 Main St',
             'password' => 'password123',
             'plan_type' => 'basic',
             'booth_location' => 'Hall A',
@@ -36,12 +35,13 @@ class CompanyApiTest extends TestCase
             'job_requirements' => 'Bachelor\'s degree in Engineering',
             'job_description' => 'Responsible for engineering tasks.',
             'company_description' => 'A company that specializes in engineering solutions.',
+            'company_location' => '123 Main St, City, Country',
         ];
 
         $response = $this->postJson('/api/companies', $data);
 
         $response->assertStatus(201)
-            ->assertJsonStructure(['data' => ['id', 'name', 'email', 'address']]);
+            ->assertJsonStructure(['data' => ['id', 'name', 'email', 'booth_location', 'plan_type', 'company_description', 'company_location']]);
 
         $this->assertDatabaseHas('companies', ['email' => $data['email']]);
     }
@@ -74,6 +74,7 @@ class CompanyApiTest extends TestCase
             'job_requirements' => 'Master\'s degree in Technology',
             'job_description' => 'Responsible for technology-related tasks.',
             'company_description' => 'An updated company description specializing in technology solutions.',
+            'company_location' => '789 New St, City, Country',
 
         ];
 
