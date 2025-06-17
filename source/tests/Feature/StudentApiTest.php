@@ -44,7 +44,6 @@ class StudentApiTest extends TestCase
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password123',
             'study_direction' => 'Informatica',
-            'graduation_track' => 5,
         ];
 
         $response = $this->postJson('/api/students', $data);
