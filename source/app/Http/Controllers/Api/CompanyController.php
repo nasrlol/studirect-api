@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Services\LogService;
 use App\Services\MailService;
-use Illuminate\Container\Attributes\Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -38,7 +37,6 @@ class CompanyController extends Controller
             'password' => 'required|string|min:8',
             'plan_type' => 'required|string|max:255',
             'booth_location' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255',
             'job_types' => 'nullable|string|max:255',
             'job_domain' => 'nullable|string|max:255',
             'photo' => 'nullable|string|max:255',
@@ -50,7 +48,6 @@ class CompanyController extends Controller
 
         // Standaardwaarden voor ontbrekende velden
         $defaults = [
-            'description' => 'Bedrijfsbeschrijving nog niet ingevuld',
             'job_types' => 'Fulltime',
             'job_domain' => 'Nog niet gespecificeerd',
             'photo' => null,
@@ -104,7 +101,6 @@ class CompanyController extends Controller
             'email' => 'required|email|unique:companies,email,' .$company->id,
             'password' => 'required|string|min:8',
             'plan_type' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
             'job_types' => 'required|string|max:255',
             'job_domain' => 'required|string|max:255',
             'booth_location' => 'required|string|max:255',
@@ -154,7 +150,6 @@ class CompanyController extends Controller
                 'email',
                 'password',
                 'plan_type',
-                'description',
                 'job_types',
                 'job_domain',
                 'booth_location',
