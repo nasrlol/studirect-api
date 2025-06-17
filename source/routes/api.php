@@ -12,76 +12,88 @@ use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Auth\CompanyAuthController;
 use App\Http\Controllers\Api\Auth\StudentAuthController;
 
-// Student routes
+// Public routes - accessible without authentication
 Route::middleware('throttle:300,1')->group(function () {
-    Route::get('/students', [StudentController::class, 'index']);
+    // Authentication Routes
+    Route::post('/students/login', [StudentAuthController::class, 'login']);
+    Route::post('/companies/login', [CompanyAuthController::class, 'login']);
+    Route::post('/admins/login', [AdminAuthController::class, 'login']);
+    
+    // Registration Routes
     Route::post('/students', [StudentController::class, 'store']);
-    Route::get('/students/{id}', [StudentController::class, 'show']);
-    Route::put('/students/{id}', [StudentController::class, 'update']);
-    Route::delete('/students/{id}', [StudentController::class, 'destroy']);
-    Route::get('/students/{id}/verify', [StudentController::class, 'verify'])
-        ->name('students.verify') // maak een naam voor de route, kan ik die straks makkelijker aanroepen in de mail view
-        ->middleware('signed');
-    Route::patch('/students/{id}', [StudentController::class, 'partialUpdate']);
-});
-
-// Company routes
-Route::middleware('throttle:300,1')->group(function () {
-    Route::get('/companies', [CompanyController::class, 'index']);
     Route::post('/companies', [CompanyController::class, 'store']);
-    Route::get('/companies/{id}', [CompanyController::class, 'show']);
-    Route::put('/companies/{id}', [CompanyController::class, 'update']);
-    Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
-    Route::patch('companies/{id}', [CompanyController::class, 'partialUpdate']);
+    
+    // Email verification
+    Route::get('/students/{id}/verify', [StudentController::class, 'verify'])
+        ->name('students.verify')
+        ->middleware('signed');
+    
+    // Public information
+    Route::get('/diplomas', [DiplomaController::class, 'index']);
+    Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
 });
 
-// Appointment routes
-Route::middleware('throttle:500,1')->group(function () {
-    Route::get('/appointments', [AppointmentController::class, 'index']);
-    Route::post('/appointments', [AppointmentController::class, 'store']);
-    Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
-    Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
-    Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
-});
-
-// Connection routes
-Route::middleware('throttle:500,1')->group(function () {
-    Route::get('/connections', [ConnectionController::class, 'index']);
-    Route::post('/connections', [ConnectionController::class, 'store']);
-    Route::get('/connections/{id}', [ConnectionController::class, 'show']);
-    Route::patch('/connections/{id}', [ConnectionController::class, 'update']);
-    // hier een patch in plaats van een put omdat enkel het tijdstip wordt aangepast
-    Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
-});
-
-// Route::apiResource('appointments', AppointmentController::class);
-
-// Admin routes voor logs
-Route::get('/admin/logs', [LogController::class, 'getLogs']);
-
-Route::get('/diplomas', [DiplomaController::class, 'index']);
-Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
-
-// Routes voor berichten
-Route::post('/messages/send', [MessageController::class, 'sendMessage']);
-//Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
-
-Route::post('/messages/conversation', [MessageController::class, 'getConversation']);
-
-
-// Authentication Routes
-Route::post('/students/login', [StudentAuthController::class, 'login']);
-Route::post('/companies/login', [CompanyAuthController::class, 'login']);
-Route::post('/admins/login', [AdminAuthController::class, 'login']);
-
-// Protected Routes
-Route::middleware('auth:sanctum')->group(function () {
-    // Logout routes
+// Protected Routes - require authentication
+Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
+    // Common authenticated routes
     Route::post('/students/logout', [StudentAuthController::class, 'logout']);
     Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
     Route::post('/admins/logout', [AdminAuthController::class, 'logout']);
     
-    // You can protect other routes here as needed
-    // For example:
-    // Route::get('/protected-resource', [YourController::class, 'method']);
+    // Messaging system - accessible to all authenticated users
+    Route::post('/messages/send', [MessageController::class, 'sendMessage']);
+    Route::post('/messages/conversation', [MessageController::class, 'getConversation']);
+    
+    // Student-specific routes
+    Route::middleware('ability:student')->group(function () {
+        Route::get('/students/{id}', [StudentController::class, 'show'])->middleware('can:view,App\Models\Student,id');
+        Route::put('/students/{id}', [StudentController::class, 'update'])->middleware('can:update,App\Models\Student,id');
+        Route::patch('/students/{id}', [StudentController::class, 'partialUpdate'])->middleware('can:update,App\Models\Student,id');
+        Route::delete('/students/{id}', [StudentController::class, 'destroy'])->middleware('can:delete,App\Models\Student,id');
+        
+        // Student can view companies
+        Route::get('/companies', [CompanyController::class, 'index']);
+        Route::get('/companies/{id}', [CompanyController::class, 'show']);
+        
+        // Appointments and connections
+        Route::post('/appointments', [AppointmentController::class, 'store']);
+        Route::get('/appointments/{id}', [AppointmentController::class, 'show'])->middleware('can:view,App\Models\Appointment,id');
+        Route::put('/appointments/{id}', [AppointmentController::class, 'update'])->middleware('can:update,App\Models\Appointment,id');
+        Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy'])->middleware('can:delete,App\Models\Appointment,id');
+        
+        Route::post('/connections', [ConnectionController::class, 'store']);
+        Route::get('/connections/{id}', [ConnectionController::class, 'show'])->middleware('can:view,App\Models\Connection,id');
+        Route::patch('/connections/{id}', [ConnectionController::class, 'update'])->middleware('can:update,App\Models\Connection,id');
+    });
+    
+    // Company-specific routes
+    Route::middleware('ability:company')->group(function () {
+        Route::get('/companies/{id}', [CompanyController::class, 'show'])->middleware('can:view,App\Models\Company,id');
+        Route::put('/companies/{id}', [CompanyController::class, 'update'])->middleware('can:update,App\Models\Company,id');
+        Route::patch('companies/{id}', [CompanyController::class, 'partialUpdate'])->middleware('can:update,App\Models\Company,id');
+        Route::delete('/companies/{id}', [CompanyController::class, 'destroy'])->middleware('can:delete,App\Models\Company,id');
+        
+        // Companies can view students
+        Route::get('/students', [StudentController::class, 'index']);
+        Route::get('/students/{id}', [StudentController::class, 'show']);
+        
+        // Company appointments and connections
+        Route::get('/appointments', [AppointmentController::class, 'index']);
+        Route::get('/appointments/{id}', [AppointmentController::class, 'show'])->middleware('can:view,App\Models\Appointment,id');
+        Route::get('/connections', [ConnectionController::class, 'index']);
+    });
+    
+    // Admin-only routes
+    Route::middleware('ability:admin')->group(function () {
+        // Admin can manage all resources
+        Route::get('/students', [StudentController::class, 'index']);
+        Route::get('/companies', [CompanyController::class, 'index']);
+        
+        // Admin can access logs
+        Route::get('/admin/logs', [LogController::class, 'getLogs']);
+        
+        // Admin can view all appointments and connections
+        Route::get('/appointments', [AppointmentController::class, 'index']);
+        Route::get('/connections', [ConnectionController::class, 'index']);
+    });
 });
