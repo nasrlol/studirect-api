@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Enums\LogLevel;
 
 class StudentAuthController extends Controller
 {
@@ -27,11 +28,11 @@ class StudentAuthController extends Controller
             ]);
         }
 
-        $logService->setLog("Student", "Student logged in", "Auth");
+        $logService->setLog("Student", $student->id, "Student logged in", "Auth", LogLevel::NORMAL);
         
         return response()->json([
             'user' => $student,
-            'token' => $student->createToken('student-token')->plainTextToken,
+            'token' => $student->createToken('student-token', ['student'])->plainTextToken,
             'user_type' => 'student'
         ]);
     }
@@ -39,9 +40,9 @@ class StudentAuthController extends Controller
     public function logout(Request $request, LogService $logService): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
-        
-        $logService->setLog("Student", "Student logged out", "Auth");
-        
+
+        $logService->setLog("Student", $request->user()->id, "Student logged out", "Auth", LogLevel::NORMAL);
+
         return response()->json(['message' => 'Logged out successfully']);
     }
 }
