@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Mail\AppointmentMail;
 use App\Mail\CompanyAccountCreation;
 use App\Mail\StudentProfileVerification;
+use App\Mail\StudentResetPassword;
 use App\Models\Appointment;
 use App\Models\Company;
 use App\Models\Student;
@@ -47,6 +48,16 @@ class MailService
             // logs service at the moment its still in the controller and i dont want to write code that im going to have to delete later
         }
 
+    }
+
+    public function sendStudentPasswordReset(Student $student): void
+    {
+        try {
+            Mail::to($student->email)->send(new StudentResetPassword($student));
+        } catch (TransferException $e)
+        {
+            // doe ik later nog wel
+        }
     }
 
 }
