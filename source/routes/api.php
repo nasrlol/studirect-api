@@ -89,8 +89,12 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
         Route::get('/students', [StudentController::class, 'index']);
         Route::get('/companies', [CompanyController::class, 'index']);
         
-        // Admin can access logs
+
+        // Admin routes voor logs
         Route::get('/admin/logs', [LogController::class, 'getLogs']);
+        Route::get('admin/logs/students/{id}', [LogController::class, 'getLogsStudent']);
+        Route::get('admin/logs/companies/{id}', [LogController::class, 'getLogsCompany']);
+        Route::get('admin/logs/admins/{id}', [LogController::class, 'getLogsAdmin']);
         
         // Admin can view all appointments and connections
         Route::get('/appointments', [AppointmentController::class, 'index']);
