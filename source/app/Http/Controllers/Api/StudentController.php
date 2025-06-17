@@ -64,13 +64,15 @@ class StudentController extends Controller
             'job_preferences' => 'nullable|string',
             'cv' => 'nullable|string',
             'profile_complete' => 'nullable|boolean',
+            'profile_photo' => 'nullable|string|max:255',  // Add validation for profile photo
         ]);
 
         // Standaardwaarden alleen voor optionele velden
         $defaults = [
             'interests' => 'Nog niet ingevuld',
             'job_preferences' => 'Nog niet ingevuld',
-            'profile_complete' => false
+            'profile_complete' => false,
+            'profile_photo' => null,  // Default is null
         ];
 
         foreach ($defaults as $field => $value) {
@@ -122,6 +124,7 @@ class StudentController extends Controller
                 'job_preferences' => 'required|string',
                 'cv' => 'nullable|string',
                 'profile_complete' => 'boolean',
+                'profile_photo' => 'nullable|string|max:255',  
             ]);
 
             $student->update($validated);
@@ -186,7 +189,7 @@ class StudentController extends Controller
                 'job_preferences',
                 'cv',
                 'profile_complete',
-
+                'profile_photo',  
             ];
 
             // filtreren op enkel de informatie dat meegegeven wordt
