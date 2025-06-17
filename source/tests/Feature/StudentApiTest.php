@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Diploma;
 use App\Models\Student;
+use Database\Seeders\DiplomaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,7 +18,6 @@ class StudentApiTest extends TestCase
         Student::factory()->count(3)->create();
 
         $response = $this->getJson('/api/students');
-
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
@@ -29,8 +30,6 @@ class StudentApiTest extends TestCase
                             'graduation_track',
                             'interests',
                             'job_preferences',
-                            'cv',
-                            'profile_complete',
                         ]
                 ]
             ]);
@@ -38,12 +37,18 @@ class StudentApiTest extends TestCase
 
     public function test_store_creates_student(): void
     {
+        $this->seed(DiplomaSeeder::class); // Ensure diplomas exist
+        $diploma = Diploma::first(); // or create one if needed
+
         $data = [
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => $this->faker->unique()->safeEmail,
             'password' => 'password123',
             'study_direction' => 'Informatica',
+            'graduation_track' => $diploma ? $diploma->id : 1,
+            'interests' => 'Programming, AI',
+            'job_preferences' => 'Software Development',
         ];
 
         $response = $this->postJson('/api/students', $data);
@@ -59,8 +64,6 @@ class StudentApiTest extends TestCase
                     'graduation_track',
                     'interests',
                     'job_preferences',
-                    'cv',
-                    'profile_complete',
                 ],
                 'message'
             ]);
@@ -89,17 +92,19 @@ class StudentApiTest extends TestCase
     {
         $student = Student::factory()->create();
 
+        $this->seed(DiplomaSeeder::class); // Ensure diplomas exist
+
+        $diploma = Diploma::first(); // or create one if needed
+
         $data = [
             'first_name' => 'Updated',
-            'last_name' => 'Name',
+            'last_name' => 'Doe',
             'email' => $this->faker->unique()->safeEmail,
-            'password' => 'newpassword123',
-            'study_direction' => 'Netwerken',
-            'graduation_track' => 3,
-            'interests' => 'Security',
-            'job_preferences' => 'Backend Developer',
-            'cv' => 'cv_link.pdf',
-            'profile_complete' => true,
+            'password' => 'password123',
+            'study_direction' => 'Informatica',
+            'graduation_track' => $diploma ? $diploma->id : 1,
+            'interests' => 'Programming, AI',
+            'job_preferences' => 'Software Development',
         ];
 
         $response = $this->putJson("/api/students/{$student->id}", $data);

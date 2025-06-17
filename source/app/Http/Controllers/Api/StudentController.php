@@ -59,7 +59,7 @@ class StudentController extends Controller
             'email' => 'required|email|unique:students,email',
             'password' => 'required|string|min:8',
             'study_direction' => 'required|string|max:255', // Nu verplicht
-            'graduation_track' => 'required|string|max:255', // Nu verplicht
+            'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
             'interests' => 'nullable|string',
             'job_preferences' => 'nullable|string',
             'cv' => 'nullable|string',
@@ -117,7 +117,7 @@ class StudentController extends Controller
                 'email' => 'required|email|unique:students,email,' . $student->id,
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
-                'graduation_track' => 'required|string|max:255',
+                'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
                 'interests' => 'required|string',
                 'job_preferences' => 'required|string',
                 'cv' => 'nullable|string',
