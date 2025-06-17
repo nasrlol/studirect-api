@@ -19,4 +19,14 @@ class LogController extends Controller
             'data' => $log
         ]);
     }
+
+    public function getLogsByStudenten($id): JsonResponse
+    {
+
+    }
+
+    public function getLogsByBedrijven($id): JsonResponse
+    {
+
+    }
 }
