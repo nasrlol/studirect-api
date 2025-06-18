@@ -89,7 +89,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
-            $table->string('time_slot');
+            $table->time('time_start');
+            $table->time('time_end');
             $table->timestamps();
         });
 
