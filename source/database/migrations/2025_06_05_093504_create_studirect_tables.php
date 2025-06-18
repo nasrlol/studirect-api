@@ -47,6 +47,7 @@ return new class extends Migration {
             $table->string('password');
             $table->string('study_direction')->nullable();
             $table->foreignId('graduation_track')->nullable()->constrained('diplomas')->onDelete('cascade');
+            $table->foreignId('skills')->nullable()->constrained('skills')->onDelete('cascade');
             $table->text('interests')->nullable();
             $table->text('job_preferences')->nullable();
             $table->string('cv')->nullable();
@@ -101,7 +102,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->timestamps();
         });
-        
+
         // Create the pivot table for student skills
         Schema::create('student_skill', function (Blueprint $table) {
             $table->id();
@@ -109,7 +110,7 @@ return new class extends Migration {
             $table->foreignId('skill_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
-        
+
         // Create the pivot table for company skills
         Schema::create('company_skill', function (Blueprint $table) {
             $table->id();
