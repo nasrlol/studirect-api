@@ -62,7 +62,7 @@ class StudentController extends Controller
             'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
             'interests' => 'nullable|string',
             'job_preferences' => 'nullable|string',
-            'cv' => 'nullable|string',
+            'cv' => 'nullable|string|max:255',
             'profile_complete' => 'nullable|boolean',
             'profile_photo' => 'nullable|string|max:255',  // Add validation for profile photo
         ]);
@@ -71,6 +71,7 @@ class StudentController extends Controller
         $defaults = [
             'interests' => 'Nog niet ingevuld',
             'job_preferences' => 'Nog niet ingevuld',
+            'cv' => null,  // Default is null
             'profile_complete' => false,
             'profile_photo' => null,  // Default is null
         ];
@@ -122,7 +123,7 @@ class StudentController extends Controller
                 'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
                 'interests' => 'required|string',
                 'job_preferences' => 'required|string',
-                'cv' => 'nullable|string',
+                'cv' => 'nullable|string|max:255',
                 'profile_complete' => 'boolean',
                 'profile_photo' => 'nullable|string|max:255',  
             ]);
