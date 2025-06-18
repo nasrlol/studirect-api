@@ -130,6 +130,7 @@ class StudentController extends Controller
                 'profile_photo' => 'nullable|string|max:255',
             ]);
 
+            $validated['password'] = Hash::make($validated['password']);
             $student->update($validated);
 
             $logService->setLog("Student", $student->id, "Student updated", "Student");
