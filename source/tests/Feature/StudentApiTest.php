@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Feature;
 
 use App\Models\Diploma;
+use App\Models\Skill;
 use App\Models\Student;
 use Database\Seeders\DiplomaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,24 +22,28 @@ class StudentApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
-                        '*' => [
-                            'id',
-                            'first_name',
-                            'last_name',
-                            'email',
-                            'study_direction',
-                            'graduation_track',
-                            'interests',
-                            'job_preferences',
-                        ]
+                    '*' => [
+                        'id',
+                        'first_name',
+                        'last_name',
+                        'email',
+                        'study_direction',
+                        'graduation_track',
+                        'interests',
+                        'job_preferences',
+                        'cv',
+                        'profile_complete',
+                        'profile_photo',
+                    ]
                 ]
             ]);
     }
 
     public function test_store_creates_student(): void
     {
-        $this->seed(DiplomaSeeder::class); // Ensure diplomas exist
-        $diploma = Diploma::first(); // or create one if needed
+        $this->seed(DiplomaSeeder::class);
+        $diploma = Diploma::first();
+
 
         $data = [
             'first_name' => 'John',
@@ -49,9 +54,14 @@ class StudentApiTest extends TestCase
             'graduation_track' => $diploma ? $diploma->id : 1,
             'interests' => 'Programming, AI',
             'job_preferences' => 'Software Development',
+            'cv' => 'path/to/cv.pdf',
+            'profile_complete' => true,
+            'profile_photo' => 'path/to/photo.jpg',
         ];
 
+
         $response = $this->postJson('/api/students', $data);
+
 
         $response->assertStatus(201)
             ->assertJsonStructure([
@@ -69,13 +79,22 @@ class StudentApiTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('students', [
-            'email' => $data['email']
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'study_direction' => $data['study_direction'],
+            'graduation_track' => $data['graduation_track'],
+            'interests' => $data['interests'],
+            'job_preferences' => $data['job_preferences'],
         ]);
+
     }
 
     public function test_show_returns_student(): void
     {
         $student = Student::factory()->create();
+        $skills = Skill::inRandomOrder()->take(2)->get();
+        $student->skills()->attach($skills);
 
         $response = $this->getJson("/api/students/{$student->id}");
 
@@ -84,6 +103,13 @@ class StudentApiTest extends TestCase
                 'data' => [
                     'id' => $student->id,
                     'email' => $student->email,
+                    'first_name' => $student->first_name,
+                    'last_name' => $student->last_name,
+                    'study_direction' => $student->study_direction,
+                    'graduation_track' => $student->graduation_track,
+                    'interests' => $student->interests,
+                    'job_preferences' => $student->job_preferences,
+
                 ]
             ]);
     }
@@ -91,10 +117,9 @@ class StudentApiTest extends TestCase
     public function test_update_modifies_student(): void
     {
         $student = Student::factory()->create();
-
-        $this->seed(DiplomaSeeder::class); // Ensure diplomas exist
-
-        $diploma = Diploma::first(); // or create one if needed
+        $this->seed(DiplomaSeeder::class);
+        $diploma = Diploma::first();
+        $skills = Skill::inRandomOrder()->take(2)->get();
 
         $data = [
             'first_name' => 'Updated',
@@ -117,6 +142,12 @@ class StudentApiTest extends TestCase
         $this->assertDatabaseHas('students', [
             'id' => $student->id,
             'first_name' => 'Updated',
+            'last_name' => 'Doe',
+            'email' => $data['email'],
+            'study_direction' => $data['study_direction'],
+            'graduation_track' => $data['graduation_track'],
+            'interests' => $data['interests'],
+            'job_preferences' => $data['job_preferences'],
         ]);
     }
 
