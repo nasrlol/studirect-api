@@ -11,19 +11,19 @@ class Skill extends Model
         'name',
         'description',
     ];
-    
+
     /**
      * The students that have this skill.
      */
-    public function students(): BelongsToMany
+    public function student(): BelongsToMany
     {
         return $this->belongsToMany(Student::class);
     }
-    
+
     /**
      * The companies that require this skill.
      */
-    public function companies(): BelongsToMany
+    public function company(): BelongsToMany
     {
         return $this->belongsToMany(Company::class);
     }
