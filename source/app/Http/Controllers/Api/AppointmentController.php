@@ -30,11 +30,13 @@ class AppointmentController extends Controller
             'student_id' => 'required|integer|exists:students,id',
             'company_id' => 'required|integer|exists:companies,id',
             // de "exists:student,id" id kijkt na of dat de FK zich wel in de db bevindt
-            'time_slot' => 'required|string|max:255',
+            'time_start' => 'required|date_format:H:i',
+            'time_end' => 'required|date_format:H:i'
         ]);
 
         $appointmentExists = Appointment::where('company_id', $validate['company_id'])
-            ->where('time_slot', $validate['time_slot'])
+            ->where('time_start', $validate['time_start'])
+            ->where('time_end', $validate['time_end'])
             ->exists();
 
         if ($appointmentExists)
@@ -75,16 +77,15 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::findOrFail($id);
         $validated = $request->validate([
-            'time_slot' => 'required|string|max:255',
-            // afspraak verzetten = enkel tijdstip verzetten
-            // moet dan een patch zijn??
+            'time_start' => 'required|date_format:H:i',
+            'time_end' => 'required|date_format:H:i'
         ]);
 
         $appointment->update($validated);
         return response()->json([
             'data' => $appointment,
             'message' => 'Appointment updated successfully'
-        ], 200);
+        ]);
     }
 
     /**
