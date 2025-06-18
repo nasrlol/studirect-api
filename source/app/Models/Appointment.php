@@ -15,7 +15,8 @@ class Appointment extends Model
     protected $fillable = [
         'student_id',
         'company_id',
-        'time_slot',
+        'time_start',
+        'time_end'
     ];
 
     // Relatie: een appointment hoort bij één student
