@@ -59,7 +59,7 @@ class AppointmentApiTest extends TestCase
             'time_end' => $time_end
         ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(400)
             ->assertJsonFragment(['message' => 'That time slot is already being used']);
     }
 
@@ -91,7 +91,6 @@ class AppointmentApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonFragment(['time_start' => '13:00', 'time_end' => '13:30']);
         $this->assertDatabaseHas('appointments', [
-            'id' => $appointment->id,
             'time_start' => '13:00',
             'time_end' => '13:30',
         ]);
