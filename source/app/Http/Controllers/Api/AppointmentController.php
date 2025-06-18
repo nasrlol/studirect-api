@@ -49,21 +49,15 @@ class AppointmentController extends Controller
         $validate = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
             'company_id' => 'required|integer|exists:companies,id',
-            // de "exists:student,id" id kijkt na of dat de FK zich wel in de db bevindt
             'time_start' => 'required|date_format:H:i',
             'time_end' => 'required|date_format:H:i'
         ]);
 
-        $appointmentExists = Appointment::where('company_id', $validate['company_id'])
-            ->where('time_start', $validate['time_start'])
-            ->where('time_end', $validate['time_end'])
-            ->exists();
 
-        if ($appointmentExists)
-        {
+        if ($this->appointmentTimeOverlap($validate)) {
             return response()->json([
                 'message' => 'That time slot is already being used'
-            ]);
+            ], 400);
         }
 
         $appointment = Appointment::create($validate);
