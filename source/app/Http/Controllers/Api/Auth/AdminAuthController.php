@@ -27,7 +27,7 @@ class AdminAuthController extends Controller
             ]);
         }
 
-        $logService->setLog("Admin", "Admin logged in", "Auth");
+        //$logService->setLog("Admin", "Admin logged in", "Auth");
         
         return response()->json([
             'user' => $admin,
@@ -40,7 +40,7 @@ class AdminAuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         
-        $logService->setLog("Admin", "Admin logged out", "Auth");
+       // $logService->setLog("Admin", "Admin logged out", "Auth");
         
         return response()->json(['message' => 'Logged out successfully']);
     }

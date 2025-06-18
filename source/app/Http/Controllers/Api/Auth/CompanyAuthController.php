@@ -27,7 +27,7 @@ class CompanyAuthController extends Controller
             ]);
         }
 
-        $logService->setLog("Company", "Company logged in", "Auth");
+       // $logService->setLog("Company", "Company logged in", "Auth");
         
         return response()->json([
             'user' => $company,
@@ -40,7 +40,7 @@ class CompanyAuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         
-        $logService->setLog("Company", "Company logged out", "Auth");
+        //$logService->setLog("Company", "Company logged out", "Auth");
         
         return response()->json(['message' => 'Logged out successfully']);
     }
