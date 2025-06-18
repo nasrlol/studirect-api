@@ -28,10 +28,19 @@ class ConnectionController extends Controller
             'status' => 'required|boolean', // bijvoorbeeld 'true' of 'false'
         ]);
 
+        // Calculate skill match percentage
+        $skillMatchPercentage = Connection::calculateSkillMatchPercentage(
+            $validated['student_id'], 
+            $validated['company_id']
+        );
+        
+        // Add match percentage to validated data
+        $validated['skill_match_percentage'] = $skillMatchPercentage;
+        
         $connection = Connection::create($validated);
-
-        $logService->setLog("Student", $connection->student_id ,"Connection created", "Connection");
-
+        
+        $logService->setLog("Student", $connection->student_id, "Connection created", "Connection");
+        
         return response()->json([
             'data' => $connection,
             'message' => 'connection succesvol aangemaakt'
@@ -61,8 +70,18 @@ class ConnectionController extends Controller
                 'status' => 'required|boolean',
             ]);
 
+            // Update skill match percentage if student or company changed
+            if ($connection->student_id != $validated['student_id'] || 
+                $connection->company_id != $validated['company_id']) {
+                $validated['skill_match_percentage'] = Connection::calculateSkillMatchPercentage(
+                    $validated['student_id'], 
+                    $validated['company_id']
+                );
+            }
+
             $connection->update($validated);
-            $logService->setLog("Student", $connection->student_id, "Connection updated ", "Connection");
+            
+            $logService->setLog("Student", $connection->student_id, "Connection updated", "Connection");
 
             return response()->json([
                 'data' => $connection,
