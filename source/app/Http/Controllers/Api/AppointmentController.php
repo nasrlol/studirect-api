@@ -101,6 +101,15 @@ class AppointmentController extends Controller
             'time_end' => 'required|date_format:H:i'
         ]);
 
+        $validated['company_id'] = $appointment->company_id;
+        // we controleren niet op een company id dus we halen hem even uit de appointment zodat de check kan werken
+        if ($this->appointmentTimeOverlap($validated, $id))
+        {
+            return response()->json([
+                'message' => 'That time slot is already being used'
+            ], 400);
+        };
+
         $appointment->update($validated);
         return response()->json([
             'data' => $appointment,
