@@ -60,6 +60,7 @@ class StudentController extends Controller
             'password' => 'required|string|min:8',
             'study_direction' => 'required|string|max:255', // Nu verplicht
             'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
+            'skills' => 'required|string|exists:skills,id',
             'interests' => 'nullable|string',
             'job_preferences' => 'nullable|string',
             'cv' => 'nullable|string|max:255',
@@ -121,11 +122,12 @@ class StudentController extends Controller
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
                 'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
+                'skills' => 'required|string|exists:skills,id',
                 'interests' => 'required|string',
                 'job_preferences' => 'required|string',
                 'cv' => 'nullable|string|max:255',
                 'profile_complete' => 'boolean',
-                'profile_photo' => 'nullable|string|max:255',  
+                'profile_photo' => 'nullable|string|max:255',
             ]);
 
             $student->update($validated);
@@ -186,11 +188,12 @@ class StudentController extends Controller
                 'password',
                 'study_direction',
                 'graduation_track',
+                'skills',
                 'interests',
                 'job_preferences',
                 'cv',
                 'profile_complete',
-                'profile_photo',  
+                'profile_photo',
             ];
 
             // filtreren op enkel de informatie dat meegegeven wordt
