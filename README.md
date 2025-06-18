@@ -18,7 +18,9 @@ De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt ee
 ## Technische Stack
 
 - Laravel (PHP Framework)
+- Laravel Sanctum
 - MySQL database
+- Mailtrap
 
 ## Installatie
 
