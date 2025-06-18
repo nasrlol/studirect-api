@@ -33,9 +33,18 @@ class AppointmentController extends Controller
             'time_slot' => 'required|string|max:255',
         ]);
 
-        $appointment = Appointment::create($validate);
+        $appointmentExists = Appointment::where('company_id', $validate['company_id'])
+            ->where('time_slot', $validate['time_slot'])
+            ->exists();
 
-        // hier verzend ik de bevestigingsmail
+        if ($appointmentExists)
+        {
+            return response()->json([
+                'message' => 'That time slot is already being used'
+            ]);
+        }
+
+        $appointment = Appointment::create($validate);
 
         $logService->setLog("student", $appointment->student_id, "appointment creation", " appointment");
         $mailService->sendAppointmentConfirmation($appointment, $logService);
