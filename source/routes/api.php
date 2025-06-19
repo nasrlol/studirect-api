@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AdminController;
 
 // Student routes
 Route::middleware('throttle:300,1')->group(function () {
@@ -121,4 +122,15 @@ Route::middleware('throttle:500,1')->group(function () {
 
     // Calculate skill match
     Route::get('/match/{student_id}/{company_id}', [SkillController::class, 'calculateMatch']);
+});
+
+
+//Route::middleware(['throttle:300,1', 'auth:sanctum', 'ability:admin'])->group(function () {
+Route::middleware('throttle:500,1')->group(function () {
+    // Admin CRUD operations
+    Route::get('/admins', [AdminController::class, 'index']);
+    Route::post('/admins', [AdminController::class, 'store']);
+    Route::get('/admins/{id}', [AdminController::class, 'show']);
+    Route::put('/admins/{id}', [AdminController::class, 'update']);
+    Route::delete('/admins/{id}', [AdminController::class, 'destroy']);
 });
