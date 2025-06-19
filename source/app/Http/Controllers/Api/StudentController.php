@@ -24,7 +24,7 @@ class StudentController extends Controller
 
     public function index(): JsonResponse
     {
-        $students = Student::cursorPaginate(15);
+        $students = Student::all();
 
         /*
         if (request()->wantsJson()) {
@@ -59,18 +59,21 @@ class StudentController extends Controller
             'email' => 'required|email|unique:students,email',
             'password' => 'required|string|min:8',
             'study_direction' => 'required|string|max:255', // Nu verplicht
-            'graduation_track' => 'required|string|max:255', // Nu verplicht
+            'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
             'interests' => 'nullable|string',
             'job_preferences' => 'nullable|string',
-            'cv' => 'nullable|string',
+            'cv' => 'nullable|string|max:255',
             'profile_complete' => 'nullable|boolean',
+            'profile_photo' => 'nullable|string|max:255',  // Add validation for profile photo
         ]);
 
         // Standaardwaarden alleen voor optionele velden
         $defaults = [
             'interests' => 'Nog niet ingevuld',
             'job_preferences' => 'Nog niet ingevuld',
-            'profile_complete' => false
+            'cv' => null,  // Default is null
+            'profile_complete' => false,
+            'profile_photo' => null,  // Default is null
         ];
 
         foreach ($defaults as $field => $value) {
@@ -80,9 +83,9 @@ class StudentController extends Controller
         }
 
         $student = Student::create($validated);
-        $logService->setLog("Student", $student->id,"Student created", "Student");
 
-        $mailService->sendStudentVerification($student);
+        $logService->setLog("Student", $student->id,"Student created", "Student");
+        $mailService->sendStudentVerification($student, $logService);
 
         return response()->json([
             'data' => $student,
@@ -117,11 +120,12 @@ class StudentController extends Controller
                 'email' => 'required|email|unique:students,email,' . $student->id,
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
-                'graduation_track' => 'required|string|max:255',
+                'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
                 'interests' => 'required|string',
                 'job_preferences' => 'required|string',
-                'cv' => 'nullable|string',
+                'cv' => 'nullable|string|max:255',
                 'profile_complete' => 'boolean',
+                'profile_photo' => 'nullable|string|max:255',  
             ]);
 
             $student->update($validated);
@@ -169,7 +173,7 @@ class StudentController extends Controller
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Failed to find student'], 404);
         }
-     }
+    }
 
     public function partialUpdate(Request $request, string $id, LogService $logService): JsonResponse
     {
@@ -186,7 +190,7 @@ class StudentController extends Controller
                 'job_preferences',
                 'cv',
                 'profile_complete',
-
+                'profile_photo',  
             ];
 
             // filtreren op enkel de informatie dat meegegeven wordt

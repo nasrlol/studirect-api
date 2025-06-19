@@ -40,7 +40,6 @@ class StudentAuthController extends Controller
     public function logout(Request $request, LogService $logService): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
-
         $logService->setLog("Student", $request->user()->id, "Student logged out", "Auth", LogLevel::NORMAL);
 
         return response()->json(['message' => 'Logged out successfully']);

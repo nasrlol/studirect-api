@@ -23,6 +23,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'email' => 'required|email|unique:admins,email',
             'password' => 'required|string|min:8',
+            'profile_photo' => 'nullable|string|max:255',  // Add validation for profile photo
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
@@ -50,6 +51,7 @@ class AdminController extends Controller
             $validated = $request->validate([
                 'email' => 'email|unique:admins,email,' . $admin->id,
                 'password' => 'nullable|string|min:8',
+                'profile_photo' => 'nullable|string|max:255',  // Add validation for profile photo
             ]);
 
             if (!empty($validated['password'])) {
@@ -57,7 +59,7 @@ class AdminController extends Controller
             }
 
             $admin->update($validated);
-            $logService->setLog("Admin", $admin->id, "Admin updated ", "Admin");
+            $logService->setLog("Admin", $admin->id, "Admin updated ", "Admin", LogLevel::CRITICAL);
             // severity level wordt hier niet gezet omdat ik dat als default waarde heb gezet, dus normal = niks doen
 
 

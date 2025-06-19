@@ -29,6 +29,7 @@ class CompanyAuthController extends Controller
         }
 
         $logService->setLog("Company", $company->id, "Company logged in", "Auth", LogLevel::NORMAL);
+
         
         return response()->json([
             'user' => $company,
@@ -40,9 +41,8 @@ class CompanyAuthController extends Controller
     public function logout(Request $request, LogService $logService): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
-        
         $logService->setLog("Company", $request->user()->id, "Company logged out", "Auth", LogLevel::NORMAL);
-        
+
         return response()->json(['message' => 'Logged out successfully']);
     }
 }

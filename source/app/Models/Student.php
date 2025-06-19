@@ -24,6 +24,7 @@ class Student extends Model
         'job_preferences',
         'cv',
         'profile_complete',
+        'profile_photo',  
     ];
 
     // wachtwoord mag niet als plain tekst worden opgeslagen dus hashen
@@ -53,8 +54,8 @@ class Student extends Model
         return $this->hasMany(Connection::class);
     }
 
-    public function diploma(): HasMany
+    public function diploma()
     {
-        return $this->hasMany(Diploma::class, 'graduation_track');
+        return $this->belongsTo(Diploma::class, 'graduation_track');
     }
 }

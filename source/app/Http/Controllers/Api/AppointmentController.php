@@ -24,20 +24,46 @@ class AppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, MailService $mailService, LogService $logger): JsonResponse
+
+    private function appointmentTimeOverlap(array $data, $id = null): bool
+    {
+        $query = Appointment::where('company_id', $data['company_id'])
+            ->where(function ($query) use ($data) {
+                $query->whereBetween('time_start', [$data['time_start'], $data['time_end']])
+                    ->orWhereBetween('time_end', [$data['time_start'], $data['time_end']])
+                    ->orWhere(function ($query_) use ($data) {
+                        $query_->where('time_start', '<=', $data['time_start'])
+                            ->where('time_end', '>=', $data['time_end']);
+                    });
+            });
+
+        if ($id) {
+            $query->where('id', '!=', $id);
+        }
+
+        return $query->exists();
+    }
+
+    public function store(Request $request, MailService $mailService, LogService $logService): JsonResponse
     {
         $validate = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
             'company_id' => 'required|integer|exists:companies,id',
-            // de "exists:student,id" id kijkt na of dat de FK zich wel in de db bevindt
-            'time_slot' => 'required|string|max:255',
+            'time_start' => 'required|date_format:H:i',
+            'time_end' => 'required|date_format:H:i'
         ]);
+
+
+        if ($this->appointmentTimeOverlap($validate)) {
+            return response()->json([
+                'message' => 'That time slot is already being used'
+            ], 400);
+        }
 
         $appointment = Appointment::create($validate);
 
-        // hier verzend ik de bevestigingsmail
-        $mailService->sendAppointmentConfirmation($appointment);
-        $logger->setLog("student", $appointment->student_id, "appointment creation", " appointment");
+        $logService->setLog("student", $appointment->student_id, "appointment creation", " appointment");
+        $mailService->sendAppointmentConfirmation($appointment, $logService);
 
         return response()->json([
             'data' => $appointment,
@@ -65,16 +91,24 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::findOrFail($id);
         $validated = $request->validate([
-            'time_slot' => 'required|string|max:255',
-            // afspraak verzetten = enkel tijdstip verzetten
-            // moet dan een patch zijn??
+            'time_start' => 'required|date_format:H:i',
+            'time_end' => 'required|date_format:H:i'
         ]);
+
+        $validated['company_id'] = $appointment->company_id;
+        // we controleren niet op een company id dus we halen hem even uit de appointment zodat de check kan werken
+        if ($this->appointmentTimeOverlap($validated, $id))
+        {
+            return response()->json([
+                'message' => 'That time slot is already being used'
+            ], 400);
+        };
 
         $appointment->update($validated);
         return response()->json([
             'data' => $appointment,
             'message' => 'Appointment updated successfully'
-        ], 200);
+        ]);
     }
 
     /**

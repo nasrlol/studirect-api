@@ -29,7 +29,7 @@ class AdminAuthController extends Controller
         }
 
         $logService->setLog("Admin", $admin->id, "Admin logged in", "Auth", LogLevel::NORMAL);
-        
+       
         return response()->json([
             'user' => $admin,
             'token' => $admin->createToken('admin-token', ['admin'])->plainTextToken,
@@ -41,6 +41,7 @@ class AdminAuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         
+
         $logService->setLog("Admin", $request->user()->id, "Admin logged out", "Auth", LogLevel::NORMAL);
         
         return response()->json(['message' => 'Logged out successfully']);

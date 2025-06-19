@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('profile_photo')->nullable();
             $table->timestamps();
         });
 
@@ -20,7 +21,6 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->string('plan_type')->nullable();
-            $table->text('description')->nullable();
             $table->text('job_types')->nullable();
             $table->text('job_domain')->nullable();
             $table->string('booth_location')->nullable();
@@ -29,6 +29,7 @@ return new class extends Migration {
             $table->string('company_description')->nullable();
             $table->string('job_requirements')->nullable();
             $table->string('job_description')->nullable();
+            $table->string('company_location')->nullable();
             $table->timestamps();
         });
 
@@ -45,12 +46,12 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->string('study_direction')->nullable();
-            $table->unsignedBigInteger('graduation_track')->nullable();
-            $table->foreign('graduation_track')->references('id')->on('diplomas')->onDelete('cascade');
+            $table->foreignId('graduation_track')->nullable()->constrained('diplomas')->onDelete('cascade');
             $table->text('interests')->nullable();
             $table->text('job_preferences')->nullable();
             $table->string('cv')->nullable();
             $table->boolean('profile_complete')->default(false);
+            $table->string('profile_photo')->nullable();
             $table->timestamps();
         });
 
@@ -87,7 +88,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
-            $table->string('time_slot');
+            $table->time('time_start');
+            $table->time('time_end');
             $table->timestamps();
         });
 

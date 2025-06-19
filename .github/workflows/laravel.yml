@@ -1,0 +1,52 @@
+
+name: Laravel
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  laravel-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, bcmath, xml, pdo, sqlite
+
+    - name: Copy .env
+      working-directory: source
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+    - name: Install Dependencies
+      working-directory: source
+      run: composer install --no-interaction --prefer-dist --no-progress
+
+    - name: Generate App Key
+      working-directory: source
+      run: php artisan key:generate
+
+    - name: Set Directory Permissions
+      working-directory: source
+      run: chmod -R 777 storage bootstrap/cache
+
+    - name: Create SQLite Database
+      working-directory: source
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+
+    - name: Run Tests
+      working-directory: source
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
+      run: php artisan test
