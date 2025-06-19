@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\Models\Message;
-use App\Models\Student;
-use App\Models\Company;
 use App\Http\Controllers\Controller;
+use App\Models\Message;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 
 class MessageController extends Controller
@@ -38,7 +37,7 @@ class MessageController extends Controller
                 'user2_id' => 'required|integer',
                 'user2_type' => 'required|string',
             ]);
-            
+
             $messages = Message::where(function ($query) use ($validated) {
                 $query->where('sender_id', $validated['user1_id'])
                     ->where('sender_type', $validated['user1_type'])
@@ -52,7 +51,7 @@ class MessageController extends Controller
             })->orderBy('created_at', 'asc')->get();
 
             return response()->json(['conversation' => $messages]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validatiefout',
                 'details' => $e->errors()

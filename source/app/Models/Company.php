@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class Company extends Model
@@ -31,22 +30,6 @@ class Company extends Model
         'job_description',
         'company_location',
     ];
-
-
-    // zelfde als bij student het wachtwoord mag niet als plain tekst worden
-    // opgeslagen dus we hashen het
-
-    public function setPasswordAttribute($value)
-    {
-        // hashen enkel wanneer het nog niet gehashed is
-        if (Hash::needsRehash($value)) {
-            $value = Hash::make($value);
-        }
-        $this->attributes['password'] = $value;
-
-        // Altijd hashen om zeker te zijn
-        //$this->attributes['password'] = Hash::make($value);
-    }
 
     // Relatie: een bedrijf kan meerdere afspraken hebben
     public function appointment(): HasMany

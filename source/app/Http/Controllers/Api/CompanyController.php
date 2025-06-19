@@ -47,6 +47,8 @@ class CompanyController extends Controller
             'company_location' => 'nullable|string|max:255'
         ]);
 
+        $validate['password'] = Hash::make($validate['password']);
+
         // Standaardwaarden voor ontbrekende velden
         $defaults = [
             'job_types' => 'Fulltime',
@@ -109,6 +111,8 @@ class CompanyController extends Controller
             'speeddate_duration' => 'required|integer|max:60'
             ]);
 
+            $validated['password'] = Hash::make($validated['password']);
+
             $company->update($validated);
             $logService->setLog("Company", $company->id, "Company updated", "Company", LogLevel::CRITICAL);
 
@@ -170,6 +174,8 @@ class CompanyController extends Controller
             // het wachtwoord opnieuw hashen
             if (isset($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
+
+
             }
 
             $company->update($data);
