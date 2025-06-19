@@ -14,6 +14,7 @@ class Connection extends Model
         'student_id',
         'company_id',
         'status',
+        'skill_match_percentage',
     ];
 
     // Relaties (optioneel)

@@ -16,7 +16,6 @@ class CompanyFactory extends Factory
             'email' => $this->faker->safeEmail(),
             'password' => 'password', // dit hoeft nog niet hier hashed te worden omdat ik de setAttribute functie ga maken die het wel gaat het hashen voor ons
             'plan_type' => $this->faker->randomElement(['Basic','Standard', 'Premium']),
-            'description' => $this->faker->paragraph(2),
             'job_types' => $this->faker->randomElement(['Stagair','Fulltime','Studentenjob']),
             'job_domain' => $this->faker->randomElement(['Artificial Intelligence', 'Software Development', 'Business Intelligence', 'Netwerken', 'Robotics']),
             'booth_location' => $this->faker->randomElement([
@@ -24,8 +23,10 @@ class CompanyFactory extends Factory
             'photo' => $this->faker->url(),
             'speeddate_duration' => $this->faker->numberBetween(1,30),
             'company_description' => $this->faker->paragraph(2),
+            'job_title' => $this->faker->jobTitle(),
             'job_requirements' => $this->faker->paragraph(2),
-            'job_description' => $this->faker->paragraph(2)
+            'job_description' => $this->faker->paragraph(2),
+            'company_location' => $this->faker->address()
         ];
     }
 }

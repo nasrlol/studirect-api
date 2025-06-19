@@ -27,7 +27,7 @@ class StudentAuthController extends Controller
             ]);
         }
 
-        $logService->setLog("Student", "Student logged in", "Auth");
+       // $logService->setLog("Student", "Student logged in", "Auth");
         
         return response()->json([
             'user' => $student,
@@ -40,7 +40,7 @@ class StudentAuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         
-        $logService->setLog("Student", "Student logged out", "Auth");
+        //$logService->setLog("Student", "Student logged out", "Auth");
         
         return response()->json(['message' => 'Logged out successfully']);
     }

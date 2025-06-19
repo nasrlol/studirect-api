@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
@@ -19,15 +20,16 @@ class Company extends Model
         'email',
         'password',
         'plan_type',
-        'description',
         'job_types',
         'job_domain',
         'booth_location',
         'photo',
         'speeddate_duration',
         'company_description',
+        'job_title',
         'job_requirements',
         'job_description',
+        'company_location',
     ];
 
 
@@ -56,5 +58,10 @@ class Company extends Model
     public function connections(): HasMany
     {
         return $this->hasMany(Connection::class);
+    }
+
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class);
     }
 }

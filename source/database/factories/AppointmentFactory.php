@@ -17,8 +17,10 @@ class AppointmentFactory extends Factory
         return [
             'student_id' => Student::factory(),
             'company_id' => Company::factory(),
-            'time_slot' => $this->faker->randomElement([
-                '09:00 - 09:30', '09:30 - 10:00', '10:00 - 10:30']),
+            'time_start' => $this->faker->randomElement([
+                '09:00', '09:30', '09:30', '10:00', '10:30']),
+            'time_end' => $this->faker->randomElement([
+                '11:00', '11:30', '12:30', '13:00', '13:30']),
         ];
     }
 }

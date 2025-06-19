@@ -20,7 +20,7 @@ class CompanyController extends Controller
      */
     public function index(): JsonResponse
     {
-        $companies = Company::cursorPaginate(15);
+        $companies = Company::all();
         return response()->json([
             'data'=>$companies
         ]);
@@ -37,19 +37,18 @@ class CompanyController extends Controller
             'password' => 'required|string|min:8',
             'plan_type' => 'required|string|max:255',
             'booth_location' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255',
             'job_types' => 'nullable|string|max:255',
             'job_domain' => 'nullable|string|max:255',
             'photo' => 'nullable|string|max:255',
             'speeddate_duration' => 'nullable|integer|max:60',
             'job_requirements' => 'nullable|string',
             'job_description' => 'nullable|string',
-            'company_description' => 'nullable|string'
+            'company_description' => 'nullable|string',
+            'company_location' => 'nullable|string|max:255'
         ]);
 
         // Standaardwaarden voor ontbrekende velden
         $defaults = [
-            'description' => 'Bedrijfsbeschrijving nog niet ingevuld',
             'job_types' => 'Fulltime',
             'job_domain' => 'Nog niet gespecificeerd',
             'photo' => null,
@@ -68,8 +67,8 @@ class CompanyController extends Controller
 
         $company = Company::create($validate);
 
-        $mailService->sendCompanyAccountVerification($company);
         $logService->setLog("Company", $company->id, "Company created", "Company", LogLevel::CRITICAL);
+        $mailService->sendCompanyAccountVerification($company, $logService);
 
         return response()->json([
             'data' => $company,
@@ -103,7 +102,6 @@ class CompanyController extends Controller
             'email' => 'required|email|unique:companies,email,' .$company->id,
             'password' => 'required|string|min:8',
             'plan_type' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
             'job_types' => 'required|string|max:255',
             'job_domain' => 'required|string|max:255',
             'booth_location' => 'required|string|max:255',
@@ -112,7 +110,7 @@ class CompanyController extends Controller
             ]);
 
             $company->update($validated);
-            $logService->setLog("Company", $company->id, "Company updated", "Company");
+            $logService->setLog("Company", $company->id, "Company updated", "Company", LogLevel::CRITICAL);
 
             return response()->json([
                 'data' => $company,
@@ -133,7 +131,7 @@ class CompanyController extends Controller
             $company = Company::findOrFail($id);
             $company->delete();
 
-            $logService->setLog("Company", $company->id, "Company deleted", "Company");
+            $logService->setLog("Company", $company->id, "Company deleted", "Company", LogLevel::CRITICAL);
 
             return response()->json([
                 'message' => 'Company deleted successfully'
@@ -153,15 +151,16 @@ class CompanyController extends Controller
                 'email',
                 'password',
                 'plan_type',
-                'description',
                 'job_types',
                 'job_domain',
                 'booth_location',
                 'photo',
                 'speeddate_duration',
                 'company_description',
+                'job_title',
                 'job_requirements',
-                'job_description'
+                'job_description',
+                'company_location'
                 ];
 
 
