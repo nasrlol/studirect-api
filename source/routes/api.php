@@ -125,7 +125,8 @@ Route::middleware('throttle:500,1')->group(function () {
 });
 
 
-Route::middleware(['throttle:300,1', 'auth:sanctum', 'ability:admin'])->group(function () {
+//Route::middleware(['throttle:300,1', 'auth:sanctum', 'ability:admin'])->group(function () {
+Route::middleware('throttle:500,1')->group(function () {
     // Admin CRUD operations
     Route::get('/admins', [AdminController::class, 'index']);
     Route::post('/admins', [AdminController::class, 'store']);
