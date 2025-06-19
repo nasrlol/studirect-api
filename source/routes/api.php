@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\Auth\AdminAuthController;
 use App\Http\Controllers\Api\Auth\CompanyAuthController;
@@ -14,7 +15,6 @@ use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AdminController;
 
 // Student routes
 Route::middleware('throttle:300,1')->group(function () {
@@ -39,8 +39,24 @@ Route::middleware('throttle:300,1')->group(function () {
     Route::patch('companies/{id}', [CompanyController::class, 'partialUpdate']);
 });
 
+// Admin routes
+Route::middleware('throttle:1,1')->group(function () {
+    // Admin CRUD operations
+    Route::get('/admins', [AdminController::class, 'index']);
+    Route::post('/admins', [AdminController::class, 'store']);
+    Route::get('/admins/{id}', [AdminController::class, 'show']);
+    Route::put('/admins/{id}', [AdminController::class, 'update']);
+    Route::delete('/admins/{id}', [AdminController::class, 'destroy']);
+});
+
+// Logs
+Route::get('/admin/logs', [LogController::class, 'getLogs']);
+Route::get('admin/logs/students/{id}', [LogController::class, 'getLogsStudent']);
+Route::get('admin/logs/companies/{id}', [LogController::class, 'getLogsCompany']);
+Route::get('admin/logs/admins/{id}', [LogController::class, 'getLogsAdmin']);
+
 // Appointment routes
-Route::middleware('throttle:500,1')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
@@ -58,49 +74,31 @@ Route::middleware('throttle:500,1')->group(function () {
     Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 });
 
-// Route::apiResource('appointments', AppointmentController::class);
-
-// Admin routes voor logs
-Route::get('/admin/logs', [LogController::class, 'getLogs']);
-Route::get('admin/logs/students/{id}', [LogController::class, 'getLogsStudent']);
-Route::get('admin/logs/companies/{id}', [LogController::class, 'getLogsCompany']);
-Route::get('admin/logs/admins/{id}', [LogController::class, 'getLogsAdmin']);
-
 Route::get('/diplomas', [DiplomaController::class, 'index']);
 Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
 
-// Routes voor berichten
+// Berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
-//Route::get('/messages/conversation', [MessageController::class, 'getConversation']);
-
 Route::post('/messages/conversation', [MessageController::class, 'getConversation']);
 
-
-// Authentication Routes
+// Authenticatie
 Route::post('/students/login', [StudentAuthController::class, 'login']);
 Route::post('/companies/login', [CompanyAuthController::class, 'login']);
 Route::post('/admins/login', [AdminAuthController::class, 'login']);
-
-
 Route::post('/login', [LoginController::class, 'login'])
     ->middleware('throttle:300,1');
 
-// Protected Routes
+// Protected Logout Authenticatie
 Route::middleware('auth:sanctum')->group(function () {
-    // Logout routes
     Route::post('/students/logout', [StudentAuthController::class, 'logout']);
     Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
     Route::post('/admins/logout', [AdminAuthController::class, 'logout']);
     Route::post('/logout', [LoginController::class, 'logout']);
-
-    // You can protect other routes here as needed
-    // For example:
-    // Route::get('/protected-resource', [YourController::class, 'method']);
 });
 
+// Authenticatie mail routes
 Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword'])
     ->middleware('signed');
-
 Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStudentPassword'])
     ->name('students.resetPassword')
     ->middleware('signed');
@@ -110,27 +108,14 @@ Route::middleware('throttle:500,1')->group(function () {
     Route::get('/skills', [SkillController::class, 'index']);
     Route::get('/skills/{id}', [SkillController::class, 'show']);
 
-    // Student skill management
     Route::post('/students/{id}/skills', [SkillController::class, 'attachToStudent']);
     Route::delete('/students/{id}/skills/{skill_id}', [SkillController::class, 'detachFromStudent']);
     Route::get('/students/{id}/skills', [SkillController::class, 'getStudentSkills']);
 
-    // Company skill management
     Route::post('/companies/{id}/skills', [SkillController::class, 'attachToCompany']);
     Route::delete('/companies/{id}/skills/{skill_id}', [SkillController::class, 'detachFromCompany']);
     Route::get('/companies/{id}/skills', [SkillController::class, 'getCompanySkills']);
 
-    // Calculate skill match
+    // Calculate skill match percentage
     Route::get('/match/{student_id}/{company_id}', [SkillController::class, 'calculateMatch']);
-});
-
-
-//Route::middleware(['throttle:300,1', 'auth:sanctum', 'ability:admin'])->group(function () {
-Route::middleware('throttle:500,1')->group(function () {
-    // Admin CRUD operations
-    Route::get('/admins', [AdminController::class, 'index']);
-    Route::post('/admins', [AdminController::class, 'store']);
-    Route::get('/admins/{id}', [AdminController::class, 'show']);
-    Route::put('/admins/{id}', [AdminController::class, 'update']);
-    Route::delete('/admins/{id}', [AdminController::class, 'destroy']);
 });
