@@ -19,6 +19,7 @@ De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt ee
 
 - Laravel (PHP Framework)
 - Laravel Sanctum
+- PHPUnit
 - MySQL database
 - Mailtrap
 
