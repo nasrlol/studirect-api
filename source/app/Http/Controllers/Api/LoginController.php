@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Student;
 use App\Services\LogService;
-use App\Enums\LogLevel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 class LoginController extends Controller
 {
     /**
-     * Handle unified login for both students and companies
+     * Handle unified login for students, companies, and admins
      *
      * @param Request $request
      * @param LogService $logService
@@ -34,17 +34,7 @@ class LoginController extends Controller
         if ($student) {
             if (Hash::check($request->password, $student->password)) {
                 // Log successful student login
-                try {
-                    $logService->setLog(
-                        actor: "Student",
-                        actor_id: $student->id,
-                        action: "Student logged in",
-                        targetType: "Auth"
-                    );
-                } catch (\Exception $e) {
-                    // Continue even if logging fails
-                    report($e);
-                }
+                $logService->setLog("Student", $student->id, "Student logged in", "Auth");
                 
                 return response()->json([
                     'user' => $student,
@@ -59,22 +49,27 @@ class LoginController extends Controller
         if ($company) {
             if (Hash::check($request->password, $company->password)) {
                 // Log successful company login
-                try {
-                    $logService->setLog(
-                        actor: "Company",
-                        actor_id: $company->id,
-                        action: "Company logged in",
-                        targetType: "Auth"
-                    );
-                } catch (\Exception $e) {
-                    // Continue even if logging fails
-                    report($e);
-                }
+                $logService->setLog("Company", $company->id, "Company logged in", "Auth");
                 
                 return response()->json([
                     'user' => $company,
                     'token' => $company->createToken('company-token', ['company'])->plainTextToken,
                     'user_type' => 'company'
+                ]);
+            }
+        }
+        
+        // Try admin login
+        $admin = Admin::where('email', $request->email)->first();
+        if ($admin) {
+            if (Hash::check($request->password, $admin->password)) {
+                // Log successful admin login
+                $logService->setLog("Admin", $admin->id, "Admin logged in", "Auth");
+                
+                return response()->json([
+                    'user' => $admin,
+                    'token' => $admin->createToken('admin-token', ['admin'])->plainTextToken,
+                    'user_type' => 'admin'
                 ]);
             }
         }
@@ -104,6 +99,9 @@ class LoginController extends Controller
         } elseif ($user instanceof Company) {
             $userType = 'Company';
             $userId = $user->id;
+        } elseif ($user instanceof Admin) {
+            $userType = 'Admin';
+            $userId = $user->id;
         }
         
         // Delete the current token
@@ -111,17 +109,7 @@ class LoginController extends Controller
         
         // Log the logout if we identified the user type
         if ($userType && $userId) {
-            try {
-                $logService->setLog(
-                    actor: $userType,
-                    actor_id: $userId,
-                    action: "$userType logged out",
-                    targetType: "Auth"
-                );
-            } catch (\Exception $e) {
-                // Continue even if logging fails
-                report($e);
-            }
+            $logService->setLog($userType, $userId, "$userType logged out", "Auth");
         }
         
         return response()->json([
