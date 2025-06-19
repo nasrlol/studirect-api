@@ -23,15 +23,13 @@ class AppointmentController extends Controller
     {
         $appointments = Appointment::all();
 
-        $this->authorize('viewAny', $appointments);
+        $this->authorize('viewAny', Appointment::class);
         return response()->json(['data' => $appointments]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-
-
     public function store(Request $request, MailService $mailService, LogService $logService): JsonResponse
     {
         $validate = $request->validate([
@@ -93,6 +91,7 @@ class AppointmentController extends Controller
             ], 400);
         }
 
+        $this->authorize('update', $appointment);
         $appointment->update($validated);
         return response()->json([
             'data' => $appointment,
@@ -107,6 +106,7 @@ class AppointmentController extends Controller
     {
         try {
             $appointment = Appointment::findOrFail($id);
+            $this->authorize("delete", $appointment);
             $appointment->delete();
 
             $logger->setLog("Student", $appointment->student_id, "Appointment deleted", "Appointment");
