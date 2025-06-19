@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Admin;
 use App\Models\Appointment;
 use App\Models\Company;
 use App\Models\Student;
@@ -14,10 +15,36 @@ class AppointmentApiTest extends TestCase
 
     public function test_index_returns_appointments()
     {
+        // getting all of the appointments is something only admins can do
+        $admin = Admin::factory()->create();
         $appointment = Appointment::factory()->create();
-        $response = $this->getJson('/api/appointments');
+
+        $this->actingAs($admin);
+        $response = $this->getJson("/api/appointments/{$appointment->id}");
+
         $response->assertStatus(200)
             ->assertJsonFragment(['id' => $appointment->id]);
+    }
+
+    public function test_index_should_return_false_for_non_admin()
+    {
+        // Students and companies should not be able to access the index endpoint
+        $company = Company::factory()->create();
+        $response = $this->actingAs($company)->getJson('/api/appointments');
+        $response->assertStatus(403)
+            ->assertJsonFragment(['message' => 'This action is unauthorized.']);
+    }
+
+    public function test_show_returns_appointment()
+    {
+        $student = Student::factory()->create();
+        $appointment = Appointment::factory()->create();
+
+        $response = $this->actingAs($student)->getJson("/api/appointments/{$appointment->id}");
+        $response->assertStatus(200)
+            ->assertJsonFragment(['id' => $appointment->id]);
+
+
     }
 
     public function test_store_creates_appointment()
@@ -63,13 +90,6 @@ class AppointmentApiTest extends TestCase
             ->assertJsonFragment(['message' => 'That time slot is already being used']);
     }
 
-    public function test_show_returns_appointment()
-    {
-        $appointment = Appointment::factory()->create();
-        $response = $this->getJson("/api/appointments/{$appointment->id}");
-        $response->assertStatus(200)
-            ->assertJsonFragment(['id' => $appointment->id]);
-    }
 
     public function test_show_returns_404_for_missing()
     {
