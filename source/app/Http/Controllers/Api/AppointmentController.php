@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Services\AppointmentService;
 use App\Services\LogService;
 use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -17,6 +18,7 @@ class AppointmentController extends Controller
      * Display a listing of the resource.
      */
     use AuthorizesRequests;
+
     public function index(): JsonResponse
     {
         $appointments = Appointment::all();
@@ -29,24 +31,6 @@ class AppointmentController extends Controller
      * Store a newly created resource in storage.
      */
 
-    private function appointmentTimeOverlap(array $data, $id = null): bool
-    {
-        $query = Appointment::where('company_id', $data['company_id'])
-            ->where(function ($query) use ($data) {
-                $query->whereBetween('time_start', [$data['time_start'], $data['time_end']])
-                    ->orWhereBetween('time_end', [$data['time_start'], $data['time_end']])
-                    ->orWhere(function ($query_) use ($data) {
-                        $query_->where('time_start', '<=', $data['time_start'])
-                            ->where('time_end', '>=', $data['time_end']);
-                    });
-            });
-
-        if ($id) {
-            $query->where('id', '!=', $id);
-        }
-
-        return $query->exists();
-    }
 
     public function store(Request $request, MailService $mailService, LogService $logService): JsonResponse
     {
@@ -58,7 +42,7 @@ class AppointmentController extends Controller
         ]);
 
 
-        if ($this->appointmentTimeOverlap($validate)) {
+        if (AppointmentService::appointmentTimeOverlap($validate)) {
             return response()->json([
                 'message' => 'That time slot is already being used'
             ], 400);
@@ -103,8 +87,7 @@ class AppointmentController extends Controller
 
         $validated['company_id'] = $appointment->company_id;
         // we controleren niet op een company id dus we halen hem even uit de appointment zodat de check kan werken
-        if ($this->appointmentTimeOverlap($validated, $id))
-        {
+        if (AppointmentService::appointmentTimeOverlap($validated, $id)) {
             return response()->json([
                 'message' => 'That time slot is already being used'
             ], 400);
