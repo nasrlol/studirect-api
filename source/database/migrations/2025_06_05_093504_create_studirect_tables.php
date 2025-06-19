@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->string('profile_photo')->nullable();
+            $table->string('role')->default('admin');
             $table->timestamps();
         });
 
@@ -31,6 +32,7 @@ return new class extends Migration {
             $table->string('job_requirements')->nullable();
             $table->string('job_description')->nullable();
             $table->string('company_location')->nullable();
+            $table->string('role')->default('company');
             $table->timestamps();
         });
 
@@ -53,6 +55,7 @@ return new class extends Migration {
             $table->string('cv')->nullable();
             $table->boolean('profile_complete')->default(false);
             $table->string('profile_photo')->nullable();
+            $table->string('role')->default('student');
             $table->timestamps();
         });
 
