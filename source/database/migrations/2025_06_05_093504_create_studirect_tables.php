@@ -27,6 +27,7 @@ return new class extends Migration {
             $table->string('photo')->nullable();
             $table->integer('speeddate_duration')->nullable();
             $table->string('company_description')->nullable();
+            $table->string('job_title')->nullable();
             $table->string('job_requirements')->nullable();
             $table->string('job_description')->nullable();
             $table->string('company_location')->nullable();
@@ -71,6 +72,7 @@ return new class extends Migration {
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->boolean('status')->default(false);
+            $table->float('skill_match_percentage')->default(0);
             $table->timestamps();
         });
 
@@ -93,6 +95,29 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        // Create the main skills table
+        Schema::create('skills', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+
+        //  pivot tabel voor de student skills
+        Schema::create('skill_student', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->foreignId('skill_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        // pivot tabel voor company skills
+        Schema::create('company_skill', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->foreignId('skill_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
 
     }
 
@@ -105,5 +130,8 @@ return new class extends Migration {
         Schema::dropIfExists('students');
         Schema::dropIfExists('companies');
         Schema::dropIfExists('admins');
+        Schema::dropIfExists('company_skill');
+        Schema::dropIfExists('skill_student');
+        Schema::dropIfExists('skills');
     }
 };

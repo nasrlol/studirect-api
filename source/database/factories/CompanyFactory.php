@@ -23,6 +23,7 @@ class CompanyFactory extends Factory
             'photo' => $this->faker->url(),
             'speeddate_duration' => $this->faker->numberBetween(1,30),
             'company_description' => $this->faker->paragraph(2),
+            'job_title' => $this->faker->jobTitle(),
             'job_requirements' => $this->faker->paragraph(2),
             'job_description' => $this->faker->paragraph(2),
             'company_location' => $this->faker->address()

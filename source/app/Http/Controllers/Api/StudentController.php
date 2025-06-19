@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
+use App\Models\Log;
 use App\Models\Student;
 use App\Services\LogService;
 use App\Services\MailService;
@@ -13,44 +15,19 @@ use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
-    // momenteel hebben we 2 StudentController.php bestanden
-    // elk met een functie index, eentje geeft een json response terug en
-    // de andere geeft een view response terug
-    // inefficient
-
-    // kleine update over de vorige comment, het terug geven van een view is een
-    // frontend iets en het zorgde alleen maar voor errors dus heb ik die er uit gehaald
-    // in een vorige pull request
-
     public function index(): JsonResponse
     {
         $students = Student::all();
 
-        /*
-        if (request()->wantsJson()) {
-        */
-
-        // json voor json request
         return response()->json([
             'data' => $students
         ]);
 
-        // return view voor het geval dat er een view wordt gevraagd
-        /*
-        return view('student.index', [
-            'students' => $students
-        ]);
     }
-        */
-        // code uitgecomment want het blijft maar een html view terug geven terwijl dat we de json nodig hebben
-    }
-    // het herkennen hiervan doet laravel automatisch, in geval van browser aanvraag -> view
-    // anders krijg je een json (als de controller het vraagt he)
 
     /**
      * Store a newly created resource in storage.
      */
-
     public function store(Request $request, LogService $logService, MailService $mailService): JsonResponse
     {
         $validated = $request->validate([
@@ -58,13 +35,13 @@ class StudentController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:students,email',
             'password' => 'required|string|min:8',
-            'study_direction' => 'required|string|max:255', // Nu verplicht
-            'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
+            'study_direction' => 'required|string|max:255',
+            'graduation_track' => 'required|integer|exists:diplomas,id',
             'interests' => 'nullable|string',
             'job_preferences' => 'nullable|string',
             'cv' => 'nullable|string|max:255',
             'profile_complete' => 'nullable|boolean',
-            'profile_photo' => 'nullable|string|max:255',  // Add validation for profile photo
+            'profile_photo' => 'nullable|string|max:255',
         ]);
 
         // Standaardwaarden alleen voor optionele velden
@@ -82,6 +59,7 @@ class StudentController extends Controller
             }
         }
 
+        $validated['password'] = Hash::make($validated['password']);
         $student = Student::create($validated);
 
         $logService->setLog("Student", $student->id,"Student created", "Student");
@@ -120,14 +98,15 @@ class StudentController extends Controller
                 'email' => 'required|email|unique:students,email,' . $student->id,
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
-                'graduation_track' => 'required|integer|exists:diplomas,id', // Nu verplicht
+                'graduation_track' => 'required|integer|exists:diplomas,id',
                 'interests' => 'required|string',
                 'job_preferences' => 'required|string',
                 'cv' => 'nullable|string|max:255',
                 'profile_complete' => 'boolean',
-                'profile_photo' => 'nullable|string|max:255',  
+                'profile_photo' => 'nullable|string|max:255',
             ]);
 
+            $validated['password'] = Hash::make($validated['password']);
             $student->update($validated);
 
             $logService->setLog("Student", $student->id, "Student updated", "Student");
@@ -190,7 +169,7 @@ class StudentController extends Controller
                 'job_preferences',
                 'cv',
                 'profile_complete',
-                'profile_photo',  
+                'profile_photo',
             ];
 
             // filtreren op enkel de informatie dat meegegeven wordt
