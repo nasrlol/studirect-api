@@ -1,18 +1,19 @@
 <?php
 
 use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\Api\Auth\AdminAuthController;
+use App\Http\Controllers\Api\Auth\CompanyAuthController;
+use App\Http\Controllers\Api\Auth\StudentAuthController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ConnectionController;
 use App\Http\Controllers\Api\DiplomaController;
 use App\Http\Controllers\Api\LogController;
+use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\Auth\AdminAuthController;
-use App\Http\Controllers\Api\Auth\CompanyAuthController;
-use App\Http\Controllers\Api\Auth\StudentAuthController;
 
 // Student routes
 Route::middleware('throttle:300,1')->group(function () {
@@ -79,6 +80,10 @@ Route::post('/students/login', [StudentAuthController::class, 'login']);
 Route::post('/companies/login', [CompanyAuthController::class, 'login']);
 Route::post('/admins/login', [AdminAuthController::class, 'login']);
 
+
+Route::post('/login', [LoginController::class, 'login'])
+    ->middleware('throttle:300,1');
+
 // Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
     // Logout routes
@@ -102,17 +107,17 @@ Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStud
 Route::middleware('throttle:500,1')->group(function () {
     Route::get('/skills', [SkillController::class, 'index']);
     Route::get('/skills/{id}', [SkillController::class, 'show']);
-    
+
     // Student skill management
     Route::post('/students/{id}/skills', [SkillController::class, 'attachToStudent']);
     Route::delete('/students/{id}/skills/{skill_id}', [SkillController::class, 'detachFromStudent']);
     Route::get('/students/{id}/skills', [SkillController::class, 'getStudentSkills']);
-    
+
     // Company skill management
     Route::post('/companies/{id}/skills', [SkillController::class, 'attachToCompany']);
     Route::delete('/companies/{id}/skills/{skill_id}', [SkillController::class, 'detachFromCompany']);
     Route::get('/companies/{id}/skills', [SkillController::class, 'getCompanySkills']);
-    
+
     // Calculate skill match
     Route::get('/match/{student_id}/{company_id}', [SkillController::class, 'calculateMatch']);
 });
