@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ConnectionController;
 use App\Http\Controllers\Api\DiplomaController;
 use App\Http\Controllers\Api\LogController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
@@ -90,7 +91,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Route::get('/protected-resource', [YourController::class, 'method']);
 });
 
+Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword'])
+    ->middleware('signed');
 
+Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStudentPassword'])
+    ->name('students.resetPassword')
+    ->middleware('signed');
 
 // Skills routes
 Route::middleware('throttle:500,1')->group(function () {

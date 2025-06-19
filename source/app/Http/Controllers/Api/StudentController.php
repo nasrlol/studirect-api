@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
+use App\Models\Log;
 use App\Models\Student;
 use App\Services\LogService;
 use App\Services\MailService;

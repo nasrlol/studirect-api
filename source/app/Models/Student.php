@@ -44,6 +44,7 @@ class Student extends Model
         //$this->attributes['password'] = Hash::make($value);
     }
 
+    // ik voeg deze comment toe om CI nog eens te laten runnen omdat deze PR was gemaakt voor dat die was geimplementeerd
 
     public function appointment(): HasMany
     {
