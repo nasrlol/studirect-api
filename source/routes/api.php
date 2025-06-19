@@ -90,6 +90,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/students/logout', [StudentAuthController::class, 'logout']);
     Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
     Route::post('/admins/logout', [AdminAuthController::class, 'logout']);
+    Route::post('/logout', [LoginController::class, 'logout']);
 
     // You can protect other routes here as needed
     // For example:
