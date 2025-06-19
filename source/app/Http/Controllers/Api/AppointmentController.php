@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Services\LogService;
 use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,9 +16,12 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizesRequests;
     public function index(): JsonResponse
     {
         $appointments = Appointment::all();
+
+        $this->authorize('viewAny', $appointments);
         return response()->json(['data' => $appointments]);
     }
 
@@ -78,6 +82,8 @@ class AppointmentController extends Controller
     {
         try {
             $appointment = Appointment::findOrFail($id);
+
+            $this->authorize('view', $appointment);
             return response()->json(['data' => $appointment]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Appointment not found'], 404);
@@ -102,7 +108,7 @@ class AppointmentController extends Controller
             return response()->json([
                 'message' => 'That time slot is already being used'
             ], 400);
-        };
+        }
 
         $appointment->update($validated);
         return response()->json([
