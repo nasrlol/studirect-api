@@ -33,6 +33,31 @@ Route::middleware('throttle:300,1')->group(function () {
     // Public information
     Route::get('/diplomas', [DiplomaController::class, 'index']);
     Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
+
+    // Skills zijn public
+    Route::get('/skills', [SkillController::class, 'index']);
+    Route::get('/skills/{id}', [SkillController::class, 'show']);
+
+    // Student skill management
+    Route::post('/students/{id}/skills', [SkillController::class, 'attachToStudent']);
+    Route::delete('/students/{id}/skills/{skill_id}', [SkillController::class, 'detachFromStudent']);
+    Route::get('/students/{id}/skills', [SkillController::class, 'getStudentSkills']);
+
+    // Company skill management
+    Route::post('/companies/{id}/skills', [SkillController::class, 'attachToCompany']);
+    Route::delete('/companies/{id}/skills/{skill_id}', [SkillController::class, 'detachFromCompany']);
+    Route::get('/companies/{id}/skills', [SkillController::class, 'getCompanySkills']);
+
+    // Calculate skill match
+    Route::get('/match/{student_id}/{company_id}', [SkillController::class, 'calculateMatch']);
+
+    Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword'])
+        ->middleware('signed');
+
+    Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStudentPassword'])
+        ->name('students.resetPassword')
+        ->middleware('signed');
+
 });
 
 // Protected Routes - require authentication
@@ -104,32 +129,3 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
     });
 });
 
-    // You can protect other routes here as needed
-    // For example:
-    // Route::get('/protected-resource', [YourController::class, 'method']);
-
-Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword'])
-    ->middleware('signed');
-
-Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStudentPassword'])
-    ->name('students.resetPassword')
-    ->middleware('signed');
-
-// Skills routes
-Route::middleware('throttle:500,1')->group(function () {
-    Route::get('/skills', [SkillController::class, 'index']);
-    Route::get('/skills/{id}', [SkillController::class, 'show']);
-
-    // Student skill management
-    Route::post('/students/{id}/skills', [SkillController::class, 'attachToStudent']);
-    Route::delete('/students/{id}/skills/{skill_id}', [SkillController::class, 'detachFromStudent']);
-    Route::get('/students/{id}/skills', [SkillController::class, 'getStudentSkills']);
-
-    // Company skill management
-    Route::post('/companies/{id}/skills', [SkillController::class, 'attachToCompany']);
-    Route::delete('/companies/{id}/skills/{skill_id}', [SkillController::class, 'detachFromCompany']);
-    Route::get('/companies/{id}/skills', [SkillController::class, 'getCompanySkills']);
-
-    // Calculate skill match
-    Route::get('/match/{student_id}/{company_id}', [SkillController::class, 'calculateMatch']);
-});
