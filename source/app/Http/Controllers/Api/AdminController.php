@@ -28,6 +28,7 @@ class AdminController extends Controller
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+
         $admin = Admin::create($validated);
 
         $logService->setLog("Admin", $admin->id, "Admin created ", "Admin", LogLevel::CRITICAL);
@@ -74,7 +75,7 @@ class AdminController extends Controller
             $admin = Admin::findOrFail($id);
 
             $admin->delete();
-            $logService->setLog("Admin",$admin->id, "Admin deleted ", "Admin", LogLevel::CRITICAL);
+            $logService->setLog("Admin", $admin->id, "Admin deleted ", "Admin", LogLevel::CRITICAL);
 
             return response()->json(['message' => 'Admin verwijderd']);
         } catch (ModelNotFoundException $e) {
