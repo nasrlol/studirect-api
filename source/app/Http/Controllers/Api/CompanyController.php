@@ -72,7 +72,7 @@ class CompanyController extends Controller
 
         return response()->json([
             'data' => $company,
-            'message' => 'Company created successfully' 
+            'message' => 'Company created successfully'
         ], 201);
     }
 
@@ -157,6 +157,7 @@ class CompanyController extends Controller
                 'photo',
                 'speeddate_duration',
                 'company_description',
+                'job_title',
                 'job_requirements',
                 'job_description',
                 'company_location'

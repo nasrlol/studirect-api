@@ -25,6 +25,7 @@ class Company extends Model
         'photo',
         'speeddate_duration',
         'company_description',
+        'job_title',
         'job_requirements',
         'job_description',
         'company_location',
