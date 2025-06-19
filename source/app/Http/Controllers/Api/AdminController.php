@@ -6,9 +6,10 @@ use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Services\LogService;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -22,11 +23,11 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'email' => 'required|email|unique:admins,email',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8',         // Een wachtwoord van minimum 8 tekens
             'profile_photo' => 'nullable|string|max:255',  // Add validation for profile photo
         ]);
 
-        $validated['password'] = bcrypt($validated['password']);
+        $validated['password'] = Hash::make($validated['password']);
         $admin = Admin::create($validated);
 
         $logService->setLog("Admin", $admin->id, "Admin created ", "Admin", LogLevel::CRITICAL);
@@ -55,13 +56,11 @@ class AdminController extends Controller
             ]);
 
             if (!empty($validated['password'])) {
-                $validated['password'] = bcrypt($validated['password']);
+                $validated['password'] = Hash::make($validated['password']);
             }
 
             $admin->update($validated);
             $logService->setLog("Admin", $admin->id, "Admin updated ", "Admin", LogLevel::CRITICAL);
-            // severity level wordt hier niet gezet omdat ik dat als default waarde heb gezet, dus normal = niks doen
-
 
             return response()->json(['data' => $admin]);
         } catch (ModelNotFoundException $e) {
