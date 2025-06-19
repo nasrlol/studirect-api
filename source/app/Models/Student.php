@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 
@@ -30,21 +29,6 @@ class Student extends Model
     ];
 
     // wachtwoord mag niet als plain tekst worden opgeslagen dus hashen
-
-    public function setPasswordAttribute($value)
-    {
-        // hashen enkel wanneer het nog niet gehashed is
-        if (Hash::needsRehash($value)) {
-            $value = Hash::make($value);
-        }
-        $this->attributes['password'] = $value;
-
-        // Altijd hashen om zeker te zijn,
-        // wordt dan het gehashed ook niet gehashed?
-        //$this->attributes['password'] = Hash::make($value);
-    }
-
-    // ik voeg deze comment toe om CI nog eens te laten runnen omdat deze PR was gemaakt voor dat die was geimplementeerd
 
     public function appointment(): HasMany
     {
