@@ -6,7 +6,7 @@ use App\Models\Appointment;
 
 class AppointmentService
 {
-    public function appointmentTimeOverlap(array $data, $id = null): bool
+    public static function appointmentTimeOverlap(array $data, $id = null): bool
     {
         $query = Appointment::where('company_id', $data['company_id'])
             ->where(function ($query) use ($data) {
