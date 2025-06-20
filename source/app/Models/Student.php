@@ -13,6 +13,7 @@ class Student extends Authenticatable
 {
     use HasFactory, HasApiTokens;
 
+    protected $hidden = ['password'];
     protected $fillable = [
         'first_name',
         'last_name',
