@@ -11,7 +11,7 @@ class ConnectionPolicy
 {
     public function viewAny($user): bool
     {
-        return $user instanceof Admin || $user instanceof Student || $user instanceof Company;
+        return $user instanceof Admin;
     }
 
     public function view($user, Connection $connection): bool
