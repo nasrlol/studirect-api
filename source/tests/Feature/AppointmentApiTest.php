@@ -58,7 +58,7 @@ class AppointmentApiTest extends TestCase
             'time_end' => "15:30"
         ];
 
-        $response = $this->postJson('/api/appointments', $data);
+        $response = $this->actingAs($student)->postJson('/api/appointments', $data);
         $response->assertStatus(201)
             ->assertJsonFragment(['student_id' => $student->id]);
         $this->assertDatabaseHas('appointments', $data);
@@ -78,7 +78,7 @@ class AppointmentApiTest extends TestCase
             'time_end' => "18:30"
         ]);
 
-        $response = $this->postJson('/api/appointments', [
+        $response = $this->actingAs($student)->postJson('/api/appointments', [
             'student_id' => $student->id,
             'company_id' => $company->id,
             'time_start' => $time_start,
@@ -92,16 +92,17 @@ class AppointmentApiTest extends TestCase
 
     public function test_show_returns_404_for_missing()
     {
-        $response = $this->getJson('/api/appointments/9999');
+        $student = Student::factory()->create();
+        $response = $this->actingAs($student)->getJson('/api/appointments/9999');
         $response->assertStatus(404)
             ->assertJsonFragment(['message' => 'Appointment not found']);
     }
 
     public function test_update_changes_time_student()
     {
-        $student = Company::factory()->create();
+        $student = Student::factory()->create();
         $appointment = Appointment::factory()->create([
-            'company_id' => $student->id,
+            'student_id' => $student->id,
             'time_start' => '12:00',
             'time_end' => '12:30',
         ]);
@@ -189,7 +190,8 @@ class AppointmentApiTest extends TestCase
 
     public function test_destroy_returns_404_for_missing()
     {
-        $response = $this->deleteJson('/api/appointments/9999');
+        $student = Student::factory()->create();
+        $response = $this->actingAs($student)->deleteJson('/api/appointments/9999');
         $response->assertStatus(404)
             ->assertJsonFragment(['message' => 'Appointment not found']);
     }
