@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Company;
 use App\Services\LogService;
 use App\Services\MailService;
@@ -21,8 +22,9 @@ class CompanyController extends Controller
     public function index(): JsonResponse
     {
         $companies = Company::all();
+        $this->authorize("viewAny", Admin::class);
         return response()->json([
-            'data'=>$companies
+            'data' => $companies
         ]);
     }
 
@@ -67,6 +69,7 @@ class CompanyController extends Controller
             }
         }
 
+        $this->authorize("create", Company::class);
         $company = Company::create($validate);
 
         $logService->setLog("Company", $company->id, "Company created", "Company", LogLevel::CRITICAL);
@@ -85,43 +88,9 @@ class CompanyController extends Controller
     {
         try {
             $company = Company::findOrFail($id);
-            return response()->json(['data'=>$company]);
-        } catch(ModelNotFoundException $e)
-        {
-            return response()->json(['message' => 'Company not found']);
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id, LogService $logService) : JsonResponse
-    {
-        try {
-            $company = Company::findOrFail($id);
-            $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:companies,email,' .$company->id,
-            'password' => 'required|string|min:8',
-            'plan_type' => 'required|string|max:255',
-            'job_types' => 'required|string|max:255',
-            'job_domain' => 'required|string|max:255',
-            'booth_location' => 'required|string|max:255',
-            'photo' => 'nullable|string|max:255',
-            'speeddate_duration' => 'required|integer|max:60'
-            ]);
-
-            $validated['password'] = Hash::make($validated['password']);
-
-            $company->update($validated);
-            $logService->setLog("Company", $company->id, "Company updated", "Company", LogLevel::CRITICAL);
-
-            return response()->json([
-                'data' => $company,
-                'message' => 'Company updated successfully'
-            ]);
-        } catch (ModelNotFoundException $e)
-        {
+            $this->authorize("view", $company);
+            return response()->json(['data' => $company]);
+        } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Company not found']);
         }
     }
@@ -133,6 +102,8 @@ class CompanyController extends Controller
     {
         try {
             $company = Company::findOrFail($id);
+
+            $this->authorize("delete", $company);
             $company->delete();
 
             $logService->setLog("Company", $company->id, "Company deleted", "Company", LogLevel::CRITICAL);
@@ -165,7 +136,7 @@ class CompanyController extends Controller
                 'job_requirements',
                 'job_description',
                 'company_location'
-                ];
+            ];
 
 
             // filtreren op enkel de informatie dat meegegeven wordt
@@ -178,6 +149,7 @@ class CompanyController extends Controller
 
             }
 
+            $this->authorize("update", $company);
             $company->update($data);
             return response()->json([
                 'data' => $company,
@@ -186,6 +158,40 @@ class CompanyController extends Controller
 
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Company not found'], 404);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id, LogService $logService): JsonResponse
+    {
+        try {
+            $company = Company::findOrFail($id);
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:companies,email,' . $company->id,
+                'password' => 'required|string|min:8',
+                'plan_type' => 'required|string|max:255',
+                'job_types' => 'required|string|max:255',
+                'job_domain' => 'required|string|max:255',
+                'booth_location' => 'required|string|max:255',
+                'photo' => 'nullable|string|max:255',
+                'speeddate_duration' => 'required|integer|max:60'
+            ]);
+
+            $validated['password'] = Hash::make($validated['password']);
+
+            $this->authorize("update", $company);
+            $company->update($validated);
+            $logService->setLog("Company", $company->id, "Company updated", "Company", LogLevel::CRITICAL);
+
+            return response()->json([
+                'data' => $company,
+                'message' => 'Company updated successfully'
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Company not found']);
         }
     }
 }
