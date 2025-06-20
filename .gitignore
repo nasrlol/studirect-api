@@ -1,7 +1,6 @@
 .idea
 .env
 .env.*
-
 .vscode
 /vendor/
 /node_modules/
