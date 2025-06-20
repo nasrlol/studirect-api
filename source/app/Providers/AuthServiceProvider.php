@@ -14,11 +14,6 @@ use App\Policies\ConnectionPolicy;
 use App\Policies\StudentPolicy;
 use Illuminate\Support\ServiceProvider;
 
-// models
-
-// policies
-
-
 /**
  * Class AuthServiceProvider
  *
