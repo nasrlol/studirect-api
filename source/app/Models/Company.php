@@ -14,6 +14,7 @@ class Company extends Authenticatable
     use HasFactory, HasApiTokens;
 
     // Deze velden mogen ingevuld worden via mass-assignment
+    protected $hidden = ['password'];
     protected $fillable = [
         'name',
         'email',
