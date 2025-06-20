@@ -14,10 +14,10 @@ class CompanyPolicy
 
     public function view($user, Company $company): bool
     {
-        return $this->isSelf($user, $company) || $this->isAdmin($user);
+        return $this->isCompany($user, $company) || $this->isAdmin($user);
     }
 
-    protected function isSelf($user, Company $company): bool
+    protected function isCompany($user, Company $company): bool
     {
         return $user instanceof Company && $user->id === $company->id;
     }
@@ -29,13 +29,14 @@ class CompanyPolicy
 
     public function create($user): bool
     {
-        return $user instanceof Admin; // Only admins can create companies
+        return $user instanceof Admin || $user instanceof Company; // Only admins can create companies
     }
 
     public function update($user, Company $company): bool
     {
-        return $this->isSelf($user, $company) || $this->isAdmin($user);
+        return $this->isCompany($user, $company) || $this->isAdmin($user);
     }
+
 
     public function delete($user, Company $company): bool
     {
