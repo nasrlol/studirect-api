@@ -49,4 +49,9 @@ class StudentPolicy
     {
         return false;
     }
+
+    public function verify($user, Student $student)
+    {
+        return $user instanceof Admin || $user->id === $student->id;
+    }
 }
