@@ -109,18 +109,23 @@ class StudentController extends Controller
     {
         try {
             $student = Student::findOrFail($id);
-            // $this->authorize("verify", $student);
-            // verifieren moet geen security op staan
+
             if ($student->profile_complete) {
-                return response()->json(['message' => 'Student was already verified']);
+                return view('student.verified', [
+                    'message' => 'Student was already verified.'
+                ]);
             } else {
                 $student->profile_complete = true;
                 $student->save();
-                // nu pas opgevallen dat de verandering nog moest opgeslagen worden
-                return response()->json(['message' => 'Student now verified']);
+
+                return view('student.verified', [
+                    'message' => 'Student is now verified.'
+                ]);
             }
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Failed to find student'], 404);
+            return view('student.verified', [
+                'message' => 'Student could not be found.'
+            ]);
         }
     }
 
