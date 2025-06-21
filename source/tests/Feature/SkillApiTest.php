@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature;
+namespace Tests\Feature;
 
 use App\Models\Company;
 use App\Models\Skill;
@@ -13,8 +13,7 @@ class SkillApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function list_skills()
+    public function test_list_skills()
     {
         $this->seed(SkillSeeder::class);
         $response = $this->getJson('/api/skills');
@@ -24,8 +23,7 @@ class SkillApiTest extends TestCase
     }
 
 
-    /** @test */
-    public function attach_skills_to_student_successfully()
+    public function test_attach_skills_to_student_successfully()
     {
         $this->seed(SkillSeeder::class);
         $student = Student::factory()->create();
@@ -44,8 +42,7 @@ class SkillApiTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function attach_skills_to_nonexistent_student_returns_404()
+    public function test_attach_skills_to_nonexistent_student_returns_404()
     {
         $this->seed(SkillSeeder::class);
         $skills = Skill::inRandomOrder()->take(3)->get();
@@ -57,8 +54,7 @@ class SkillApiTest extends TestCase
             ->assertJsonFragment(['message' => 'Student not found']);
     }
 
-    /** @test */
-    public function attach_skills_with_invalid_skill_ids_returns_validation_error()
+    public function test_attach_skills_with_invalid_skill_ids_returns_validation_error()
     {
         $student = Student::factory()->create();
         $payload = ['skill_ids' => [999, 1000]];
@@ -69,8 +65,7 @@ class SkillApiTest extends TestCase
             ->assertJsonValidationErrors(['skill_ids.0', 'skill_ids.1']);
     }
 
-    /** @test */
-    public function attach_skills_without_skill_ids_returns_validation_error()
+    public function test_attach_skills_without_skill_ids_returns_validation_error()
     {
         $student = Student::factory()->create();
         $payload = [];
@@ -82,8 +77,7 @@ class SkillApiTest extends TestCase
     }
 
 
-    /** @test */
-    public function show_skill()
+    public function test_show_skill()
     {
         $this->seed(SkillSeeder::class);
         $skill = Skill::inRandomOrder()->first();
@@ -94,8 +88,7 @@ class SkillApiTest extends TestCase
             ->assertJsonFragment(['name' => $skill->name]);
     }
 
-    /** @test */
-    public function calculatesSkillMatchPercentageSuccessfully(): void
+    public function test_calculatesSkillMatchPercentageSuccessfully(): void
     {
         // Seed skills
         $this->seed(SkillSeeder::class);
@@ -125,8 +118,7 @@ class SkillApiTest extends TestCase
     }
 
 
-    /** @test */
-    public function returnsNotFoundWhenStudentOrCompanyDoesNotExist(): void
+    public function test_returnsNotFoundWhenStudentOrCompanyDoesNotExist(): void
     {
         $studentId = 999;
         $companyId = 888;

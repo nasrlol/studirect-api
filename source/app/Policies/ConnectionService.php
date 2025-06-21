@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Policies;
 
 use App\Models\Company;
 use App\Models\Student;

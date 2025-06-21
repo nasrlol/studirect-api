@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Models\Admin;
 use App\Models\Company;
 use App\Models\Connection;
 use App\Models\Student;
-use App\Services\ConnectionService;
+use App\Policies\ConnectionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ConnectionApiTest extends TestCase
@@ -16,6 +18,8 @@ class ConnectionApiTest extends TestCase
     public function test_index_returns_connections()
     {
         Connection::factory()->count(2)->create();
+        $admin = Admin::factory()->create();
+        Sanctum::actingAs($admin, ['admin']);
 
         $response = $this->getJson('/api/connections');
 
@@ -39,6 +43,7 @@ class ConnectionApiTest extends TestCase
             'skill_match_percentage' => ConnectionService::calculateSkillMatchPercentage($student->id, $company->id)
         ];
 
+        Sanctum::actingAs($student, ['student']);
         $response = $this->postJson('/api/connections', $data);
 
         $response->assertStatus(201)
@@ -47,8 +52,10 @@ class ConnectionApiTest extends TestCase
 
     public function test_show_returns_connection()
     {
-        $connection = Connection::factory()->create();
+        $student = Student::factory()->create();
+        $connection = Connection::factory()->create(['student_id' => $student->id]);
 
+        Sanctum::actingAs($student, ['student']);
         $response = $this->getJson("/api/connections/{$connection->id}");
 
         $response->assertStatus(200)
@@ -71,20 +78,28 @@ class ConnectionApiTest extends TestCase
             'student_id' => $connection->student_id,
             'company_id' => $connection->company_id,
             'status' => false,
-            'skill_match_percentage' => 75.0
         ];
+
+        $student = Student::find($connection->student_id);
+        Sanctum::actingAs($student, ['student']);
+
 
         $response = $this->patchJson("/api/connections/{$connection->id}", $data);
 
         $response->assertStatus(200)
-            ->assertJsonStructure(['data' => ['id', 'student_id', 'company_id', 'status', 'skill_match_percentage']]);
+            ->assertJsonStructure(['data' => ['id', 'student_id', 'company_id', 'status']]);
     }
 
     public function test_destroy_deletes_connection()
     {
         $connection = Connection::factory()->create();
 
+        $student = Student::find($connection->student_id);
+        Sanctum::actingAs($student, ['student']);
+
+
         $response = $this->deleteJson("/api/connections/{$connection->id}");
+        Sanctum::actingAs($student, ['student']);
 
         $response->assertStatus(200);
 

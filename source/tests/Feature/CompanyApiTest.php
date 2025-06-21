@@ -1,10 +1,13 @@
 <?php
 
-namespace Feature;
+namespace Tests\Feature;
 
+use App\Models\Admin;
 use App\Models\Company;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
+
 
 class CompanyApiTest extends TestCase
 {
@@ -12,16 +15,17 @@ class CompanyApiTest extends TestCase
 
     public function test_index_returns_companies()
     {
+        $admin = Admin::factory()->create();
         Company::factory()->count(2)->create();
 
-        $response = $this->getJson('/api/companies');
-
+        $response = $this->actingAs($admin)->getJson('/api/companies');
         $response->assertStatus(200)
             ->assertJsonStructure(['data']);
     }
 
     public function test_store_creates_company()
     {
+        $company = Company::factory()->create();
         $data = [
             'name' => 'Test Company',
             'email' => 'test@company.com',
@@ -39,6 +43,8 @@ class CompanyApiTest extends TestCase
             'company_location' => '123 Main St, City, Country',
         ];
 
+        Sanctum::actingAs($company, ['company']);
+
         $response = $this->postJson('/api/companies', $data);
 
         $response->assertStatus(201)
@@ -50,6 +56,7 @@ class CompanyApiTest extends TestCase
     public function test_show_returns_company()
     {
         $company = Company::factory()->create();
+        Sanctum::actingAs($company, ['company']);
 
         $response = $this->getJson("/api/companies/{$company->id}");
 
@@ -60,6 +67,7 @@ class CompanyApiTest extends TestCase
     public function test_update_modifies_company()
     {
         $company = Company::factory()->create();
+        Sanctum::actingAs($company, ['company']);
 
         $data = [
             'name' => 'Updated Name',
@@ -91,6 +99,8 @@ class CompanyApiTest extends TestCase
     public function test_destroy_deletes_company()
     {
         $company = Company::factory()->create();
+        $admin = Admin::factory()->create();
+        Sanctum::actingAs($admin, ['admin']);
 
         $response = $this->deleteJson("/api/companies/{$company->id}");
 

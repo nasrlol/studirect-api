@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
-use App\Models\Log;
+use App\Models\Admin;
 use App\Models\Student;
 use App\Services\LogService;
 use App\Services\MailService;
@@ -18,6 +17,7 @@ class StudentController extends Controller
     public function index(): JsonResponse
     {
         $students = Student::all();
+        $this->authorize("viewAny", Admin::class);
 
         return response()->json([
             'data' => $students
@@ -60,9 +60,10 @@ class StudentController extends Controller
         }
 
         $validated['password'] = Hash::make($validated['password']);
+
         $student = Student::create($validated);
 
-        $logService->setLog("Student", $student->id,"Student created", "Student");
+        $logService->setLog("Student", $student->id, "Student created", "Student");
         $mailService->sendStudentVerification($student, $logService);
 
         return response()->json([
@@ -79,42 +80,8 @@ class StudentController extends Controller
     {
         try {
             $student = Student::findOrFail($id);
+            $this->authorize("view", $student);
             return response()->json(['data' => $student]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Student not found'], 404);
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id, LogService $logService): JsonResponse
-    {
-        try {
-            $student = Student::findOrFail($id);
-            $validated = $request->validate([
-                'first_name' => 'required|string|max:255',
-                'last_name' => 'required|string|max:255',
-                'email' => 'required|email|unique:students,email,' . $student->id,
-                'password' => 'required|string|min:8',
-                'study_direction' => 'required|string|max:255',
-                'graduation_track' => 'required|integer|exists:diplomas,id',
-                'interests' => 'required|string',
-                'job_preferences' => 'required|string',
-                'cv' => 'nullable|string|max:255',
-                'profile_complete' => 'boolean',
-                'profile_photo' => 'nullable|string|max:255',
-            ]);
-
-            $validated['password'] = Hash::make($validated['password']);
-            $student->update($validated);
-
-            $logService->setLog("Student", $student->id, "Student updated", "Student");
-
-            return response()->json([
-                'data' => $student,
-                'message' => 'Student updated successfully'
-            ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Student not found'], 404);
         }
@@ -124,6 +91,8 @@ class StudentController extends Controller
     {
         try {
             $student = Student::findOrFail($id);
+
+            $this->authorize("delete", $student);
             $student->delete();
 
             $logService->setLog("Student", $student->id, "Student deleted", "Student");
@@ -136,21 +105,27 @@ class StudentController extends Controller
         }
     }
 
-
     public function verify(string $id)
     {
         try {
             $student = Student::findOrFail($id);
+
             if ($student->profile_complete) {
-                return response()->json(['message' => 'Student was already verified']);
+                return view('student.verified', [
+                    'message' => 'Student was already verified.'
+                ]);
             } else {
                 $student->profile_complete = true;
                 $student->save();
-                // nu pas opgevallen dat de verandering nog moest opgeslagen worden
-                return response()->json(['message' => 'Student now verified']);
+
+                return view('student.verified', [
+                    'message' => 'Student is now verified.'
+                ]);
             }
         } catch (ModelNotFoundException $e) {
-            return response()->json(['message' => 'Failed to find student'], 404);
+            return view('student.verified', [
+                'message' => 'Student could not be found.'
+            ]);
         }
     }
 
@@ -180,14 +155,52 @@ class StudentController extends Controller
                 $data['password'] = Hash::make($data['password']);
             }
 
+            $this->authorize("update", $student);
             $student->update($data);
-            $logService->setLog("Student", $student->id,"Student updated", "Student");
+            $logService->setLog("Student", $student->id, "Student updated", "Student");
 
             return response()->json([
                 'data' => $student,
                 'message' => 'Student partially updated successfully',
             ]);
 
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id, LogService $logService): JsonResponse
+    {
+        try {
+            $student = Student::findOrFail($id);
+            $validated = $request->validate([
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'email' => 'required|email|unique:students,email,' . $student->id,
+                'password' => 'required|string|min:8',
+                'study_direction' => 'required|string|max:255',
+                'graduation_track' => 'required|integer|exists:diplomas,id',
+                'interests' => 'required|string',
+                'job_preferences' => 'required|string',
+                'cv' => 'nullable|string|max:255',
+                'profile_complete' => 'boolean',
+                'profile_photo' => 'nullable|string|max:255',
+            ]);
+
+            $validated['password'] = Hash::make($validated['password']);
+
+            $this->authorize("update", $student);
+            $student->update($validated);
+
+            $logService->setLog("Student", $student->id, "Student updated", "Student");
+
+            return response()->json([
+                'data' => $student,
+                'message' => 'Student updated successfully'
+            ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Student not found'], 404);
         }

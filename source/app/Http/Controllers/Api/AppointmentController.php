@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Services\AppointmentService;
 use App\Services\LogService;
 use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,35 +17,19 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizesRequests;
+
     public function index(): JsonResponse
     {
         $appointments = Appointment::all();
+
+        $this->authorize('viewAny', Appointment::class);
         return response()->json(['data' => $appointments]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-
-    private function appointmentTimeOverlap(array $data, $id = null): bool
-    {
-        $query = Appointment::where('company_id', $data['company_id'])
-            ->where(function ($query) use ($data) {
-                $query->whereBetween('time_start', [$data['time_start'], $data['time_end']])
-                    ->orWhereBetween('time_end', [$data['time_start'], $data['time_end']])
-                    ->orWhere(function ($query_) use ($data) {
-                        $query_->where('time_start', '<=', $data['time_start'])
-                            ->where('time_end', '>=', $data['time_end']);
-                    });
-            });
-
-        if ($id) {
-            $query->where('id', '!=', $id);
-        }
-
-        return $query->exists();
-    }
-
     public function store(Request $request, MailService $mailService, LogService $logService): JsonResponse
     {
         $validate = $request->validate([
@@ -54,7 +40,7 @@ class AppointmentController extends Controller
         ]);
 
 
-        if ($this->appointmentTimeOverlap($validate)) {
+        if (AppointmentService::appointmentTimeOverlap($validate)) {
             return response()->json([
                 'message' => 'That time slot is already being used'
             ], 400);
@@ -78,6 +64,8 @@ class AppointmentController extends Controller
     {
         try {
             $appointment = Appointment::findOrFail($id);
+
+            $this->authorize('view', $appointment);
             return response()->json(['data' => $appointment]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Appointment not found'], 404);
@@ -97,13 +85,13 @@ class AppointmentController extends Controller
 
         $validated['company_id'] = $appointment->company_id;
         // we controleren niet op een company id dus we halen hem even uit de appointment zodat de check kan werken
-        if ($this->appointmentTimeOverlap($validated, $id))
-        {
+        if (AppointmentService::appointmentTimeOverlap($validated, $id)) {
             return response()->json([
                 'message' => 'That time slot is already being used'
             ], 400);
-        };
+        }
 
+        $this->authorize('update', $appointment);
         $appointment->update($validated);
         return response()->json([
             'data' => $appointment,
@@ -118,6 +106,7 @@ class AppointmentController extends Controller
     {
         try {
             $appointment = Appointment::findOrFail($id);
+            $this->authorize("delete", $appointment);
             $appointment->delete();
 
             $logger->setLog("Student", $appointment->student_id, "Appointment deleted", "Appointment");

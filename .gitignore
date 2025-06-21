@@ -1,6 +1,6 @@
 .idea
 .env
-.env.*
+.env.testing
 .vscode
 /vendor/
 /node_modules/
