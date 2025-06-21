@@ -80,11 +80,6 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
     // hier een patch in plaats van een put omdat enkel het tijdstip wordt aangepast
     Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 
-    // Berichten
-    Route::post('/messages/send', [MessageController::class, 'sendMessage']);
-    Route::post('/messages/conversation', [MessageController::class, 'getConversation']);
-
-
     // Protected Logout Authenticatie
     Route::post('/students/logout', [StudentAuthController::class, 'logout']);
     Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
@@ -99,6 +94,11 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
         ->middleware('signed');
 
 });
+
+// Berichten
+Route::post('/messages/send', [MessageController::class, 'sendMessage']);
+Route::post('/messages/conversation', [MessageController::class, 'getConversation']);
+
 
 Route::middleware('throttle:api')->group(function () {
     // Skills routes
