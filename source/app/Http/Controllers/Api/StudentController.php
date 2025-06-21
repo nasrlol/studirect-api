@@ -109,7 +109,8 @@ class StudentController extends Controller
     {
         try {
             $student = Student::findOrFail($id);
-            $this->authorize("verify", $student);
+            // $this->authorize("verify", $student);
+            // verifieren moet geen security op staan
             if ($student->profile_complete) {
                 return response()->json(['message' => 'Student was already verified']);
             } else {
