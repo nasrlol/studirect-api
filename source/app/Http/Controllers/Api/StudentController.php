@@ -61,7 +61,6 @@ class StudentController extends Controller
 
         $validated['password'] = Hash::make($validated['password']);
 
-        $this->authorize("create", Student::class);
         $student = Student::create($validated);
 
         $logService->setLog("Student", $student->id, "Student created", "Student");
