@@ -49,6 +49,9 @@ class CompanyController extends Controller
             'company_location' => 'nullable|string|max:255'
         ]);
 
+        $tempCompany = new Company($validate);
+        $mailService->sendCompanyAccountVerification($tempCompany, $logService);
+
         $validate['password'] = Hash::make($validate['password']);
 
         // Standaardwaarden voor ontbrekende velden
@@ -73,7 +76,6 @@ class CompanyController extends Controller
         $company = Company::create($validate);
 
         $logService->setLog("Company", $company->id, "Company created", "Company", LogLevel::CRITICAL);
-        $mailService->sendCompanyAccountVerification($company, $logService);
 
         return response()->json([
             'data' => $company,
