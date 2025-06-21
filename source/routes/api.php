@@ -121,7 +121,6 @@ Route::middleware('throttle:api')->group(function () {
     Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
 });
 
-
 // Authenticatie
 Route::post('/students/login', [StudentAuthController::class, 'login'])->middleware('throttle:login');
 Route::post('/companies/login', [CompanyAuthController::class, 'login'])->middleware('throttle:login');
