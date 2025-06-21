@@ -93,35 +93,38 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
 
     // Authenticatie mail routes
     Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword'])
-        ->middleware('signed');
+        ->middleware(['signed', 'throttle:mail']);
     Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStudentPassword'])
         ->name('students.resetPassword')
         ->middleware('signed');
 
 });
 
-// Skills routes
-Route::get('/skills', [SkillController::class, 'index']);
-Route::get('/skills/{id}', [SkillController::class, 'show']);
+Route::middleware('throttle:api')->group(function () {
+    // Skills routes
+    Route::get('/skills', [SkillController::class, 'index']);
+    Route::get('/skills/{id}', [SkillController::class, 'show']);
 
-Route::post('/students/{id}/skills', [SkillController::class, 'attachToStudent']);
-Route::delete('/students/{id}/skills/{skill_id}', [SkillController::class, 'detachFromStudent']);
-Route::get('/students/{id}/skills', [SkillController::class, 'getStudentSkills']);
+    Route::post('/students/{id}/skills', [SkillController::class, 'attachToStudent']);
+    Route::delete('/students/{id}/skills/{skill_id}', [SkillController::class, 'detachFromStudent']);
+    Route::get('/students/{id}/skills', [SkillController::class, 'getStudentSkills']);
 
-Route::post('/companies/{id}/skills', [SkillController::class, 'attachToCompany']);
-Route::delete('/companies/{id}/skills/{skill_id}', [SkillController::class, 'detachFromCompany']);
-Route::get('/companies/{id}/skills', [SkillController::class, 'getCompanySkills']);
+    Route::post('/companies/{id}/skills', [SkillController::class, 'attachToCompany']);
+    Route::delete('/companies/{id}/skills/{skill_id}', [SkillController::class, 'detachFromCompany']);
+    Route::get('/companies/{id}/skills', [SkillController::class, 'getCompanySkills']);
 
-// Calculate skill match percentage
-Route::get('/match/{student_id}/{company_id}', [SkillController::class, 'calculateMatch']);
+    // Calculate skill match percentage
+    Route::get('/match/{student_id}/{company_id}', [SkillController::class, 'calculateMatch']);
+
+    // Diplomas ophalen
+    Route::get('/diplomas', [DiplomaController::class, 'index']);
+    Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
+});
 
 
 // Authenticatie
-Route::post('/students/login', [StudentAuthController::class, 'login']);
-Route::post('/companies/login', [CompanyAuthController::class, 'login']);
-Route::post('/admins/login', [AdminAuthController::class, 'login']);
-Route::post('/login', [LoginController::class, 'login']);
+Route::post('/students/login', [StudentAuthController::class, 'login'])->middleware('throttle:login');
+Route::post('/companies/login', [CompanyAuthController::class, 'login'])->middleware('throttle:login');
+Route::post('/admins/login', [AdminAuthController::class, 'login'])->middleware('throttle:login');
+Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:login');
 
-// diplomas ophalen
-Route::get('/diplomas', [DiplomaController::class, 'index']);
-Route::get('/diplomas/{id}', [DiplomaController::class, 'show']);
