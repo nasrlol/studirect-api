@@ -33,13 +33,12 @@ Route::middleware(['auth:sanctum', 'ability:student,admin', 'throttle:300,1'])->
 // Company routes
 
 
-Route::post('/companies', [CompanyController::class, 'store']);
-
 Route::middleware(['auth:sanctum', 'throttle:300,1'])->group(function () {
     Route::get('/companies', [CompanyController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'ability:company,admin', 'throttle:300,1'])->group(function () {
+    Route::post('/companies', [CompanyController::class, 'store']);
     Route::get('/companies/{id}', [CompanyController::class, 'show']);
     Route::put('/companies/{id}', [CompanyController::class, 'update']);
     Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
