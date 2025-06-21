@@ -54,15 +54,15 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:1,1'])->group(func
     Route::get('/admins/{id}', [AdminController::class, 'show']);
     Route::put('/admins/{id}', [AdminController::class, 'update']);
     Route::delete('/admins/{id}', [AdminController::class, 'destroy']);
+});
 
-    // Logs
+// Logs
+Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:500,1'])->group(function () {
     Route::get('/admin/logs', [LogController::class, 'getLogs']);
     Route::get('admin/logs/students/{id}', [LogController::class, 'getLogsStudent']);
     Route::get('admin/logs/companies/{id}', [LogController::class, 'getLogsCompany']);
     Route::get('admin/logs/admins/{id}', [LogController::class, 'getLogsAdmin']);
-
 });
-
 
 // Appointment routes
 Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
