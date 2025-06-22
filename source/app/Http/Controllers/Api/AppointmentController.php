@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AppointmentController extends Controller
 {
@@ -21,9 +22,12 @@ class AppointmentController extends Controller
 
     public function index(): JsonResponse
     {
-        $appointments = Appointment::all();
-
         $this->authorize('viewAny', Appointment::class);
+
+        $appointments = Cache::rememberForever('appointments.all', function () {
+            return Appointment::all();
+        });
+
         return response()->json(['data' => $appointments]);
     }
 
@@ -32,6 +36,8 @@ class AppointmentController extends Controller
      */
     public function store(Request $request, MailService $mailService, LogService $logService): JsonResponse
     {
+        Cache::forget('appointments.all');
+
         $validate = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
             'company_id' => 'required|integer|exists:companies,id',
@@ -62,6 +68,8 @@ class AppointmentController extends Controller
      */
     public function show(string $id): JsonResponse
     {
+        Cache::forget('appointments.all');
+
         try {
             $appointment = Appointment::findOrFail($id);
 
@@ -77,6 +85,8 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
+        Cache::forget('appointments.all');
+
         $appointment = Appointment::findOrFail($id);
         $validated = $request->validate([
             'time_start' => 'required|date_format:H:i',
@@ -104,6 +114,8 @@ class AppointmentController extends Controller
      */
     public function destroy(string $id, LogService $logger): JsonResponse
     {
+        Cache::forget('appointments.all');
+
         try {
             $appointment = Appointment::findOrFail($id);
             $this->authorize("delete", $appointment);

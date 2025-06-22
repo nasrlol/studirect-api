@@ -10,6 +10,7 @@ use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
@@ -20,7 +21,9 @@ class CompanyController extends Controller
      */
     public function index(): JsonResponse
     {
-        $companies = Company::all();
+        $companies = Cache::rememberForever('companies.all', function () {
+            return Company::all();
+        });
         // beveiligin weggehaald voor zelfde reden zoals bij studenten
         return response()->json([
             'data' => $companies
@@ -32,6 +35,9 @@ class CompanyController extends Controller
      */
     public function store(Request $request, MailService $mailService, LogService $logService): JsonResponse
     {
+
+        Cache::forget('companies.all');
+
         $validate = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:companies,email',
@@ -101,6 +107,9 @@ class CompanyController extends Controller
      */
     public function destroy(string $id, LogService $logService): JsonResponse
     {
+
+        Cache::forget('companies.all');
+
         try {
             $company = Company::findOrFail($id);
 
@@ -119,6 +128,9 @@ class CompanyController extends Controller
 
     public function partialUpdate(Request $request, string $id): JsonResponse
     {
+
+        Cache::forget('companies.all');
+
         try {
             $company = Company::findOrFail($id);
 
@@ -167,6 +179,9 @@ class CompanyController extends Controller
      */
     public function update(Request $request, string $id, LogService $logService): JsonResponse
     {
+
+        Cache::forget('companies.all');
+
         try {
             $company = Company::findOrFail($id);
             $validated = $request->validate([

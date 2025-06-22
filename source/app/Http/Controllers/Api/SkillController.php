@@ -11,6 +11,7 @@ use App\Services\LogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SkillController extends Controller
 {
@@ -19,7 +20,11 @@ class SkillController extends Controller
      */
     public function index(): JsonResponse
     {
-        $skills = Skill::all();
+        $skills = Cache::remember('skills.all', 60 * 60, function () {
+            return Skill::all();
+        });
+
+
         return response()->json([
             'data' => $skills
         ]);
