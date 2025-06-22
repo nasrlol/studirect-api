@@ -18,14 +18,18 @@ use Illuminate\Support\Facades\Route;
 
 // Student routes
 
-Route::post('/students', [StudentController::class, 'store']);
+
+Route::middleware(['throttle:300,1'])->group(function () {
+    Route::post('/students', [StudentController::class, 'store']);
+    Route::get('/students/{id}', [StudentController::class, 'show']);
+});
+
 Route::get('/students/{id}/verify', [StudentController::class, 'verify'])
     ->name('students.verify') // maak een naam voor de route, kan ik die straks makkelijker aanroepen in de mail view
     ->middleware('signed');
 
 Route::get('/students', [StudentController::class, 'index']);
 Route::middleware(['auth:sanctum', 'ability:student,admin', 'throttle:300,1'])->group(function () {
-    Route::get('/students/{id}', [StudentController::class, 'show']);
     Route::put('/students/{id}', [StudentController::class, 'update']);
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
     Route::patch('/students/{id}', [StudentController::class, 'partialUpdate']);
@@ -34,23 +38,22 @@ Route::middleware(['auth:sanctum', 'ability:student,admin', 'throttle:300,1'])->
 // Company routes
 Route::middleware(['throttle:300,1'])->group(function () {
     Route::get('/companies', [CompanyController::class, 'index']);
+    Route::get('/companies/{id}', [CompanyController::class, 'show']);
 });
+
 
 Route::middleware(['auth:sanctum', 'ability:company,admin', 'throttle:300,1'])->group(function () {
     Route::post('/companies', [CompanyController::class, 'store']);
-    Route::get('/companies/{id}', [CompanyController::class, 'show']);
     Route::put('/companies/{id}', [CompanyController::class, 'update']);
     Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
     Route::patch('companies/{id}', [CompanyController::class, 'partialUpdate']);
 });
 
 // Admin routes
-
 Route::post('/admins', [AdminController::class, 'store']);
 Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:1,1'])->group(function () {
     // Admin CRUD operations
     Route::get('/admins', [AdminController::class, 'index']);
-
     Route::get('/admins/{id}', [AdminController::class, 'show']);
     Route::put('/admins/{id}', [AdminController::class, 'update']);
     Route::delete('/admins/{id}', [AdminController::class, 'destroy']);
