@@ -45,10 +45,12 @@ Route::middleware(['auth:sanctum', 'ability:company,admin', 'throttle:300,1'])->
 });
 
 // Admin routes
+
+Route::post('/admins', [AdminController::class, 'store']);
 Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:1,1'])->group(function () {
     // Admin CRUD operations
     Route::get('/admins', [AdminController::class, 'index']);
-    Route::post('/admins', [AdminController::class, 'store']);
+
     Route::get('/admins/{id}', [AdminController::class, 'show']);
     Route::put('/admins/{id}', [AdminController::class, 'update']);
     Route::delete('/admins/{id}', [AdminController::class, 'destroy']);
