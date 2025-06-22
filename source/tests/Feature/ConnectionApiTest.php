@@ -105,4 +105,83 @@ class ConnectionApiTest extends TestCase
 
         $this->assertDatabaseMissing('connections', ['id' => $connection->id]);
     }
+
+    public function test_student_can_view_own_connections()
+    {
+        $student = Student::factory()->create();
+        $otherStudent = Student::factory()->create();
+        $company = Company::factory()->create();
+
+        // 2 connections for current student, 1 for someone else
+        Connection::factory()->count(2)->create(['student_id' => $student->id, 'company_id' => $company->id]);
+        Connection::factory()->create(['student_id' => $otherStudent->id, 'company_id' => $company->id]);
+
+        Sanctum::actingAs($student, ['student']);
+
+        $response = $this->getJson("/api/connections/student/{$student->id}");
+        $response->assertStatus(200)
+            ->assertJsonCount(2, 'data');
+    }
+
+    public function test_student_cannot_view_connections_of_other_student()
+    {
+        $student = Student::factory()->create();
+        $otherStudent = Student::factory()->create();
+        $company = Company::factory()->create();
+
+        Connection::factory()->create(['student_id' => $otherStudent->id, 'company_id' => $company->id]);
+
+        Sanctum::actingAs($student, ['student']);
+
+        $response = $this->getJson("/api/connections/student/{$otherStudent->id}");
+        $response->assertStatus(403);
+    }
+
+    public function test_company_can_view_own_connections()
+    {
+        $student = Student::factory()->create();
+        $company = Company::factory()->create();
+        $otherCompany = Company::factory()->create();
+
+        Connection::factory()->count(2)->create(['student_id' => $student->id, 'company_id' => $company->id]);
+        Connection::factory()->create(['student_id' => $student->id, 'company_id' => $otherCompany->id]);
+
+        Sanctum::actingAs($company, ['company']);
+
+        $response = $this->getJson("/api/connections/company/{$company->id}");
+        $response->assertStatus(200)
+            ->assertJsonCount(2, 'data');
+    }
+
+    public function test_company_cannot_view_connections_of_other_company()
+    {
+        $student = Student::factory()->create();
+        $company = Company::factory()->create();
+        $otherCompany = Company::factory()->create();
+
+        Connection::factory()->create(['student_id' => $student->id, 'company_id' => $otherCompany->id]);
+
+        Sanctum::actingAs($company, ['company']);
+
+        $response = $this->getJson("/api/connections/company/{$otherCompany->id}");
+        $response->assertStatus(403);
+    }
+
+    public function test_admin_can_view_connections_of_any_student_or_company()
+    {
+        $student = Student::factory()->create();
+        $company = Company::factory()->create();
+        $admin = Admin::factory()->create();
+
+        Connection::factory()->count(2)->create(['student_id' => $student->id, 'company_id' => $company->id]);
+
+        Sanctum::actingAs($admin, ['admin']);
+
+        $resStudent = $this->getJson("/api/connections/student/{$student->id}");
+        $resCompany = $this->getJson("/api/connections/company/{$company->id}");
+
+        $resStudent->assertStatus(200)->assertJsonCount(2, 'data');
+        $resCompany->assertStatus(200)->assertJsonCount(2, 'data');
+    }
+
 }
