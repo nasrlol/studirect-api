@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Models\Company;
 use App\Services\LogService;
 use App\Services\MailService;
@@ -22,7 +21,6 @@ class CompanyController extends Controller
     public function index(): JsonResponse
     {
         $companies = Company::all();
-        $this->authorize("viewAny", Admin::class);
         return response()->json([
             'data' => $companies
         ]);
