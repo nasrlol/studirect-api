@@ -47,7 +47,7 @@ class MailService
 
     }
 
-    public function sendStudentPasswordReset(Student $student, LogService $logService): void
+    public function sendStudentPasswordReset(Student $student): void
     {
         try {
             Mail::to($student->email)->send(new StudentResetPassword($student));
@@ -55,12 +55,9 @@ class MailService
             try {
                 Mail::to($student->email)->send(new StudentResetPassword($student));
             } catch (TransferException $e) {
-
-                $logService->setLog("Student", $student->id, $e, "Student");
             }
         } catch (\Exception $e) {
 
-            $logService->setLog("Company", $student->id, $e, "Student");
         }
     }
 }

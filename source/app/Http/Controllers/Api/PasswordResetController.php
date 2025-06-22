@@ -11,7 +11,7 @@ use Symfony\Component\Mailer\Exception\TransportException;
 class PasswordResetController extends Controller
 {
 
-    public function sendResetStudentPassword(string $id, MailService $mailService): JsonResponse
+    public function sendResetStudentPassword(MailService $mailService, string $id): JsonResponse
     {
         $student = Student::findOrFail($id);
 
