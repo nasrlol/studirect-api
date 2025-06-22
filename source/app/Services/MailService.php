@@ -9,6 +9,7 @@ use App\Mail\StudentProfileVerification;
 use App\Mail\StudentResetPassword;
 use App\Models\Appointment;
 use App\Models\Company;
+use App\Models\Log;
 use App\Models\Student;
 use GuzzleHttp\Exception\TransferException;
 use Illuminate\Support\Facades\Mail;
@@ -57,8 +58,10 @@ class MailService
             try {
                 Mail::to($student->email)->send(new StudentResetPassword($student));
             } catch (TransportExceptionInterface $retryException) {
+                Log::error($e->getMessage());
             }
         } catch (\Exception $e) {
+            Log::error($e->getMessage());
         }
     }
 }
