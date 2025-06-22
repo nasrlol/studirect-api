@@ -32,6 +32,6 @@ class ConnectionService
         $matchPercentage = ($matchingSkillsCount / $studentSkillIds->count()) * 100;
 
         // Round to 2 decimal places
-        return round($matchPercentage, 2);
+        return round(pow($matchPercentage, 1.1), 2);
     }
 }
