@@ -80,7 +80,7 @@ class ConnectionController extends Controller
 
     public function showConnectionStudent(string $id): JsonResponse
     {
-        $this->authorize('viewAny', Connection::class);
+        $this->authorize('viewAny', [Connection::class, $id]);
 
         $connections = Connection::where('student_id', $id)->get();
 
@@ -93,8 +93,7 @@ class ConnectionController extends Controller
 
     public function showConnectionCompany(string $id): JsonResponse
     {
-
-        $this->authorize('viewAny', Connection::class);
+        $this->authorize('viewAny', [Connection::class, $id]);
         $connections = Connection::where('company_id', $id)->get();
 
         if ($connections->isEmpty()) {
