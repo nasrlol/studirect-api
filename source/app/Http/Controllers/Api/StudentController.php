@@ -17,6 +17,9 @@ class StudentController extends Controller
     {
         $students = Student::all();
 
+
+        // beveiliging weg gehaald omdat het zo wordt mogelijk gemaakt dat het ophalen van alle studenten
+        // om te zoeken en wat dan ook even dan makklijker gaat in de frontend ipv van alles te beginnen herwerken en herschrijven
         return response()->json([
             'data' => $students
         ]);
@@ -76,7 +79,7 @@ class StudentController extends Controller
     {
         try {
             $student = Student::findOrFail($id);
-            $this->authorize("view", $student);
+            // $this->authorize("view", $student);
             return response()->json(['data' => $student]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Student not found'], 404);

@@ -21,6 +21,7 @@ class CompanyController extends Controller
     public function index(): JsonResponse
     {
         $companies = Company::all();
+        // beveiligin weggehaald voor zelfde reden zoals bij studenten
         return response()->json([
             'data' => $companies
         ]);
@@ -88,7 +89,7 @@ class CompanyController extends Controller
     {
         try {
             $company = Company::findOrFail($id);
-            $this->authorize("view", $company);
+            // $this->authorize("view", $company);
             return response()->json(['data' => $company]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Company not found']);
