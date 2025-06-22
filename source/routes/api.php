@@ -86,13 +86,11 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
     Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
     Route::post('/admins/logout', [AdminAuthController::class, 'logout']);
     Route::post('/logout', [LoginController::class, 'logout']);
-
-
 });
 
 // Authenticatie mail routes
 Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword'])
-    ->middleware(['signed', 'throttle:mail']);
+    ->middleware('throttle:mail');
 
 // Berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
