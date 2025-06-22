@@ -34,7 +34,6 @@ class StudentApiTest extends TestCase
                         'email',
                         'study_direction',
                         'graduation_track',
-                        'interests',
                         'job_preferences',
                         'cv',
                         'profile_complete',
@@ -57,7 +56,6 @@ class StudentApiTest extends TestCase
             'password' => 'password123',
             'study_direction' => 'Informatica',
             'graduation_track' => $diploma ? $diploma->id : 1,
-            'interests' => 'Programming, AI',
             'job_preferences' => 'Software Development',
             'cv' => 'path/to/cv.pdf',
             'profile_complete' => true,
@@ -77,7 +75,6 @@ class StudentApiTest extends TestCase
                     'email',
                     'study_direction',
                     'graduation_track',
-                    'interests',
                     'job_preferences',
                 ],
                 'message'
@@ -89,7 +86,6 @@ class StudentApiTest extends TestCase
             'email' => $data['email'],
             'study_direction' => $data['study_direction'],
             'graduation_track' => $data['graduation_track'],
-            'interests' => $data['interests'],
             'job_preferences' => $data['job_preferences'],
         ]);
 
@@ -113,7 +109,6 @@ class StudentApiTest extends TestCase
                     'last_name' => $student->last_name,
                     'study_direction' => $student->study_direction,
                     'graduation_track' => $student->graduation_track,
-                    'interests' => $student->interests,
                     'job_preferences' => $student->job_preferences,
 
                 ]
@@ -135,7 +130,6 @@ class StudentApiTest extends TestCase
             'password' => 'password123',
             'study_direction' => 'Informatica',
             'graduation_track' => $diploma ? $diploma->id : 1,
-            'interests' => 'Programming, AI',
             'job_preferences' => 'Software Development',
         ];
 
@@ -153,7 +147,6 @@ class StudentApiTest extends TestCase
             'email' => $data['email'],
             'study_direction' => $data['study_direction'],
             'graduation_track' => $data['graduation_track'],
-            'interests' => $data['interests'],
             'job_preferences' => $data['job_preferences'],
         ]);
     }

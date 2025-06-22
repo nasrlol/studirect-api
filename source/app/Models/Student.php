@@ -21,7 +21,6 @@ class Student extends Authenticatable
         'password',
         'study_direction',
         'graduation_track',
-        'interests',
         'job_preferences',
         'cv',
         'profile_complete',

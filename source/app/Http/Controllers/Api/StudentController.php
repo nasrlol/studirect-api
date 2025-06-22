@@ -37,7 +37,6 @@ class StudentController extends Controller
             'password' => 'required|string|min:8',
             'study_direction' => 'required|string|max:255',
             'graduation_track' => 'required|integer|exists:diplomas,id',
-            'interests' => 'nullable|string',
             'job_preferences' => 'nullable|string',
             'cv' => 'nullable|string|max:255',
             'profile_complete' => 'nullable|boolean',
@@ -46,7 +45,6 @@ class StudentController extends Controller
 
         // Standaardwaarden alleen voor optionele velden
         $defaults = [
-            'interests' => 'Nog niet ingevuld',
             'job_preferences' => 'Nog niet ingevuld',
             'cv' => null,  // Default is null
             'profile_complete' => false,
@@ -140,7 +138,6 @@ class StudentController extends Controller
                 'password',
                 'study_direction',
                 'graduation_track',
-                'interests',
                 'job_preferences',
                 'cv',
                 'profile_complete',
@@ -183,7 +180,6 @@ class StudentController extends Controller
                 'password' => 'required|string|min:8',
                 'study_direction' => 'required|string|max:255',
                 'graduation_track' => 'required|integer|exists:diplomas,id',
-                'interests' => 'required|string',
                 'job_preferences' => 'required|string',
                 'cv' => 'nullable|string|max:255',
                 'profile_complete' => 'boolean',

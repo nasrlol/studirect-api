@@ -50,7 +50,6 @@ return new class extends Migration {
             $table->string('password');
             $table->string('study_direction')->nullable();
             $table->foreignId('graduation_track')->nullable()->constrained('diplomas')->onDelete('cascade');
-            $table->text('interests')->nullable();
             $table->text('job_preferences')->nullable();
             $table->string('cv')->nullable();
             $table->boolean('profile_complete')->default(false);
