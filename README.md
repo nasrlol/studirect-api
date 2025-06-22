@@ -116,7 +116,7 @@ php artisan test
 
 ## Meer weten?
 
-- [API Documentatie](./API-ROUTES.md)
+- [API Documentatie](./docs/api.md)
 - [Security Checklist](./Security.md)
 - [Projectdocumentatie (Wiki)](../../wiki)
 
