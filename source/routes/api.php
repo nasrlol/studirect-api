@@ -89,7 +89,7 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
 });
 
 // Authenticatie mail routes
-Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword']);
+Route::post('/reset/mail/{id}', [PasswordResetController::class, 'sendResetStudentPassword']);
 
 // Berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
