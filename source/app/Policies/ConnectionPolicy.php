@@ -9,9 +9,12 @@ use App\Models\Student;
 
 class ConnectionPolicy
 {
-    public function viewAny($user): bool
+    public function viewAny($user, $id = null): bool
     {
-        return $user instanceof Admin;
+        return $user instanceof Admin
+            || ($user instanceof Student && $user->id == $id)
+            || ($user instanceof Company && $user->id == $id);
+
     }
 
     public function view($user, Connection $connection): bool
