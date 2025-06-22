@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Models\Student;
 use App\Services\LogService;
 use App\Services\MailService;
@@ -17,7 +16,6 @@ class StudentController extends Controller
     public function index(): JsonResponse
     {
         $students = Student::all();
-        $this->authorize("viewAny", Admin::class);
 
         return response()->json([
             'data' => $students
