@@ -22,8 +22,9 @@ Route::post('/students', [StudentController::class, 'store']);
 Route::get('/students/{id}/verify', [StudentController::class, 'verify'])
     ->name('students.verify') // maak een naam voor de route, kan ik die straks makkelijker aanroepen in de mail view
     ->middleware('signed');
+
+Route::get('/students', [StudentController::class, 'index']);
 Route::middleware(['auth:sanctum', 'ability:student,admin', 'throttle:300,1'])->group(function () {
-    Route::get('/students', [StudentController::class, 'index']);
     Route::get('/students/{id}', [StudentController::class, 'show']);
     Route::put('/students/{id}', [StudentController::class, 'update']);
     Route::delete('/students/{id}', [StudentController::class, 'destroy']);
