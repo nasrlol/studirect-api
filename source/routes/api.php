@@ -31,8 +31,6 @@ Route::middleware(['auth:sanctum', 'ability:student,admin', 'throttle:300,1'])->
 });
 
 // Company routes
-
-
 Route::middleware(['auth:sanctum', 'throttle:300,1'])->group(function () {
     Route::get('/companies', [CompanyController::class, 'index']);
 });
@@ -56,7 +54,7 @@ Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:1,1'])->group(func
 });
 
 // Logs
-Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:500,1'])->group(function () {
+Route::middleware(['auth:sanctum', 'ability:admin', 'throttle:50,1'])->group(function () {
     Route::get('/admin/logs', [LogController::class, 'getLogs']);
     Route::get('admin/logs/students/{id}', [LogController::class, 'getLogsStudent']);
     Route::get('admin/logs/companies/{id}', [LogController::class, 'getLogsCompany']);
@@ -91,7 +89,6 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
     Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStudentPassword'])
         ->name('students.resetPassword')
         ->middleware('signed');
-
 });
 
 // Berichten
