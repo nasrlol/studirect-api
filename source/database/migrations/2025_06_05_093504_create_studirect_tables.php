@@ -86,6 +86,8 @@ return new class extends Migration {
             $table->string('sender_type'); // 'student' of 'company'
             $table->string('receiver_type'); // 'student' of 'company'
             $table->text('content');
+            $table->index(['sender_id', 'sender_type']);
+            $table->index(['receiver_id', 'receiver_type']);
             $table->timestamps();
         });
 
@@ -95,6 +97,7 @@ return new class extends Migration {
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->time('time_start');
             $table->time('time_end');
+            $table->index(['student_id', 'time_start']);
             $table->timestamps();
         });
 
@@ -136,5 +139,6 @@ return new class extends Migration {
         Schema::dropIfExists('company_skill');
         Schema::dropIfExists('skill_student');
         Schema::dropIfExists('skills');
+        Schema::dropIfExists('diplomas');
     }
 };
