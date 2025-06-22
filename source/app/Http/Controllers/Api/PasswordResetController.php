@@ -15,16 +15,18 @@ use Symfony\Component\Mailer\Exception\TransportException;
 class PasswordResetController extends Controller
 {
 
-    public function sendResetStudentPassword(Student $student, MailService $mailService): JsonResponse
+    public function sendResetStudentPassword(string $id, MailService $mailService): JsonResponse
     {
+        $student = Student::findOrFail($id);
+
         try {
             $mailService->sendStudentPasswordReset($student);
             return response()->json(['message' => 'Reset password mail send successfully']);
-        } catch (TransportException $e)
-        {
+        } catch (TransportException $e) {
             return response()->json(['message' => 'Failed to send reset password mail']);
         }
     }
+
     public function resetStudentPassword(Request $request, string $id, LogService $logService): JsonResponse
     {
         $validated = $request->validate([
@@ -41,9 +43,8 @@ class PasswordResetController extends Controller
                 'message' => 'Student password changed successfully',
             ]);
 
-        } catch (ModelNotFoundException $e)
-        {
-            return response()->json(['message'=> 'Student not found'], 404);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Student not found'], 404);
         }
     }
 }
