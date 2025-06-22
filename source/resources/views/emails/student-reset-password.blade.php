@@ -48,7 +48,7 @@
     <p>Klik op de knop hieronder om je wachtwoord opnieuw in te stellen:</p>
 
     <p>
-        <a href="127.0.0.1:8000/students/wachtwoord/reset/{{$student->id}}" class="button">
+        <a href="127.0.0.1:8000/passwords" class="button" target="_blank">
             Wachtwoord resetten
         </a>
     </p>
