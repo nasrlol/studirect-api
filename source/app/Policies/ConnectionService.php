@@ -29,7 +29,7 @@ class ConnectionService
         $totalUniqueSkills = $studentSkillIds->union($companySkillIds)->count();
 
         // Score krijgen op hoeveelheid van de student zijn skills overeenkomen
-        $matchPercentage = ($matchingSkillsCount / $totalUniqueSkills->count()) * 100;
+        $matchPercentage = ($matchingSkillsCount / $studentSkillIds->count()) * 100;
 
         // Round to 2 decimal places
         return round($matchPercentage, 2);
