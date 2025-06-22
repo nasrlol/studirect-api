@@ -48,7 +48,7 @@ class MailService
 
     }
 
-    public function sendStudentPasswordReset(Student $student, LogService $logService): void
+    public function sendStudentPasswordReset(LogService $logService, Student $student): void
     {
         try {
             Mail::to($student->email)->send(new StudentResetPassword($student));
