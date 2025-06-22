@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Skill;
 use App\Models\Student;
-use App\Services\ConnectionService;
+use App\Policies\ConnectionService;
 use App\Services\LogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;

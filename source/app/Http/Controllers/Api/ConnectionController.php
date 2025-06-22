@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\LogLevel;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Connection;
-use App\Services\ConnectionService;
+use App\Policies\ConnectionService;
 use App\Services\LogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +20,7 @@ class ConnectionController extends Controller
     public function index(): JsonResponse
     {
         $connections = Connection::all();
+        $this->authorize("viewAny", Admin::class);
         return response()->json(['data' => $connections]);
     }
 
@@ -30,10 +32,19 @@ class ConnectionController extends Controller
         $validated = $request->validate([
             'student_id' => 'required|integer|exists:students,id',
             'company_id' => 'required|integer|exists:companies,id',
-            'status' => 'required|boolean', // bijvoorbeeld 'true' of 'false'
+            'status' => 'required|boolean',
             'skill_match_percentage' => 'nullable|numeric',
         ]);
 
+        $exists = Connection::where('student_id', $validated['student_id'])
+            ->where('company_id', $validated['company_id'])
+            ->exists();
+
+        if ($exists) {
+            return response()->json(['message' => 'Connection already exists'], 409);
+        }
+
+        $this->authorize("create", Connection::class);
         // Calculate skill match percentage
         $skillMatchPercentage = ConnectionService::calculateSkillMatchPercentage(
             $validated['student_id'],
@@ -42,6 +53,7 @@ class ConnectionController extends Controller
 
         // Add match percentage to validated data
         $validated['skill_match_percentage'] = $skillMatchPercentage;
+
         $connection = Connection::create($validated);
 
         $logService->setLog("Student", $connection->student_id, "Connection created", "Connection");
@@ -59,10 +71,35 @@ class ConnectionController extends Controller
     {
         try {
             $connection = Connection::findOrFail($id);
+            $this->authorize("view", $connection);
             return response()->json(['data' => $connection]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'connection niet gevonden'], 404);
         }
+    }
+
+    public function showConnectionStudent(string $id): JsonResponse
+    {
+        $this->authorize('viewAny', [Connection::class, $id]);
+
+        $connections = Connection::where('student_id', $id)->get();
+
+        if ($connections->isEmpty()) {
+            return response()->json(['message' => 'No connection found for this student'], 404);
+        }
+
+        return response()->json(['data' => $connections]);
+    }
+
+    public function showConnectionCompany(string $id): JsonResponse
+    {
+        $this->authorize('viewAny', [Connection::class, $id]);
+        $connections = Connection::where('company_id', $id)->get();
+
+        if ($connections->isEmpty()) {
+            return response()->json(['message' => 'No connection found for this company'], 404);
+        }
+        return response()->json(['data' => $connections]);
     }
 
     /*
@@ -88,6 +125,7 @@ class ConnectionController extends Controller
                 );
             }
 
+            $this->authorize("update", $connection);
             $connection->update($validated);
             $logService->setLog("Student", $connection->student_id, "Connection updated", "Connection");
 
@@ -107,6 +145,7 @@ class ConnectionController extends Controller
     {
         try {
             $connection = Connection::findOrFail($id);
+            $this->authorize("delete", $connection);
             $connection->delete();
 
             $logService->setLog("Student", $connection->student_id, "Connection deleted ", "Connection", LogLevel::CRITICAL);

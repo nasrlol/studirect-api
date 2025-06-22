@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->string('password');
             $table->string('profile_photo')->nullable();
+            $table->string('role')->default('admin');
             $table->timestamps();
         });
 
@@ -31,6 +32,7 @@ return new class extends Migration {
             $table->string('job_requirements')->nullable();
             $table->string('job_description')->nullable();
             $table->string('company_location')->nullable();
+            $table->string('role')->default('company');
             $table->timestamps();
         });
 
@@ -48,11 +50,11 @@ return new class extends Migration {
             $table->string('password');
             $table->string('study_direction')->nullable();
             $table->foreignId('graduation_track')->nullable()->constrained('diplomas')->onDelete('cascade');
-            $table->text('interests')->nullable();
             $table->text('job_preferences')->nullable();
             $table->string('cv')->nullable();
             $table->boolean('profile_complete')->default(false);
             $table->string('profile_photo')->nullable();
+            $table->string('role')->default('student');
             $table->timestamps();
         });
 
@@ -83,6 +85,8 @@ return new class extends Migration {
             $table->string('sender_type'); // 'student' of 'company'
             $table->string('receiver_type'); // 'student' of 'company'
             $table->text('content');
+            $table->index(['sender_id', 'sender_type']);
+            $table->index(['receiver_id', 'receiver_type']);
             $table->timestamps();
         });
 
@@ -92,6 +96,7 @@ return new class extends Migration {
             $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
             $table->time('time_start');
             $table->time('time_end');
+            $table->index(['student_id', 'time_start']);
             $table->timestamps();
         });
 
@@ -133,5 +138,6 @@ return new class extends Migration {
         Schema::dropIfExists('company_skill');
         Schema::dropIfExists('skill_student');
         Schema::dropIfExists('skills');
+        Schema::dropIfExists('diplomas');
     }
 };

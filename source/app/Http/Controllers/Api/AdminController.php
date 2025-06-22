@@ -15,7 +15,10 @@ class AdminController extends Controller
 {
     public function index(): JsonResponse
     {
+
         $admins = Admin::all();
+
+        $this->authorize("viewAny", Admin::class);
         return response()->json(['data' => $admins]);
     }
 
@@ -28,6 +31,8 @@ class AdminController extends Controller
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+
+        // $this->authorize("create", Admin::class);
         $admin = Admin::create($validated);
 
         $logService->setLog("Admin", $admin->id, "Admin created ", "Admin", LogLevel::CRITICAL);
@@ -39,6 +44,7 @@ class AdminController extends Controller
     {
         try {
             $admin = Admin::findOrFail($id);
+            $this->authorize("view", $admin);
             return response()->json(['data' => $admin]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'Admin niet gevonden'], 404);
@@ -58,7 +64,7 @@ class AdminController extends Controller
             if (!empty($validated['password'])) {
                 $validated['password'] = Hash::make($validated['password']);
             }
-
+            $this->authorize("update", $admin);
             $admin->update($validated);
             $logService->setLog("Admin", $admin->id, "Admin updated ", "Admin", LogLevel::CRITICAL);
 
@@ -73,8 +79,9 @@ class AdminController extends Controller
         try {
             $admin = Admin::findOrFail($id);
 
+            $this->authorize("delete", $admin);
             $admin->delete();
-            $logService->setLog("Admin",$admin->id, "Admin deleted ", "Admin", LogLevel::CRITICAL);
+            $logService->setLog("Admin", $admin->id, "Admin deleted ", "Admin", LogLevel::CRITICAL);
 
             return response()->json(['message' => 'Admin verwijderd']);
         } catch (ModelNotFoundException $e) {

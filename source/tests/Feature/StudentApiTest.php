@@ -1,13 +1,15 @@
 <?php
 
-namespace Feature;
+namespace Tests\Feature;
 
+use App\Models\Admin;
 use App\Models\Diploma;
 use App\Models\Skill;
 use App\Models\Student;
 use Database\Seeders\DiplomaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class StudentApiTest extends TestCase
@@ -17,6 +19,9 @@ class StudentApiTest extends TestCase
     public function test_index_returns_students(): void
     {
         Student::factory()->count(3)->create();
+        $admin = Admin::factory()->create();
+
+        Sanctum::actingAs($admin, ['admin']);
 
         $response = $this->getJson('/api/students');
         $response->assertStatus(200)
@@ -29,7 +34,6 @@ class StudentApiTest extends TestCase
                         'email',
                         'study_direction',
                         'graduation_track',
-                        'interests',
                         'job_preferences',
                         'cv',
                         'profile_complete',
@@ -52,15 +56,14 @@ class StudentApiTest extends TestCase
             'password' => 'password123',
             'study_direction' => 'Informatica',
             'graduation_track' => $diploma ? $diploma->id : 1,
-            'interests' => 'Programming, AI',
             'job_preferences' => 'Software Development',
             'cv' => 'path/to/cv.pdf',
             'profile_complete' => true,
             'profile_photo' => 'path/to/photo.jpg',
         ];
 
-
-        $response = $this->postJson('/api/students', $data);
+        $student = Student::factory()->create();
+        $response = $this->actingAs($student)->postJson('/api/students', $data);
 
 
         $response->assertStatus(201)
@@ -72,7 +75,6 @@ class StudentApiTest extends TestCase
                     'email',
                     'study_direction',
                     'graduation_track',
-                    'interests',
                     'job_preferences',
                 ],
                 'message'
@@ -84,7 +86,6 @@ class StudentApiTest extends TestCase
             'email' => $data['email'],
             'study_direction' => $data['study_direction'],
             'graduation_track' => $data['graduation_track'],
-            'interests' => $data['interests'],
             'job_preferences' => $data['job_preferences'],
         ]);
 
@@ -96,6 +97,7 @@ class StudentApiTest extends TestCase
         $skills = Skill::inRandomOrder()->take(2)->get();
         $student->skills()->attach($skills);
 
+        Sanctum::actingAs($student, ['student']);
         $response = $this->getJson("/api/students/{$student->id}");
 
         $response->assertStatus(200)
@@ -107,7 +109,6 @@ class StudentApiTest extends TestCase
                     'last_name' => $student->last_name,
                     'study_direction' => $student->study_direction,
                     'graduation_track' => $student->graduation_track,
-                    'interests' => $student->interests,
                     'job_preferences' => $student->job_preferences,
 
                 ]
@@ -119,7 +120,8 @@ class StudentApiTest extends TestCase
         $student = Student::factory()->create();
         $this->seed(DiplomaSeeder::class);
         $diploma = Diploma::first();
-        $skills = Skill::inRandomOrder()->take(2)->get();
+
+        Sanctum::actingAs($student, ['student']);
 
         $data = [
             'first_name' => 'Updated',
@@ -128,7 +130,6 @@ class StudentApiTest extends TestCase
             'password' => 'password123',
             'study_direction' => 'Informatica',
             'graduation_track' => $diploma ? $diploma->id : 1,
-            'interests' => 'Programming, AI',
             'job_preferences' => 'Software Development',
         ];
 
@@ -146,7 +147,6 @@ class StudentApiTest extends TestCase
             'email' => $data['email'],
             'study_direction' => $data['study_direction'],
             'graduation_track' => $data['graduation_track'],
-            'interests' => $data['interests'],
             'job_preferences' => $data['job_preferences'],
         ]);
     }
@@ -155,6 +155,7 @@ class StudentApiTest extends TestCase
     {
         $student = Student::factory()->create();
 
+        Sanctum::actingAs($student, ['student']);
         $response = $this->deleteJson("/api/students/{$student->id}");
 
         $response->assertStatus(200)

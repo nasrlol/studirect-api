@@ -3,17 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-
-class Student extends Model
+class Student extends Authenticatable
 {
     use HasFactory, HasApiTokens;
 
+    protected $hidden = ['password'];
     protected $fillable = [
         'first_name',
         'last_name',
@@ -21,7 +21,6 @@ class Student extends Model
         'password',
         'study_direction',
         'graduation_track',
-        'interests',
         'job_preferences',
         'cv',
         'profile_complete',

@@ -13,6 +13,7 @@ use App\Models\Student;
 use GuzzleHttp\Exception\TransferException;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 // controllers dienen voor het maken van routes
 // services dat een logische bewerking encapsuleert en die dan implementeert
@@ -23,8 +24,7 @@ class MailService
         try {
             Mail::to($student->email)->send(new StudentProfileVerification($student));
             // gebruikte hiervoor de gewone exception maar voor mail dinges is transportexceptioninterface
-        } catch (TransportException $e)
-        {
+        } catch (TransportException $e) {
             $logService->setLog("Student", $student->id, $e, "Student");
         }
     }
@@ -33,9 +33,8 @@ class MailService
     {
         try {
             Mail::to($appointment->student->email)->send(new AppointmentMail($appointment));
-        } catch (TransportException $e)
-        {
-            $logService->setLog("Student", $appointment->student_id ,$e, "Appointment");
+        } catch (TransportException $e) {
+            $logService->setLog("Student", $appointment->student_id, $e, "Appointment");
         }
     }
 
@@ -43,9 +42,8 @@ class MailService
     {
         try {
             Mail::to($company->email)->send(new CompanyAccountCreation($company));
-        } catch (TransferException $e)
-        {
-            $logService->setLog("Company", $company->id ,$e, "Company");
+        } catch (TransferException $e) {
+            $logService->setLog("Company", $company->id, $e, "Company");
         }
 
     }
@@ -54,10 +52,8 @@ class MailService
     {
         try {
             Mail::to($student->email)->send(new StudentResetPassword($student));
-        } catch (TransferException $e)
-        {
-            // doe ik later nog wel
+        } catch (TransportExceptionInterface $e) {
+
         }
     }
-
 }
