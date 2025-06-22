@@ -28,8 +28,8 @@ class ConnectionService
         // Calculate the total unique skills
         $totalUniqueSkills = $studentSkillIds->union($companySkillIds)->count();
 
-        // Calculate the match percentage using Jaccard similarity coefficient
-        $matchPercentage = ($matchingSkillsCount / $totalUniqueSkills) * 100;
+        // Score krijgen op hoeveelheid van de student zijn skills overeenkomen
+        $matchPercentage = ($matchingSkillsCount / $totalUniqueSkills->count()) * 100;
 
         // Round to 2 decimal places
         return round($matchPercentage, 2);
