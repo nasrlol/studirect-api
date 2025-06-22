@@ -78,6 +78,9 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
     // hier een patch in plaats van een put omdat enkel het tijdstip wordt aangepast
     Route::delete('/connections/{id}', [ConnectionController::class, 'destroy']);
 
+    Route::get('/connections/student/{id}', [ConnectionController::class, 'showConnectionStudent']);
+    Route::get('/connections/company/{id}', [ConnectionController::class, 'showConnectionCompany']);
+
     // Protected Logout Authenticatie
     Route::post('/students/logout', [StudentAuthController::class, 'logout']);
     Route::post('/companies/logout', [CompanyAuthController::class, 'logout']);
