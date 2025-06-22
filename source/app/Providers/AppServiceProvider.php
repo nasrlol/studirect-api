@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('mail', function (Request $request) {
-            return Limit::perMinute(2)->by($request->ip());
+            return Limit::perMinute(15)->by($request->ip());
         });
 
     }
