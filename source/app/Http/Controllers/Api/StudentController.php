@@ -9,21 +9,21 @@ use App\Services\MailService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
+
     public function index(): JsonResponse
     {
-        $students = Student::all();
+        $students = Cache::rememberForever('students.all', function () {
+            return Student::all();
+        });
 
-
-        // beveiliging weg gehaald omdat het zo wordt mogelijk gemaakt dat het ophalen van alle studenten
-        // om te zoeken en wat dan ook even dan makklijker gaat in de frontend ipv van alles te beginnen herwerken en herschrijven
         return response()->json([
             'data' => $students
         ]);
-
     }
 
     /**
@@ -31,6 +31,8 @@ class StudentController extends Controller
      */
     public function store(Request $request, LogService $logService, MailService $mailService): JsonResponse
     {
+        Cache::forget('students.all');
+
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -77,6 +79,8 @@ class StudentController extends Controller
 
     public function show(string $id): JsonResponse
     {
+
+
         try {
             $student = Student::findOrFail($id);
             // $this->authorize("view", $student);
@@ -88,6 +92,10 @@ class StudentController extends Controller
 
     public function destroy(string $id, LogService $logService): JsonResponse
     {
+
+
+        Cache::forget('students.all');
+
         try {
             $student = Student::findOrFail($id);
 
@@ -106,6 +114,9 @@ class StudentController extends Controller
 
     public function verify(string $id)
     {
+
+        Cache::forget('students.all');
+
         try {
             $student = Student::findOrFail($id);
 
@@ -130,6 +141,9 @@ class StudentController extends Controller
 
     public function partialUpdate(Request $request, string $id, LogService $logService): JsonResponse
     {
+
+        Cache::forget('students.all');
+
         try {
             $student = Student::findOrFail($id);
             $fields = [
@@ -172,6 +186,8 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id, LogService $logService): JsonResponse
     {
+
+        Cache::forget('students.all');
         try {
             $student = Student::findOrFail($id);
             $validated = $request->validate([
