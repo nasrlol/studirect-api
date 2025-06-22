@@ -13,6 +13,7 @@ use App\Models\Student;
 use GuzzleHttp\Exception\TransferException;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 // controllers dienen voor het maken van routes
 // services dat een logische bewerking encapsuleert en die dan implementeert
@@ -47,17 +48,19 @@ class MailService
 
     }
 
-    public function sendStudentPasswordReset(Student $student): void
+    public function sendStudentPasswordReset(Student $student, LogService $logService): void
     {
         try {
             Mail::to($student->email)->send(new StudentResetPassword($student));
-        } catch (TransferException $e) {
+        } catch (TransportExceptionInterface $e) {
+            // Optional retry logic (1 retry)
             try {
                 Mail::to($student->email)->send(new StudentResetPassword($student));
-            } catch (TransferException $e) {
+            } catch (TransportExceptionInterface $retryException) {
+                $logService->setLog("Student", $student->id, $retryException->getMessage(), "Student");
             }
         } catch (\Exception $e) {
-
+            $logService->setLog("Student", $student->id, $e->getMessage(), "Student");
         }
     }
 }
