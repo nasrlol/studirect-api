@@ -31,7 +31,7 @@ Route::middleware(['auth:sanctum', 'ability:student,admin', 'throttle:300,1'])->
 });
 
 // Company routes
-Route::middleware(['auth:sanctum', 'throttle:300,1'])->group(function () {
+Route::middleware(['throttle:300,1'])->group(function () {
     Route::get('/companies', [CompanyController::class, 'index']);
 });
 
