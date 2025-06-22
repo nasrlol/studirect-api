@@ -87,13 +87,16 @@ Route::middleware(['auth:sanctum', 'throttle:500,1'])->group(function () {
     Route::post('/admins/logout', [AdminAuthController::class, 'logout']);
     Route::post('/logout', [LoginController::class, 'logout']);
 
-    // Authenticatie mail routes
-    Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword'])
-        ->middleware(['signed', 'throttle:mail']);
-    Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStudentPassword'])
-        ->name('students.resetPassword')
-        ->middleware('signed');
+
 });
+
+
+// Authenticatie mail routes
+Route::post('/students/{id}/reset/mail', [PasswordResetController::class, 'sendResetStudentPassword'])
+    ->middleware(['signed', 'throttle:mail']);
+Route::patch('/students/{id}/reset', [PasswordResetController::class, 'resetStudentPassword'])
+    ->name('students.resetPassword')
+    ->middleware('signed');
 
 // Berichten
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
