@@ -71,12 +71,36 @@ class ConnectionController extends Controller
     {
         try {
             $connection = Connection::findOrFail($id);
-
             $this->authorize("view", $connection);
             return response()->json(['data' => $connection]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => 'connection niet gevonden'], 404);
         }
+    }
+
+    public function showConnectionStudent(string $id): JsonResponse
+    {
+        $this->authorize('viewAny', Connection::class);
+
+        $connections = Connection::where('student_id', $id)->get();
+
+        if ($connections->isEmpty()) {
+            return response()->json(['message' => 'No connection found for this student'], 404);
+        }
+
+        return response()->json(['data' => $connections]);
+    }
+
+    public function showConnectionCompany(string $id): JsonResponse
+    {
+
+        $this->authorize('viewAny', Connection::class);
+        $connections = Connection::where('company_id', $id)->get();
+
+        if ($connections->isEmpty()) {
+            return response()->json(['message' => 'No connection found for this company'], 404);
+        }
+        return response()->json(['data' => $connections]);
     }
 
     /*
