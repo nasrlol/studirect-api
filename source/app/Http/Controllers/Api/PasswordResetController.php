@@ -14,11 +14,11 @@ class PasswordResetController extends Controller
 
     public function sendResetStudentPassword(MailService $mailService, Request $request): JsonResponse
     {
-        $validated = $request->validated([
+        $validate = $request->validate([
             'email' => 'required|email|exists:students,email',
         ]);
 
-        $student = Student::where('email', $validated['email'])->firstOrFail();
+        $student = Student::where('email', $validate['email'])->firstOrFail();
         try {
             $mailService->sendStudentPasswordReset($student);
             return response()->json(['message' => 'Reset password mail send successfully']);
