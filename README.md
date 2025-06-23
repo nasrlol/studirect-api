@@ -108,7 +108,6 @@ php artisan test
 
 ## Security & Best Practices
 
-- Zie [Security.md](./Security.md) voor een up-to-date beveiligingschecklist
 - Input validatie, CSRF, XSS, SQL-injectie preventie, RBAC via policies/gates
 - Rate limiting op alle routes
 
@@ -117,7 +116,6 @@ php artisan test
 ## Meer weten?
 
 - [API Documentatie](./docs/api.md)
-- [Security Checklist](./Security.md)
 - [Projectdocumentatie (Wiki)](../../wiki)
 
 ---
