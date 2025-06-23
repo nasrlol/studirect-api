@@ -1,0 +1,66 @@
++----------------+         +----------------+         +----------------+
+| SKILL          |         | STUDENT        |         | DIPLOMA        |
+|----------------|         |----------------|         |----------------|
+| PK id          |<------->| PK id          |-------->| PK id          |
+| name           |    *..* | first_name     |    0..1 | type           |
+| description    |         | last_name      |         | created_at     |
+| created_at     |         | email          |         | updated_at     |
+| updated_at     |         | password       |         |                |
+|                |         | study_direction|         |                |
+|                |         | FK graduation_track      |                |
+|                |         | job_preferences|         |                |
+|                |         | cv             |         |                |
+|                |         | profile_complete         |                |
+|                |         | profile_photo  |         |                |
+|                |         | role           |         |                |
+|                |         | created_at     |         |                |
+|                |         | updated_at     |         |                |
++----------------+         +----------------+         +----------------+
+       |                         |    |
+       |                         |    |
++----------------+               |    |               +----------------+
+| COMPANY        |               |    |               | ADMIN          |
+|----------------|               |    |               |----------------|
+| PK id          |<--------------+----+-------------->| PK id          |
+| name           |        *..* messages *..1          | email          |
+| email          |                                    | password       |
+| password       |                                    | profile_photo  |
+| plan_type      |          +----------------+        | role           |
+| job_types      |<-------->| CONNECTION     |        | created_at     |
+| job_domain     |    1..* |----------------|        | updated_at     |
+| booth_location |         | PK id          |        |                |
+| photo          |         | FK student_id   |        +----------------+
+| speeddate_duration       | FK company_id   |
+| company_description      | status         |
+| job_title      |         | skill_match_percentage |
+| job_requirements        | created_at     |
+| job_description|         | updated_at     |
+| company_location|        |                |
+| role           |         +----------------+
+| created_at     |
+| updated_at     |         +----------------+
++----------------+         | APPOINTMENT    |
+       |                   |----------------|
+       |                   | PK id          |
+       +------------------>| FK student_id   |
+                     1..* | FK company_id   |
+                          | time_start     |
+                          | time_end       |
+                          | created_at     |
+                          | updated_at     |
+                          |                |
+                          +----------------+
+
++----------------+         +----------------+
+| MESSAGE        |         | LOG            |
+|----------------|         |----------------|
+| PK id          |         | PK id          |
+| sender_id      |         | actor          |
+| sender_type    |         | actor_id       |
+| receiver_id    |         | action         |
+| receiver_type  |         | target_type    |
+| content        |         | timestamp      |
+| created_at     |         | severity       |
+| updated_at     |         | created_at     |
+|                |         | updated_at     |
++----------------+         +----------------+
