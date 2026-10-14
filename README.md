@@ -1,76 +1,76 @@
 # StuDirect - API
 
-StuDirect is een Tinder-achtige webapplicatie die studenten en bedrijven met elkaar matcht voor de careerlaunch.  
-De applicatie is ontwikkeld als onderdeel van het programmeerproject en biedt een aangename gebruikerservaring, moderne technologieën en functies zoals swipen, chatten en profielen.
+StuDirect is a Tinder-like web application that matches students and companies for the Career Launch.  
+The application was developed as part of the programming project and offers a pleasant user experience, modern technologies and features such as swiping, chatting and profiles.
 
 ![StuDirect UI](https://github.com/user-attachments/assets/8a2230b3-5fd6-4c3a-99ef-2bc7d66b84d1)
 
 ---
 
-## Functionaliteiten
+## Features
 
-- Swipe-functionaliteit om studenten en bedrijven te matchen
-- Realtime chat tussen gematchte partijen
-- Studentprofielen met interesses, studierichting en cv
-- Bedrijfsprofielen met stages, vacatures, standplaats en algemene informatie
-- Admin-panel voor beheer studenten, bedrijven en logs
-- Emailverificatie en wachtwoordherstel
-- Skill-matching tussen student en bedrijf
+- Swipe functionality to match students and companies
+- Real-time chat between matched parties
+- Student profiles with interests, field of study and a CV
+- Company profiles with internships, job openings, location and general information
+- Admin panel for managing students, companies and logs
+- Email verification and password reset
+- Skill matching between students and companies
 - RESTful API, JSON responses, rate limiting
-- Gescheiden versies voor mobiel, desktop en admin
+- Separate versions for mobile, desktop and admin
 
 ![Laravel CI](https://github.com/nasrlol/studirect-api/actions/workflows/laravel.yml/badge.svg)
 
 ---
 
-## Technische Stack
+## Tech Stack
 
-- Laravel (PHP Framework)
-- Laravel Sanctum (API authenticatie & RBAC)
+- Laravel (PHP framework)
+- Laravel Sanctum (API authentication & RBAC)
 - Eloquent ORM
 - PHPUnit
 - MySQL database
-- Mailtrap (e-mail testing)
+- Mailtrap (email testing)
 - RESTful API, JSON
 - CI via GitHub Actions
 
 ---
 
-## Installatie
+## Installation
 
-1. **Repository klonen**
+1. **Clone the repository**
 
 ```bash
 git clone https://github.com/nasrlol/studirect-api
 cd studirect-api/source
 ```
 
-2. **Composer dependencies installeren**
+2. **Install the Composer dependencies**
 
 ```bash
 composer install
 ```
 
-3. **.env configureren**
+3. **Configure .env**
 
 ```bash
 cp .env.example .env
 ```
-Vul je database-gegevens, Mailtrap en andere omgevingsvariabelen in `.env` in.
+Fill in your database credentials, Mailtrap settings and other environment variables in `.env`.
 
-4. **App-key genereren**
+4. **Generate the app key**
 
 ```bash
 php artisan key:generate
 ```
 
-5. **Database migreren en seeden**
+5. **Migrate and seed the database**
 
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-6. **Server starten**
+6. **Start the server**
 
 ```bash
 php artisan serve
@@ -78,18 +78,18 @@ php artisan serve
 
 ---
 
-## API Gebruiken
+## Using the API
 
-Zie [API Documentatie](./API-ROUTES.md) voor alle endpoints, authenticatie en voorbeeldgebruik.
+See the [API documentation](./API-ROUTES.md) for all endpoints, authentication and usage examples.
 
-- **Authenticatie:** via Laravel Sanctum tokens (Bearer), inloggen via `/api/students/login`, `/api/companies/login` of `/api/admins/login`
-- **Rate limiting:** 300/min (standaard), 500/min voor intensieve endpoints (afspraken, connecties, skills)
-- **Alle responses zijn JSON**
-- **Zie [routes/api.php](./source/routes/api.php)** voor het volledige overzicht en actuele endpoints.
+- **Authentication:** via Laravel Sanctum tokens (Bearer); log in via `/api/students/login`, `/api/companies/login` or `/api/admins/login`
+- **Rate limiting:** 300/min (default), 500/min for intensive endpoints (appointments, connections, skills)
+- **All responses are JSON**
+- **See [routes/api.php](./source/routes/api.php)** for the complete overview and current endpoints.
 
 ---
 
-## Tests draaien
+## Running the tests
 
 ```bash
 php artisan test
@@ -97,27 +97,27 @@ php artisan test
 
 ---
 
-## Belangrijkste Mappen
+## Main Directories
 
-- `/source/app/Http/Controllers/Api/` – Alle API controllers
+- `/source/app/Http/Controllers/Api/` – all API controllers
 - `/source/routes/api.php` – API routes
-- `/source/app/Models/` – Model logica
-- `/source/database/seeders/` – Seeder data voor testaccounts
+- `/source/app/Models/` – model logic
+- `/source/database/seeders/` – seeder data for test accounts
 
 ---
 
 ## Security & Best Practices
 
-- Input validatie, CSRF, XSS, SQL-injectie preventie, RBAC via policies/gates
-- Rate limiting op alle routes
+- Input validation, CSRF, XSS and SQL injection prevention, RBAC via policies/gates
+- Rate limiting on all routes
 
 ---
 
-## Meer weten?
+## Learn more
 
-- [API Documentatie](./docs/api.md)
-- [Projectdocumentatie (Wiki)](../../wiki)
+- [API documentation](./docs/api.md)
+- [Project documentation (wiki)](../../wiki)
 
 ---
 
-© 2025 StuDirect — De API voor de careerlaunch.
+© 2025 StuDirect — The API for the Career Launch.
